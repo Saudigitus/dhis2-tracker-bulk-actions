@@ -1,0 +1,33 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: i18next-conv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"POT-Creation-Date: 2022-10-03T06:31:53.238Z\n"
+"PO-Revision-Date: 2022-10-03T06:31:53.238Z\n"
+
+msgid "Clear"
+msgstr "Clear"
+
+msgid "Column"
+msgstr "Column"
+
+msgid "Delay"
+msgstr "Delay"
+
+msgid "Only run selected checks"
+msgstr "Only run selected checks"
+
+msgid "Columns to show in table"
+msgstr "Columns to show in table"
+
+msgid "Select columns"
+msgstr "Select columns"
+
+msgid "No items to display"
+msgstr "No items to display"
+
+msgid "Something went wrong when loading the objects"
+msgstr "Something went wrong when loading the objects"

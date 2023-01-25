@@ -1,0 +1,155 @@
+.appBarContainer {
+    box-shadow: 0px 1px 5px 0px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 3px 1px -2px rgb(0 0 0 / 12%);
+    background-color: rgb(255, 255, 255);
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    min-height: 80.25px !important;
+}
+
+.appBarAddButton {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    padding-right: 30px !important;
+}
+
+.appBarIconButton {
+    font-size: 43px !important;
+    color: #4A5768;
+}
+
+.menuContainer {
+    min-height: 100% !important;
+    min-width: 25% !important;
+    max-width: 40% !important;
+    border-right: 1px solid #a0adba;
+    padding: 8px 14px;
+    background-color: #F6F6F6 !important;
+}
+
+.menuContainer h4 {
+    margin: 0;
+    font-family: "Roboto";
+    font-size: 15px;
+    font-weight: 425;
+    padding-bottom: 5px;
+}
+
+.selectedItem {
+    padding: 5px;
+    display: flex;
+    min-height: 32px;
+    margin-top: 6px;
+    border-left: 2px solid #147cd7;
+    align-items: center;
+    margin-bottom: 4px;
+    justify-content: space-between;
+}
+
+.selectionArea {
+    display: flex;
+    overflow: hidden;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.iconArea {
+    background-color: rgb(224, 224, 224);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 8px;
+    width: 22px;
+    height: 22px;
+    border-radius: 2px;
+}
+
+.gridProfileAppBar {
+    min-height: 40px;
+    align-items: center;
+    background: #FFFFFF;
+    border: 1px solid #D9D9D9;
+    padding: 4px 0px;
+}
+
+.profileAppBar {
+    display: flex;
+}
+
+.profileAppBar div {
+    margin-right: 10px;
+}
+
+.viewProfileButton{
+    display: flex !important;
+    justify-content: end !important;
+}
+
+.profileAppBar button {
+    margin-left: auto;
+}
+
+
+.label {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    letter-spacing: 0.5px;
+    color: #000000;
+}
+
+.value {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 16px;
+    letter-spacing: 0.5px;
+    color: #000000;
+}
+
+
+.topBar {
+    display: flex;
+    align-items: center;
+    background: #FFFFFF;
+    border: 1px solid #D9D9D9;
+    padding: 4px 20px;
+}
+
+.buttonMarger {
+    margin-left: auto;
+}
+
+.buttonSuccess {
+    background-color: #3d8f47 !important;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    letter-spacing: 0.5px;
+    color: #FBFCFD !important;
+    margin: 0px 10px 0px 10px;
+}
+
+
+@media (max-width: 992px) {
+    .profileAppBar{
+        display: block !important;
+    }
+    .profileAppBar div{
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .topBarDiv{
+        margin-bottom: 10px;
+    }
+}

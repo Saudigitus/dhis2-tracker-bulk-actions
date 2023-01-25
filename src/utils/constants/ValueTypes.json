@@ -1,0 +1,10 @@
+[
+    "BOOLEAN",
+    "NUMBER",
+    "TEXT",
+    "INTEGER",
+    "INTEGER_POSITIVE",
+    "DATE",
+    "INTEGER_ZERO_OR_POSITIVE",
+    "TRUE_ONLY"
+]
