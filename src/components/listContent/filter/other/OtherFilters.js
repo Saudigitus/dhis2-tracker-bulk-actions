@@ -9,9 +9,17 @@ import FilterChips from './FilterChips.js'
 function OtherFilters({ onFilterByEnrollment, selectedFilter }) {
     const filters = [
         {
-            children: "Todos eventos",
+            children: "Active enrollments",
             filter: "ACTIVE"
-        }
+        },
+        {
+            children: "Completed enrollments",
+            filter: "COMPLETED"
+        },
+        {
+            children: "Cancelled enrollments",
+            filter: "CANCELLED"
+        },
     ]
 
     return (

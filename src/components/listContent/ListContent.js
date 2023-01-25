@@ -11,6 +11,9 @@ import WithBorder from '../table/components/WithBorder.js'
 import WithPadding from '../tamplate/WithPadding.js'
 import Content from './Content.js'
 import OtherFilters from './filter/other/OtherFilters.js'
+import style from "./listcontent.module.css";
+import { DataTable } from '../table/DataTable.js'
+import EnrollmentFilter from './filter/enrollment/EnrollmentFilter.js'
 
 // eslint-disable-next-line react/prop-types
 function ListContent({ type, program }) {
@@ -69,20 +72,29 @@ function ListContent({ type, program }) {
 
   return (
     <>
+      {type === "WITHOUT_REGISTRATION" &&
+        <WithBorder type={"bottom"}>
+          <WithPadding p={"1.5em"}>
+            <span className={style.event}>
+              Registered events
+            </span>
+          </WithPadding>
+        </WithBorder>
+      }
       <div
         style={{ padding: "1.5rem" }}
       >
-
         <WithBorder type={"all"}>
-
-          <WithBorder type={"bottom"}>
-            <WithPadding>
-              <OtherFilters
-                onFilterByEnrollment={onFilterByEnrollment}
-                selectedFilter={selectedFilter}
-              />
-            </WithPadding>
-          </WithBorder>
+          {type === "WITH_REGISTRATION" &&
+            <WithBorder type={"bottom"}>
+              <WithPadding>
+                <OtherFilters
+                  onFilterByEnrollment={onFilterByEnrollment}
+                  selectedFilter={selectedFilter}
+                />
+              </WithPadding>
+            </WithBorder>
+          }
 
           <Content
             columnData={columnData}
@@ -92,7 +104,6 @@ function ListContent({ type, program }) {
             loadingOptionSet={loadingOptionSet}
             type={type}
           />
-
           <Pagination
             onPageChange={onPageChange}
             onRowsPerPageChange={onRowsPerPageChange}

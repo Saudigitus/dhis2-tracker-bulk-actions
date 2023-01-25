@@ -1,7 +1,6 @@
 import { CenteredContent, CircularLoader } from '@dhis2/ui'
 import React, { useState, useEffect } from 'react'
 import { DataTable } from '../table/DataTable.js'
-import WithPadding from '../tamplate/WithPadding.js'
 import EnrollmentFilter from './filter/enrollment/EnrollmentFilter.js'
 
 // eslint-disable-next-line react/prop-types
@@ -23,19 +22,18 @@ function Content({ columnData, headers, loading, loadingHeader, type, loadingOpt
 
     return (
         <div>
-                {
-                    loadingOptionSet ?
-                        <CenteredContent className="py-3">
-                            <CircularLoader />
-                        </CenteredContent>
-                        :
-                        <EnrollmentFilter
-                            updateVariables={updateVariables}
-                            headers={headerColumns}
-                            type={type}
-                        />
-                }
-      
+            {
+                loadingOptionSet ?
+                    <CenteredContent className="py-3">
+                        <CircularLoader />
+                    </CenteredContent>
+                    :
+                    <EnrollmentFilter
+                        updateVariables={updateVariables}
+                        headers={headerColumns}
+                        type={type}
+                    />
+            }
 
             <DataTable
                 headers={headerColumns}

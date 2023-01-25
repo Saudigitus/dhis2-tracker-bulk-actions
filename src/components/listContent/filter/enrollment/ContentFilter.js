@@ -32,7 +32,7 @@ function ContentFilter({ headers, type }) {
     }
 
     //var visibles = headers.map(value => value.visible);
-    const allHidden = headers.every(v => v.visible === false && v.visible === headers[0].visible)
+    const allHidden = headers?.every(v => v.visible === false && v.visible === headers[0].visible)
 
     const onChangeFilters = (event, key) => {
         console.log(event, key);

@@ -1,13 +1,9 @@
-/* eslint-disable import/extensions */
-import { CenteredContent, CircularLoader } from '@dhis2/ui';
 import React, { useState, useEffect } from 'react'
 import Layout from '../components/layout/Layout.js'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { AppBarContext } from '../contexts';
 import "./App.css";
 import { GeneratedVaribles } from '../contexts/GeneratedVaribles.js';
-import { useGetGeneralConfig } from '../hooks/config/useGetGeneralConfig.js';
-// eslint-disable-next-line import/order
 
 const idb =
     window.indexedDB ||
@@ -30,38 +26,20 @@ const MyApp = () => {
     const [externalUser, setexternalUser] = useState("")
     const [externalBaseUrl, setexternalBaseUrl] = useState("")
     const [allOptionSets, setallOptionSets] = useState({})
-    const { data, error, loading } = useGetGeneralConfig();
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('eventDate');
     const [reloadData, setreloadData] = useState(false)
 
 
     useEffect(() => {
-        setexternalBaseUrl(data)
         getDb()
-    }, [data])
+    }, [])
 
     async function getDb() {
         const db = await idb.open(dbName, 1);
         setexternalUser(db);
     }
 
-
-    if (error) {
-        return (
-            <CenteredContent>
-                <h1>Lamentamos não tem acesso para realizar esta operação</h1>
-            </CenteredContent>
-        )
-    }
-
-    if (loading || !externalUser) {
-        return (
-            <CenteredContent>
-                <CircularLoader />
-            </CenteredContent>
-        )
-    }
 
     return (
         <GeneratedVaribles.Provider value={{

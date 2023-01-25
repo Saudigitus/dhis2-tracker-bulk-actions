@@ -1,7 +1,7 @@
 const config = {
     type: 'app',
-    name: 'Módulo de Investigação - A',
-    description: 'Módulo de Investigação de Óbitos Hospitalares',
+    name: 'Tracker Bulk Actions',
+    description: 'Tracker Bulk Actions',
 
     entryPoints: {
         app: './src/app/App',
