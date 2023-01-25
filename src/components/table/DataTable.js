@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import i18n from '@dhis2/d2-i18n';
-import { CenteredContent, CircularLoader } from '@dhis2/ui';
+import { CenteredContent, Checkbox, CircularLoader } from '@dhis2/ui';
 import { IconButton, TableSortLabel } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
@@ -96,6 +96,7 @@ const TableComponent = (props) => {
                 // eslint-disable-next-line react/prop-types
                 className={classNames(classes.cell, classes.headerCell)}
             >
+
                 <TableSortLabel
                     active={orderBy === column.id}
                     direction={orderBy === column.id ? order : 'asc'}
@@ -116,6 +117,20 @@ const TableComponent = (props) => {
                 // eslint-disable-next-line react/prop-types
                 className={classes.row}
             >
+                <HeaderCell
+                    // innerRef={(instance) => { setColumnWidth(instance, index); }}
+                    key={"check"}
+                    // eslint-disable-next-line react/prop-types
+                    className={classNames(classes.cell, classes.headerCell)}
+                >
+                    <Checkbox
+                        checked={true}
+                        tabIndex={-1}
+                        // onChange={() => props.handleToggle(props.id)}
+                        // label={props.text}
+                        className={props.classes.checkbox}
+                        valid dense />
+                </HeaderCell>
                 {headerCells}
             </Row>
         )
@@ -174,6 +189,18 @@ const TableComponent = (props) => {
                                     className={classNames(classes.row, classes.dataRow)}
                                     onClick={() => { console.log(row) }}
                                 >
+                                    <Cell
+                                        key={row?.tei}
+                                        className={classNames(classes.cell, classes.bodyCell)}
+                                    >
+                                        <Checkbox
+                                            checked={true}
+                                            tabIndex={-1}
+                                            // onChange={() => props.handleToggle(props.id)}
+                                            // label={props.text}
+                                            className={props.classes.checkbox}
+                                            valid dense />
+                                    </Cell>
                                     {cells}
                                 </Row>
                             );
