@@ -3,20 +3,15 @@ import i18n from '@dhis2/d2-i18n';
 import { CenteredContent, CircularLoader } from '@dhis2/ui';
 import { IconButton, TableSortLabel } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { Check, MoreHoriz, Remove } from '@material-ui/icons';
 import classNames from 'classnames';
 import React, { useContext } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom';
 import { GeneratedVaribles } from '../../contexts/GeneratedVaribles.js';
-import { useParams } from '../../hooks/common/useQueryParams.js';
-import ActionsMenu from '../actions/menu.js';
 import Body from './components/Body.js'
 import Cell from './components/Cell.js'
 import Head from './components/Head.js'
 import HeaderCell from './components/HeaderCell.js'
 import Row from './components/Row.js'
 import Table from './components/Table.js'
-import SortLabelWrapper from './sort/SortLabelWrapper.js';
 
 const getStyles = (theme) => ({
     tableContainer: {
@@ -71,16 +66,6 @@ const getStyles = (theme) => ({
     }
 });
 
-function descendingComparator(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
-        return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-        return 1;
-    }
-    return 0;
-}
-
 
 const TableComponent = (props) => {
     const { order, orderBy, setOrder, setOrderBy } = useContext(GeneratedVaribles)
@@ -132,16 +117,6 @@ const TableComponent = (props) => {
                 className={classes.row}
             >
                 {headerCells}
-                <HeaderCell
-                    className={classNames(classes.cell, classes.headerCell)}
-                >
-                    Estado
-                </HeaderCell>
-                <HeaderCell
-                    className={classNames(classes.cell, classes.headerCell)}
-                >
-                    Acções
-                </HeaderCell>
             </Row>
         )
     }
@@ -200,22 +175,6 @@ const TableComponent = (props) => {
                                     onClick={() => { console.log(row) }}
                                 >
                                     {cells}
-                                    <Cell
-                                        key={"settings"}
-                                        className={classNames(classes.cell, classes.bodyCell)}
-                                    >
-                                        {row["u7dfk89C9X7"] ?
-                                            <Check aria-label='Enviado para investigação' style={{ color: '#00EB62' }} />
-                                            :
-                                            <Remove style={{ color: "rgba(0, 0, 0, 0.54)" }} />
-                                        }
-                                    </Cell>
-                                    <Cell
-                                        key={"settings"}
-                                        className={classNames(classes.cell, classes.bodyCell)}
-                                    >
-                                        <ActionsMenu row={row} />
-                                    </Cell>
                                 </Row>
                             );
                         })
