@@ -9,7 +9,6 @@ import MenuBulkAction from './MenuBulkAction.js';
 // eslint-disable-next-line react/prop-types
 function SelectColumns({ headers, updateVariables }) {
     const [open, setopen] = useState(false)
-    const [openBulk, setopenBulk] = useState(false)
     const openBulkRef = useRef()
 
     const closeDialog = () => {
@@ -54,8 +53,6 @@ function SelectColumns({ headers, updateVariables }) {
                 updateVariables={updateVariables}
                 headers={headers}
             />
-
-            {console.log(openBulkRef)}
 
 
         </React.Fragment>

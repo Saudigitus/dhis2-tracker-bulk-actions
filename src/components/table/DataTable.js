@@ -68,7 +68,7 @@ const getStyles = (theme) => ({
 
 
 const TableComponent = (props) => {
-    const { order, orderBy, setOrder, setOrderBy } = useContext(GeneratedVaribles)
+    const { order, orderBy, setOrder, setOrderBy, selectRows = [], setselectRows } = useContext(GeneratedVaribles)
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -86,6 +86,34 @@ const TableComponent = (props) => {
 
     const columnHeaderInstances = []
     const visibleColumns = headers?.filter(column => column?.visible) || []
+
+    function selectAllRows() {
+        const intersection = columnData.filter(x => !selectRows.includes(x.id));
+        const copyRows = [...selectRows]
+        if (intersection.length > 0) {
+            for (const row of intersection) {
+                copyRows.push(row.id)
+            }
+            setselectRows(copyRows)
+        } else {
+            setselectRows(intersection)
+        }
+
+
+    }
+
+    function verifyIsSelectedAll() {
+        const intersection = columnData.filter(x => selectRows.includes(x.id));
+        if (intersection.length == columnData.length) return true;
+        return false
+
+    }
+
+    function selectedSingleRow(id) {
+        const copyRows = [...selectRows]
+        copyRows.push(id)
+        setselectRows(copyRows)
+    }
 
     function renderHeaderRow(columns) {
         // eslint-disable-next-line react/prop-types
@@ -124,9 +152,9 @@ const TableComponent = (props) => {
                     className={classNames(classes.cell, classes.headerCell)}
                 >
                     <Checkbox
-                        checked={true}
+                        checked={verifyIsSelectedAll()}
                         tabIndex={-1}
-                        // onChange={() => props.handleToggle(props.id)}
+                        onChange={() => selectAllRows()}
                         // label={props.text}
                         className={props.classes.checkbox}
                         valid dense />
@@ -187,16 +215,16 @@ const TableComponent = (props) => {
                                     // style={{ backgroundColor: row.id === props?.rowData?.id ? 'rgba(160, 201, 255,0.5)' : "" }}
                                     id={index}
                                     className={classNames(classes.row, classes.dataRow)}
-                                    onClick={() => { console.log(row) }}
+                                    // onClick={() => { console.log(row) }}
                                 >
                                     <Cell
                                         key={row?.tei}
                                         className={classNames(classes.cell, classes.bodyCell)}
                                     >
                                         <Checkbox
-                                            checked={true}
+                                            checked={selectRows.findIndex(rows => rows === row.id) > -1}
                                             tabIndex={-1}
-                                            // onChange={() => props.handleToggle(props.id)}
+                                            onChange={() => selectedSingleRow(row.id)}
                                             // label={props.text}
                                             className={props.classes.checkbox}
                                             valid dense />

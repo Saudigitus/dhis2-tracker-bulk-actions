@@ -61,10 +61,12 @@ function ContentFilter({ headers, type }) {
                     colums.valueType === "List" ?
                         <div>
                             <small style={{ fontSize: 9 }}>{" "} <br /> </small>
-                            <Select
+                            {console.log(colums)}
+                              <Select
+                              style={{minWidth: 200}}
                                 isClearable={true}
                                 // value={filtersValues[colums?.id]}
-                                options={allOptionSets[colums?.optionSet].map(x => { return { value: x.code, label: x.displayName } })}
+                                options={colums.optionSets?.map(x => { return { value: x.code, label: x.displayName } })}
                                 onChange={(e) => {
                                     onChangeFilters(e, colums.id);
                                     setfiltersValues(prevState => ({ ...prevState, [colums.id]: e?.value }))
@@ -76,7 +78,7 @@ function ContentFilter({ headers, type }) {
                         :
                         <div>
                             {colums.valueType === "DATE" || colums.valueType === "TIME" ? <small style={{ fontSize: 11 }}>{colums.header} </small> : <br />}
-                            <Input value={filters[colums?.id] || ""} key={index} name={colums.id} onChange={(e) => onChangeFilters(e)} className="mr-1 filter-input" valueType={getValueType(colums.valueType)} type={getValueType(colums.valueType)} placeholder={colums.header} />
+                            <Input small value={filters[colums?.id] || ""} key={index} name={colums.id} onChange={(e) => onChangeFilters(e)} className="mr-1 filter-input" valueType={getValueType(colums.valueType)} type={getValueType(colums.valueType)} placeholder={colums.header} />
                         </div>
                 ))
             }

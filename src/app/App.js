@@ -29,6 +29,7 @@ const MyApp = () => {
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('');
     const [reloadData, setreloadData] = useState(false)
+    const [selectRows, setselectRows] = useState([])
 
 
     useEffect(() => {
@@ -52,7 +53,9 @@ const MyApp = () => {
             order, setOrder,
             orderBy, setOrderBy,
             reloadData,
-            setreloadData
+            setreloadData,
+            setselectRows,
+            selectRows
         }}>
             <AppBarContext.Provider value={{
                 selectedOu: selectedOu,
