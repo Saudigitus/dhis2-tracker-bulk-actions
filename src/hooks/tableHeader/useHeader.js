@@ -14,9 +14,9 @@ const resourceTypes = (fields, id) => ({
 })
 
 export const useHeader = ({ type, program }) => {
-    const { error, loading, objects, validationText } = useFetchData(
+    const { error, loading, objects, validationText, getData } = useFetchData(
         resourceTypes(fieldsType[type], program),
-        false
+        true
     )
 
     return {
@@ -24,6 +24,7 @@ export const useHeader = ({ type, program }) => {
         error,
         loading,
         data: objects,
-        validationText
+        validationText,
+        getData
     }
 }
