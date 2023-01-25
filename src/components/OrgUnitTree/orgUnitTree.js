@@ -90,7 +90,6 @@ function OrgUnitTree({ selected, onChange, singleSelection = true, initiallyExpa
 
                     add("ou", data.results.organisationUnits[0].id)
                     add("ouName", data.results.organisationUnits[0].displayName)
-                    add("program", "BDbg3oehQRj")
                     setInitOu(true)
                 }
         }

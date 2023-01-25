@@ -16,14 +16,8 @@ function AppBar() {
 
     const sDate = useQuery().get("startDate")
     const eDate = useQuery().get("endDate")
-    const programId = useQuery().get("program")
+    const programId = useQuery().get("programId")
 
-    useEffect(() => {
-        if (sDate || eDate) {
-            setStartDate(sDate)
-            setEndDate(eDate)
-        }
-    }, [])
 
     return (
         <div className={style.appBarContainer}>

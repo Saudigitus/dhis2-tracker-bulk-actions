@@ -5,20 +5,20 @@ import "react-select/dist/react-select.css";
 import style from "../card/card.module.css";
 
 
-function ProgramSelect({onChange, value}) {
+function ProgramSelect({ onChange, value }) {
   const options = [
-    { label: "One", value: 1 },
-    { label: "Two", value: 2 },
+    { label: "One", value: "IpHINAT79UW" },
+    { label: "Two", value: "IpHINAT79UW" },
   ]
 
   return (
     <div className={style.orgUnitCard}>
-        <VirtualizedSelect
-          options={options}
-          onChange={onChange}
-          value={value}
-        />
-      </div>
+      <VirtualizedSelect
+        options={options}
+        onChange={onChange}
+        value={value}
+      />
+    </div>
   )
 }
 

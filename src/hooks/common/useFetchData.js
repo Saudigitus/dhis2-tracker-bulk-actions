@@ -3,7 +3,7 @@ import i18n from '@dhis2/d2-i18n'
 import { useState } from 'react'
 import { generalQuery } from '../../api/requests.js'
 
-export const useFetchData = (resources, lazy = true, setDisable) => {
+export const useFetchData = (resources, lazy = true) => {
     const [objects, setObjects] = useState(null)
     const [totalPages, settotalPages] = useState(0)
     const [allData, setAllData] = useState(null)
@@ -24,7 +24,6 @@ export const useFetchData = (resources, lazy = true, setDisable) => {
                     setObjects(list)
                     setAllData(res)
                     setloading(false)
-                    setDisable(true)
                 },
                 onError: (error) => {
                     console.error('useObjects error: ', error)

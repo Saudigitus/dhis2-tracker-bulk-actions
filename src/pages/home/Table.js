@@ -9,7 +9,7 @@ import generalPagesStyles from "../Pages.module.css";
 function List() {
     const type = "WITH_REGISTRATION"
     const [searchParams] = useSearchParams();
-    const programId = searchParams.get('program');
+    const programId = searchParams.get('programId');
     const ouId = searchParams.get('ou');
 
     return (

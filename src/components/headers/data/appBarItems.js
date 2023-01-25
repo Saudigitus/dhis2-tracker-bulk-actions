@@ -12,10 +12,10 @@ const itens = (selected, setSelectedOu, programId, remove, add) => [
         selectedItem: programId?.displayName,
         action: () => <ProgramSelect onChange={
             (e) => {
-                add("programId", e.id);
+                add("programId", e.value);
             }
         } />,
-        value: "",
+        value: programId,
         setValue: (e) => { remove("programId") }
     },
     {

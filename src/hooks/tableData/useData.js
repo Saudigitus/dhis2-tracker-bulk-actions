@@ -12,23 +12,18 @@ const fieldsType = {
     QUERIES: "*"
 }
 
-//filter=Redsyjfv004:LIKE:Celso
-
 const resourceType = {
     WITH_REGISTRATION: "trackedEntityInstances",
     WITHOUT_REGISTRATION: "events",
     QUERIES: "trackedEntityInstances/query",
 }
 
-const today = formaterToIsoDate(new Date())
 const paramsType = ({ ou, program, programStage, page, pageSize, programStatus, todayData, filters, filtro, order }) => ({
     WITH_REGISTRATION: {
         ou: ou || undefined,
-        ouMode: ou ? "DESCENDANTS" : "ACCESSIBLE",
-        order: 'created:desc',
+        // ouMode: ou ? "DESCENDANTS" : "ACCESSIBLE",
+        order: order,
         attribute: filters,
-        //programEnrollmentStartDate: today,
-        programEnrollmentEndDate: today,
         filter: filtro,
         program,
         pageSize: pageSize,
@@ -38,11 +33,9 @@ const paramsType = ({ ou, program, programStage, page, pageSize, programStatus, 
     },
     QUERIES: {
         ou: ou || undefined,
-        ouMode: ou ? "DESCENDANTS" : "ACCESSIBLE",
-        order: 'created:desc',
+        // ouMode: ou ? "DESCENDANTS" : "ACCESSIBLE",
+        order: order,
         attribute: filters,
-        //programEnrollmentStartDate: today,
-        programEnrollmentEndDate: today,
         program,
         paging: false
     },
@@ -73,6 +66,7 @@ export const useData = ({ type, ou, program, programStatus = undefined, page, pa
 
     const { filter } = useContext(AppBarContext);
     const { order, orderBy } = useContext(GeneratedVaribles);
+    console.log(order, orderBy);
 
     const { error, loading, objects, validationText, getData, totalPages, allData } = useFetchData(resourceTypes({
         type,
@@ -84,8 +78,10 @@ export const useData = ({ type, ou, program, programStatus = undefined, page, pa
         todayData,
         filters,
         filtro: filter,
-        order: `${orderBy}:${order}`
-    }), )
+        order: `${orderBy? orderBy: type === "WITH_REGISTRATION" ?
+            "created" :
+            "eventDate"}:${order}`
+    }),)
 
     return {
         columnData: formatResponseData(type, objects),

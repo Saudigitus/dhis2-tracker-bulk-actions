@@ -5,7 +5,6 @@ import { Button, Input, SingleSelectField, SingleSelectOption } from '@dhis2/ui'
 import React, { useState, useContext } from 'react';
 import SearchIcon from '@material-ui/icons/Search';
 import { AppBarContext } from '../../../../contexts/AppBarContext'
-import ClearIcon from '@material-ui/icons/Clear';
 import { Divider, IconButton } from '@material-ui/core';
 import { GeneratedVaribles } from '../../../../contexts/GeneratedVaribles';
 import { getValueType } from '../../../../utils/commons/getValueType';
@@ -17,7 +16,7 @@ function ContentFilter({ headers, type }) {
     const { setFilter } = useContext(AppBarContext);
     const { allOptionSets } = useContext(GeneratedVaribles)
     const [filtersValues, setfiltersValues] = useState({})
-    var queryBuilder = "lSFnAhv8F9u:in:Obito,";
+    var queryBuilder = "";
 
 
     const fiterSearchableHeaders = () => {
@@ -47,11 +46,11 @@ function ContentFilter({ headers, type }) {
     }
 
     const onQuerySubmit = () => {
-        for (const [key, value] of Object.entries(filters)) {
-            queryBuilder += `${key}:LIKE:${value},`
-        }
+        // for (const [key, value] of Object.entries(filters)) {
+        //     queryBuilder += `${key}:LIKE:${value},`
+        // }
 
-        setFilter(queryBuilder.slice(0, -1))
+        setFilter(queryBuilder)
     }
 
 
@@ -62,7 +61,6 @@ function ContentFilter({ headers, type }) {
                     colums.valueType === "List" ?
                         <div>
                             <small style={{ fontSize: 9 }}>{" "} <br /> </small>
-                            {console.log(filtersValues[colums?.id])}
                             <Select
                                 isClearable={true}
                                 // value={filtersValues[colums?.id]}
