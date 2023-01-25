@@ -1,7 +1,6 @@
 import { useContext, useEffect } from "react";
 import { AppBarContext } from "../../contexts";
 import { GeneratedVaribles } from "../../contexts/GeneratedVaribles";
-import { formaterToIsoDate } from "../../utils/commons/dateFormatter";
 // eslint-disable-next-line import/extensions
 import { formatResponseData } from "../../utils/table/rows/formatResponseData";
 import { useFetchData } from "../common/useFetchData.js";
@@ -66,7 +65,6 @@ export const useData = ({ type, ou, program, programStatus = undefined, page, pa
 
     const { filter } = useContext(AppBarContext);
     const { order, orderBy } = useContext(GeneratedVaribles);
-    console.log(order, orderBy);
 
     const { error, loading, objects, validationText, getData, totalPages, allData } = useFetchData(resourceTypes({
         type,

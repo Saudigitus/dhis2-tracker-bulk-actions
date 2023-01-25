@@ -8,21 +8,20 @@ import { useParams } from '../../hooks/common/useQueryParams';
 import style from './appbar.module.css'
 import { itens } from './data';
 import { useConfig } from '@dhis2/app-runtime';
+import { useGetPrograms } from '../../hooks/programs/useGetPrograms';
 
 function AppBar() {
     const { baseUrl } = useConfig();
-    const { selectedOu, setSelectedOu, setStartDate, setEndDate } = useContext(AppBarContext)
+    const { selectedOu, setSelectedOu } = useContext(AppBarContext)
     const { remove, add, useQuery } = useParams()
+    const { loading, programs } = useGetPrograms("WITH_REGISTRATION")
 
-    const sDate = useQuery().get("startDate")
-    const eDate = useQuery().get("endDate")
     const programId = useQuery().get("programId")
-
 
     return (
         <div className={style.appBarContainer}>
             {
-                itens(selectedOu, setSelectedOu, programId, remove, add).map((iten, index) => (
+                itens(selectedOu, setSelectedOu, programId, remove, add, loading, programs ).map((iten, index) => (
                     <div key={index} className={style.menuContainer}>
                         <h4>{iten.title}</h4>
                         {

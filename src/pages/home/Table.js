@@ -14,20 +14,21 @@ function List() {
 
     return (
         <>
-            <div className={generalPagesStyles.pageStyle}>
-                <Paper>
-                    {(programId && ouId) &&
+            {(programId && ouId) &&
+                <div className={generalPagesStyles.pageStyle}>
+                    <Paper>
                         <>
                             <ListContent
                                 program={programId}
                                 type={type}
                             />
                         </>
-                    }
-                </Paper>
+                    </Paper>
+                </div>
+            }
+            <div style={{ height: programId ? 0 : 400 }}>
+                <WithPadding />
             </div>
-
-            <WithPadding />
         </>
     )
 }

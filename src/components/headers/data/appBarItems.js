@@ -5,12 +5,12 @@ import React from 'react'
 import { OrgUnitCard } from '../../OrgUnitTree';
 import ProgramSelect from '../../programSelect/ProgramSelect';
 
-const itens = (selected, setSelectedOu, programId, remove, add) => [
+const itens = (selected, setSelectedOu, programId, remove, add, loading, programs) => [
     {
         title: "Select Program",
         icone: () => <EventIcon style={{ fontSize: '1.2rem', color: 'rgba(0, 0, 0, 0.54)' }} />,
-        selectedItem: programId?.displayName,
-        action: () => <ProgramSelect onChange={
+        selectedItem: programs?.find((program) => program.value === programId)?.label,
+        action: () => <ProgramSelect options={programs} loading={loading} onChange={
             (e) => {
                 add("programId", e.value);
             }
