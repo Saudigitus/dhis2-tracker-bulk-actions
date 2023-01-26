@@ -5,7 +5,6 @@ import { Button, Input, SingleSelectField, SingleSelectOption } from '@dhis2/ui'
 import React, { useState, useContext } from 'react';
 import SearchIcon from '@material-ui/icons/Search';
 import { AppBarContext } from '../../../../contexts/AppBarContext'
-import ClearIcon from '@material-ui/icons/Clear';
 import { Divider, IconButton } from '@material-ui/core';
 import { GeneratedVaribles } from '../../../../contexts/GeneratedVaribles';
 import { getValueType } from '../../../../utils/commons/getValueType';
@@ -17,7 +16,7 @@ function ContentFilter({ headers, type }) {
     const { setFilter } = useContext(AppBarContext);
     const { allOptionSets } = useContext(GeneratedVaribles)
     const [filtersValues, setfiltersValues] = useState({})
-    var queryBuilder = "lSFnAhv8F9u:in:Obito,";
+    var queryBuilder = "";
 
 
     const fiterSearchableHeaders = () => {
@@ -32,7 +31,7 @@ function ContentFilter({ headers, type }) {
     }
 
     //var visibles = headers.map(value => value.visible);
-    const allHidden = headers.every(v => v.visible === false && v.visible === headers[0].visible)
+    const allHidden = headers?.every(v => v.visible === false && v.visible === headers[0].visible)
 
     const onChangeFilters = (event, key) => {
         console.log(event, key);
@@ -47,11 +46,11 @@ function ContentFilter({ headers, type }) {
     }
 
     const onQuerySubmit = () => {
-        for (const [key, value] of Object.entries(filters)) {
-            queryBuilder += `${key}:LIKE:${value},`
-        }
+        // for (const [key, value] of Object.entries(filters)) {
+        //     queryBuilder += `${key}:LIKE:${value},`
+        // }
 
-        setFilter(queryBuilder.slice(0, -1))
+        setFilter(queryBuilder)
     }
 
 
@@ -62,11 +61,12 @@ function ContentFilter({ headers, type }) {
                     colums.valueType === "List" ?
                         <div>
                             <small style={{ fontSize: 9 }}>{" "} <br /> </small>
-                            {console.log(filtersValues[colums?.id])}
-                            <Select
+                            {console.log(colums)}
+                              <Select
+                              style={{minWidth: 200}}
                                 isClearable={true}
                                 // value={filtersValues[colums?.id]}
-                                options={allOptionSets[colums?.optionSet].map(x => { return { value: x.code, label: x.displayName } })}
+                                options={colums.optionSets?.map(x => { return { value: x.code, label: x.displayName } })}
                                 onChange={(e) => {
                                     onChangeFilters(e, colums.id);
                                     setfiltersValues(prevState => ({ ...prevState, [colums.id]: e?.value }))
@@ -78,7 +78,7 @@ function ContentFilter({ headers, type }) {
                         :
                         <div>
                             {colums.valueType === "DATE" || colums.valueType === "TIME" ? <small style={{ fontSize: 11 }}>{colums.header} </small> : <br />}
-                            <Input value={filters[colums?.id] || ""} key={index} name={colums.id} onChange={(e) => onChangeFilters(e)} className="mr-1 filter-input" valueType={getValueType(colums.valueType)} type={getValueType(colums.valueType)} placeholder={colums.header} />
+                            <Input small value={filters[colums?.id] || ""} key={index} name={colums.id} onChange={(e) => onChangeFilters(e)} className="mr-1 filter-input" valueType={getValueType(colums.valueType)} type={getValueType(colums.valueType)} placeholder={colums.header} />
                         </div>
                 ))
             }

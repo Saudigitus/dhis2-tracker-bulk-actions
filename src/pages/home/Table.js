@@ -7,28 +7,28 @@ import generalPagesStyles from "../Pages.module.css";
 
 
 function List() {
-    const type = "WITHOUT_REGISTRATION"
+    const type = "WITH_REGISTRATION"
     const [searchParams] = useSearchParams();
-    const programId = searchParams.get('program');
+    const programId = searchParams.get('programId');
     const ouId = searchParams.get('ou');
 
     return (
         <>
-            <div className={generalPagesStyles.pageStyle}>
-                <Paper>
-                    {(programId && ouId) &&
+            {(programId && ouId) &&
+                <div className={generalPagesStyles.pageStyle}>
+                    <Paper>
                         <>
-                            <div className={generalPagesStyles.moduleTitleComponent}>Eventos Registrados </div>
                             <ListContent
                                 program={programId}
                                 type={type}
                             />
                         </>
-                    }
-                </Paper>
+                    </Paper>
+                </div>
+            }
+            <div style={{ height: programId ? 0 : 400 }}>
+                <WithPadding />
             </div>
-
-            <WithPadding />
         </>
     )
 }

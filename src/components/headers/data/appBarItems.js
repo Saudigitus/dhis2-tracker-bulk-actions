@@ -2,13 +2,24 @@
 import AccountTreeIcon from '@material-ui/icons/AccountTree';
 import EventIcon from '@material-ui/icons/Event';
 import React from 'react'
-import { formaterToIsoDate } from '../../../utils/commons/dateFormatter';
-import DatePicker from '../../datepicker/DatePicker';
 import { OrgUnitCard } from '../../OrgUnitTree';
+import ProgramSelect from '../../programSelect/ProgramSelect';
 
-const itens = (selected, setSelectedOu, startDate, setStartDate, endDate, setEndDate, remove, add) => [
+const itens = (selected, setSelectedOu, programId, remove, add, loading, programs) => [
     {
-        title: "Unidade Organizacional",
+        title: "Select Program",
+        icone: () => <EventIcon style={{ fontSize: '1.2rem', color: 'rgba(0, 0, 0, 0.54)' }} />,
+        selectedItem: programs?.find((program) => program.value === programId)?.label,
+        action: () => <ProgramSelect options={programs} loading={loading} onChange={
+            (e) => {
+                add("programId", e.value);
+            }
+        } />,
+        value: programId,
+        setValue: (e) => { remove("programId") }
+    },
+    {
+        title: "Select registering unit",
         icone: () => <AccountTreeIcon style={{ fontSize: '1.2rem', color: 'rgba(0, 0, 0, 0.54)' }} />,
         selectedItem: selected?.displayName,
         action: () => <OrgUnitCard expanded={false} selected={selected} onChange={
@@ -19,11 +30,11 @@ const itens = (selected, setSelectedOu, startDate, setStartDate, endDate, setEnd
                     displayName: e.displayName
                 });
                 add("ou", e.selected[0].split('/').pop());
-                add("ouName",e.displayName)
+                add("ouName", e.displayName)
             }
         } />,
         value: selected,
-        setValue: () => {setSelectedOu(); remove("ou"); remove("ouName")}
+        setValue: () => { setSelectedOu(); remove("ou"); remove("ouName") }
     },
 ]
 

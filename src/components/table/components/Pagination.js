@@ -6,8 +6,6 @@ import defaultClasses from './table.module.css';
 
 // eslint-disable-next-line react/prop-types
 const Pagination = ({ page, rowsPerPage, onPageChange, onRowsPerPageChange, totalPages, loading, totalPerPage }) => {
-    console.log(page);
-
 
     function isDesabled() {
         if (totalPerPage < rowsPerPage) {

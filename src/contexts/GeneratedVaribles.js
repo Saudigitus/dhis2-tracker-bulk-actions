@@ -12,6 +12,11 @@ export const GeneratedVaribles = createContext({
     orderBy: {},
     setOrderBy: {},
     reloadData: {},
-    setreloadData: {}
+    setreloadData: {},
+    setselectRows: {},
+    selectRows: {},
+    setprograms: {},
+    programs: {},
+    userOrgUnit: {}
 })
 

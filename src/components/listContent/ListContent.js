@@ -11,6 +11,7 @@ import WithBorder from '../table/components/WithBorder.js'
 import WithPadding from '../tamplate/WithPadding.js'
 import Content from './Content.js'
 import OtherFilters from './filter/other/OtherFilters.js'
+import style from "./listcontent.module.css";
 
 // eslint-disable-next-line react/prop-types
 function ListContent({ type, program }) {
@@ -26,7 +27,7 @@ function ListContent({ type, program }) {
   const endDate = searchParams.get('endDate');
   const [page, setpage] = useState(1)
   const [pageSize, setpageSize] = useState(10)
-  const { headers = [], loading, } = useHeader({ type, program })
+  const { headers = [], loading, getData: getDataHeader } = useHeader({ type, program })
   const { totalPages, loading: loadingHeader, columnData, getData } = useData({ type, ou: selectedOu, program, programStatus: selectedFilter, page, pageSize })
 
   const optionSets = headers.filter(x => x.optionSet)?.map(x => x.optionSet);
@@ -51,12 +52,19 @@ function ListContent({ type, program }) {
       index) => arr.indexOf(item) === index);
   }
 
+
   useEffect(() => {
     if (optionSets?.length > 0 && controlRenderOptions) {
       setcontrolRenderOptions(false)
       getOptionsByOptionSet(removeDuplicates(optionSets))
     }
   }, [headers])
+
+
+  useEffect(() => {
+    getDataHeader()
+  }, [program])
+
 
 
   useEffect(() => {
@@ -69,20 +77,29 @@ function ListContent({ type, program }) {
 
   return (
     <>
+      {type === "WITHOUT_REGISTRATION" &&
+        <WithBorder type={"bottom"}>
+          <WithPadding p={"1.5em"}>
+            <span className={style.event}>
+              Registered events
+            </span>
+          </WithPadding>
+        </WithBorder>
+      }
       <div
         style={{ padding: "1.5rem" }}
       >
-
         <WithBorder type={"all"}>
-
-          <WithBorder type={"bottom"}>
-            <WithPadding>
-              <OtherFilters
-                onFilterByEnrollment={onFilterByEnrollment}
-                selectedFilter={selectedFilter}
-              />
-            </WithPadding>
-          </WithBorder>
+          {type === "WITH_REGISTRATION" &&
+            <WithBorder type={"bottom"}>
+              <WithPadding>
+                <OtherFilters
+                  onFilterByEnrollment={onFilterByEnrollment}
+                  selectedFilter={selectedFilter}
+                />
+              </WithPadding>
+            </WithBorder>
+          }
 
           <Content
             columnData={columnData}
@@ -92,7 +109,6 @@ function ListContent({ type, program }) {
             loadingOptionSet={loadingOptionSet}
             type={type}
           />
-
           <Pagination
             onPageChange={onPageChange}
             onRowsPerPageChange={onRowsPerPageChange}
