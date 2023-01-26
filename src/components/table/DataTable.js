@@ -98,8 +98,20 @@ const TableComponent = (props) => {
         } else {
             setselectRows(intersection)
         }
+    }
 
+    function verifyIndeter() {
+        const intersection = columnData.filter(x => selectRows.includes(x.id));
 
+        if (intersection.length == 10 ) {
+            return false
+        }
+
+        if (intersection.length > 0 || selectRows.length > intersection.length) {
+            return true
+        }
+
+        return false
     }
 
     function verifyIsSelectedAll() {
@@ -111,10 +123,10 @@ const TableComponent = (props) => {
 
     function selectedSingleRow(id) {
         const copyRows = [...selectRows]
-        const pos = copyRows.findIndex(x => x.id === id)
+        const pos = copyRows.findIndex(x => x === id)
+
         if (pos > -1) {
-            delete copyRows[pos]
-            copyRows.push(id)
+            copyRows.splice(pos, 1)
             setselectRows(copyRows)
         } else {
             copyRows.push(id)
@@ -164,6 +176,7 @@ const TableComponent = (props) => {
                         tabIndex={-1}
                         onChange={() => selectAllRows()}
                         // label={props.text}
+                        indeterminate={verifyIndeter()}
                         className={props.classes.checkbox}
                         valid dense />
                 </HeaderCell>
