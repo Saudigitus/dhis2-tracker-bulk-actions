@@ -38,7 +38,6 @@ export default function SimpleMenu({ setopenModalBulkTranfer }) {
                 transformOrigin={{ vertical: 'top', horizontal: 'center' }}
             >
                 <MenuItem onClick={() => { setopenModalBulkTranfer(true); setAnchorEl(null) }}>Permanent Tranfer</MenuItem>
-                <MenuItem onClick={handleClose}>Close Enrollment</MenuItem>
             </Menu>
         </>
     );

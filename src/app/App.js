@@ -21,7 +21,8 @@ const me = {
         params: {
             fields: "organisationUnits[id,displayName]",
         }
-    }
+    },
+
 }
 
 const MyApp = () => {
