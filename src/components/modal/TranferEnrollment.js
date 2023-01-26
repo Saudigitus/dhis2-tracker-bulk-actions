@@ -47,7 +47,7 @@ const TranferEnrollment = ({ open, setopen }) => {
             <p />
             <ModalContent>
                 <div style={{ marginTop: 18, marginLeft: 0, marginBottom: 0 }}>
-                    Tranfer {selectRows.length} {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected.displayName || "Organisation Unit"}`}</strong>
+                    Transfer {selectRows.length} {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected.displayName || "Organisation Unit"}`}</strong>
                     <div style={{ background: "rgb(243, 245, 247)", height: "20px", marginTop: 10 }}></div>
                     <Box width="100%">
                         {Testing({
