@@ -44,6 +44,8 @@ const MyApp = () => {
     const [selectRows, setselectRows] = useState([])
     const [programs, setprograms] = useState([])
     const [userOrgUnit, setuserOrgUnit] = useState({})
+    const [tEItransfered, setTEItransfered] = useState([])
+    const [allTeisFormated, setallTeisFormated] = useState()
 
     const { data, loading, error } = useDataQuery(me)
 
@@ -88,7 +90,11 @@ const MyApp = () => {
             selectRows,
             setprograms,
             programs,
-            userOrgUnit
+            userOrgUnit,
+            tEItransfered,
+            setTEItransfered,
+            allTeisFormated,
+            setallTeisFormated
         }}>
             <AppBarContext.Provider value={{
                 selectedOu: selectedOu,
