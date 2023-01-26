@@ -32,7 +32,7 @@ function Testing({ name, Component }) {
 }
 
 const TranferEnrollment = ({ open, setopen }) => {
-    const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered } = useContext(GeneratedVaribles)
+    const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows } = useContext(GeneratedVaribles)
     const { useQuery } = useParams()
     const programId = useQuery().get("programId")
     const ouName = useQuery().get("ouName")
@@ -97,7 +97,7 @@ const TranferEnrollment = ({ open, setopen }) => {
                         :
                         tEItransfered.map(x =>
                             <>
-                                <div style={{ display: "flex", marginBottom: 8, marginTop:8, width: '100%' }}>
+                                <div style={{ display: "flex", marginBottom: 8, marginTop: 8, width: '100%' }}>
                                     <div>
 
                                         <Label color="muted" style={{ marginLeft: "5px" }}>{x.name}</Label >
@@ -123,17 +123,20 @@ const TranferEnrollment = ({ open, setopen }) => {
                         onClick={() => {
                             setopen(false);
                             setTEItransfered([])
+                            if (tEItransfered.length > 0) {
+                                setselectRows([])
+                            }
                         }}>
-                        {('Cancel')}
+                        {tEItransfered.length > 0 ? "Close" : ('Cancel')}
                     </Button>
-                    <Button
+                    {tEItransfered.length === 0 && <Button
                         primary
                         name="insert-preset"
                         disabled={!orgUnitSelected?.id || selectRows.length === 0}
                         onClick={() => tranfer(currentDetailsProgram(), orgUnitSelected.id, selectRows)}
                     >
                         {('Transfer')}
-                    </Button>
+                    </Button>}
                 </ButtonStrip>
             </ModalActions>
         </Modal >
