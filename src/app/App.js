@@ -4,6 +4,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { AppBarContext } from '../contexts';
 import "./App.css";
 import { GeneratedVaribles } from '../contexts/GeneratedVaribles.js';
+import { useDataQuery } from '@dhis2/app-runtime';
+import { CenteredContent, CircularLoader } from '@dhis2/ui';
 
 const idb =
     window.indexedDB ||
@@ -12,6 +14,15 @@ const idb =
     window.msIndexedDB ||
     window.shimIndexedDB;
 
+
+const me = {
+    results: {
+        resource: "me",
+        params: {
+            fields: "organisationUnits[id,displayName]",
+        }
+    }
+}
 
 const MyApp = () => {
     // initDB(DBConfig);
@@ -30,7 +41,10 @@ const MyApp = () => {
     const [orderBy, setOrderBy] = useState('');
     const [reloadData, setreloadData] = useState(false)
     const [selectRows, setselectRows] = useState([])
+    const [programs, setprograms] = useState([])
+    const [userOrgUnit, setuserOrgUnit] = useState({})
 
+    const { data, loading, error } = useDataQuery(me)
 
     useEffect(() => {
         getDb()
@@ -39,6 +53,21 @@ const MyApp = () => {
     async function getDb() {
         const db = await idb.open(dbName, 1);
         setexternalUser(db);
+    }
+
+    useEffect(() => {
+        setuserOrgUnit({
+            data: data,
+            error: error
+        })
+    }, [data])
+
+    if (loading) {
+        return (
+            <CenteredContent>
+                <CircularLoader />
+            </CenteredContent>
+        )
     }
 
 
@@ -55,7 +84,10 @@ const MyApp = () => {
             reloadData,
             setreloadData,
             setselectRows,
-            selectRows
+            selectRows,
+            setprograms,
+            programs,
+            userOrgUnit
         }}>
             <AppBarContext.Provider value={{
                 selectedOu: selectedOu,

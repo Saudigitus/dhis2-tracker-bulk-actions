@@ -111,8 +111,16 @@ const TableComponent = (props) => {
 
     function selectedSingleRow(id) {
         const copyRows = [...selectRows]
-        copyRows.push(id)
-        setselectRows(copyRows)
+        const pos = copyRows.findIndex(x => x.id === id)
+        if (pos > -1) {
+            delete copyRows[pos]
+            copyRows.push(id)
+            setselectRows(copyRows)
+        } else {
+            copyRows.push(id)
+            setselectRows(copyRows)
+        }
+
     }
 
     function renderHeaderRow(columns) {
@@ -215,7 +223,7 @@ const TableComponent = (props) => {
                                     // style={{ backgroundColor: row.id === props?.rowData?.id ? 'rgba(160, 201, 255,0.5)' : "" }}
                                     id={index}
                                     className={classNames(classes.row, classes.dataRow)}
-                                    // onClick={() => { console.log(row) }}
+                                // onClick={() => { console.log(row) }}
                                 >
                                     <Cell
                                         key={row?.tei}

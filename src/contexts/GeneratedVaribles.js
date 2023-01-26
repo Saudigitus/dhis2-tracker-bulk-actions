@@ -14,6 +14,9 @@ export const GeneratedVaribles = createContext({
     reloadData: {},
     setreloadData: {},
     setselectRows: {},
-    selectRows: {}
+    selectRows: {},
+    setprograms: {},
+    programs: {},
+    userOrgUnit: {}
 })
 

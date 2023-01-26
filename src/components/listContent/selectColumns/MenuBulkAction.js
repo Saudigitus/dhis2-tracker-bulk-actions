@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
-export default function SimpleMenu() {
+export default function SimpleMenu({ setopenModalBulkTranfer }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClick = (event) => {
@@ -19,7 +19,7 @@ export default function SimpleMenu() {
             <Button style={{
                 color: "rgb(33, 41, 52)",
                 fontSize: 14,
-                textTransform:"none",
+                textTransform: "none",
                 fontWeight: 400,
             }}
                 size="small"
@@ -37,7 +37,7 @@ export default function SimpleMenu() {
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                 transformOrigin={{ vertical: 'top', horizontal: 'center' }}
             >
-                <MenuItem onClick={handleClose}>Permanent Tranfer</MenuItem>
+                <MenuItem onClick={() => { setopenModalBulkTranfer(true); setAnchorEl(null) }}>Permanent Tranfer</MenuItem>
                 <MenuItem onClick={handleClose}>Close Enrollment</MenuItem>
             </Menu>
         </>

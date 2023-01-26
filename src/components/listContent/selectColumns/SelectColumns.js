@@ -2,6 +2,7 @@ import i18n from '@dhis2/d2-i18n';
 import { IconSettings24, Layer, Popover, Popper } from '@dhis2/ui';
 import { Button, IconButton, Tooltip } from '@material-ui/core';
 import React, { useState, useRef } from 'react'
+import TranferEnrollment from '../../modal/TranferEnrollment.js';
 import DialogSelectColumns from './DialogSelectColumns.js';
 import SimpleMenu from './MenuBulkAction.js';
 import MenuBulkAction from './MenuBulkAction.js';
@@ -9,7 +10,7 @@ import MenuBulkAction from './MenuBulkAction.js';
 // eslint-disable-next-line react/prop-types
 function SelectColumns({ headers, updateVariables }) {
     const [open, setopen] = useState(false)
-    const openBulkRef = useRef()
+    const [openModalBulk, setopenModalBulk] = useState(false)
 
     const closeDialog = () => {
         setopen(false)
@@ -28,7 +29,9 @@ function SelectColumns({ headers, updateVariables }) {
     return (
         <React.Fragment>
             <div>
-                <SimpleMenu />
+                <SimpleMenu 
+                setopenModalBulkTranfer={setopenModalBulk}
+                />
                 <span style={{ paddingRight: 10 }} />
                 <Tooltip
                     disableFocusListener
@@ -53,6 +56,11 @@ function SelectColumns({ headers, updateVariables }) {
                 updateVariables={updateVariables}
                 headers={headers}
             />
+
+            {openModalBulk && <TranferEnrollment
+                open={openModalBulk}
+                setopen={setopenModalBulk}
+            />}
 
 
         </React.Fragment>
