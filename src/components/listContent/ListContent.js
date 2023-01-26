@@ -3,6 +3,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { AppBarContext } from '../../contexts/AppBarContext.js'
 import { GeneratedVaribles } from '../../contexts/GeneratedVaribles.js'
+import { useParams } from '../../hooks/common/useQueryParams.js'
 import { useGetOptionSets } from '../../hooks/optionSets/useGetOptionSets.js'
 import { useData } from '../../hooks/tableData/useData.js'
 import { useHeader } from '../../hooks/tableHeader/useHeader.js'
@@ -15,11 +16,12 @@ import style from "./listcontent.module.css";
 
 // eslint-disable-next-line react/prop-types
 function ListContent({ type, program }) {
-  const { order, orderBy, setreloadData, reloadData } = useContext(GeneratedVaribles)
+  const { order, orderBy, setreloadData, reloadData, setallTeisFormated } = useContext(GeneratedVaribles)
   const { filter } = useContext(AppBarContext);
 
   const [selectedFilter, setselectedFilter] = useState("")
   const [controlRenderOptions, setcontrolRenderOptions] = useState(true)
+  const { remove } = useParams()
 
   const [searchParams] = useSearchParams();
   const selectedOu = searchParams.get('ou');
@@ -65,14 +67,23 @@ function ListContent({ type, program }) {
     getDataHeader()
   }, [program])
 
+  useEffect(() => {
+    setallTeisFormated(columnData)
+  }, [loadingHeader])
 
+  useEffect(() => {
+    if (searchParams.has("reload")) {
+      remove("reload")
+    }
+  }, [columnData])
+  
 
   useEffect(() => {
     if (!loadingHeader) {
       getData()
       setreloadData(false)
     }
-  }, [endDate, startDate, selectedOu, order, orderBy, reloadData, page, pageSize, filter])
+  }, [endDate, startDate, selectedOu, order, orderBy, reloadData, page, pageSize, filter, searchParams.get("reload")])
 
 
   return (

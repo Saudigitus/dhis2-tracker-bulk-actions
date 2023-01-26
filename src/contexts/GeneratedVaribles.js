@@ -17,6 +17,10 @@ export const GeneratedVaribles = createContext({
     selectRows: {},
     setprograms: {},
     programs: {},
-    userOrgUnit: {}
+    userOrgUnit: {},
+    tEItransfered: {},
+    setTEItransfered: {},
+    allTeisFormated: {},
+    setallTeisFormated: {}
 })
 
