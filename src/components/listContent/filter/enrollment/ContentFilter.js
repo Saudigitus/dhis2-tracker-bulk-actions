@@ -1,48 +1,70 @@
-/* eslint-disable import/extensions */
-/* eslint-disable import/order */
-/* eslint-disable react/prop-types */
-import { Button, Input, SingleSelectField, SingleSelectOption } from '@dhis2/ui';
-import React, { useState, useContext } from 'react';
+
+import { Input } from '@dhis2/ui';
+import { Button, FormControl, IconButton, InputLabel, makeStyles, MenuItem, Select, TextField } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
+import React, { useState, useContext, useEffect } from 'react';
 import { AppBarContext } from '../../../../contexts/AppBarContext'
-import { Divider, IconButton } from '@material-ui/core';
 import { GeneratedVaribles } from '../../../../contexts/GeneratedVaribles';
 import { getValueType } from '../../../../utils/commons/getValueType';
-import Select from 'react-select';
+import MenuFilters from './MenuFilters';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+    MuiPickersUtilsProvider,
+    KeyboardTimePicker,
+    KeyboardDatePicker,
+} from '@material-ui/pickers';
+import { format } from 'date-fns';
+
+
+const useStyles = makeStyles((theme) => ({
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 120,
+    },
+    selectEmpty: {
+        marginTop: theme.spacing(2),
+    },
+}));
+
 
 function ContentFilter({ headers, type }) {
-
+    const classes = useStyles();
     const [filters, setFilters] = useState({});
     const { setFilter } = useContext(AppBarContext);
     const { allOptionSets } = useContext(GeneratedVaribles)
     const [filtersValues, setfiltersValues] = useState({})
+    const [localFilters, setlocalFilters] = useState([])
+    const [anchorEl, setAnchorEl] = useState(null)
     var queryBuilder = "";
 
+    useEffect(() => {
+        const copyHeader = [...headers]
+        setlocalFilters(copyHeader.slice(0, 4))
+    }, [headers])
 
-    const fiterSearchableHeaders = () => {
-        return headers.filter(element => {
-            if (type === "WITH_REGISTRATION") {
-                return element.searchable === true & element.visible === true;
-            } else if (type === "WITHOUT_REGISTRATION") {
-                return element.visible === true;
-            }
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
 
-        })
+    const addSearchableHeaders = (e) => {
+        console.log(e);
+        const copyHeader = [...headers]
+        const copyHeaderLocal = [...localFilters]
+
+        let pos = copyHeader.findIndex(x => x.id === e.id)
+        copyHeaderLocal.push(copyHeader[pos])
+        setlocalFilters(copyHeaderLocal)
     }
 
-    //var visibles = headers.map(value => value.visible);
-    const allHidden = headers?.every(v => v.visible === false && v.visible === headers[0].visible)
-
     const onChangeFilters = (event, key) => {
-        console.log(event, key);
-        if (event?.value != null) {
-            setFilters(prevState => ({
-                ...prevState,
-                [key]: event?.value || event?.selected
-            }));
+        // console.log(event?.target?.value);
+        if (event?.target?.value != null) {
+            const copyHeader = { ...filters }
+            copyHeader[key] = event?.target?.value
+            setfiltersValues(copyHeader);
+        } else {
+            delete filters[key]
         }
-        delete filters[key]
-
     }
 
     const onQuerySubmit = () => {
@@ -52,46 +74,99 @@ function ContentFilter({ headers, type }) {
 
         setFilter(queryBuilder)
     }
-
+    // console.log(filtersValues);
 
     return (
         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", marginBottom: 10 }}>
             {
-                fiterSearchableHeaders().map((colums, index) => (
+                localFilters.map((colums, index) => (
                     colums.valueType === "List" ?
-                        <div>
+                        <div key={index} style={{ margin: "0 5px" }}>
                             <small style={{ fontSize: 9 }}>{" "} <br /> </small>
-                            {console.log(colums)}
-                              <Select
-                              style={{minWidth: 200}}
-                                isClearable={true}
-                                // value={filtersValues[colums?.id]}
-                                options={colums.optionSets?.map(x => { return { value: x.code, label: x.displayName } })}
-                                onChange={(e) => {
-                                    onChangeFilters(e, colums.id);
-                                    setfiltersValues(prevState => ({ ...prevState, [colums.id]: e?.value }))
-                                }}
-                                className="mr-1 filter-input-select"
-                                placeholder={colums.header} key={index}
-                            />
+                            <FormControl variant="outlined" size="small" className={classes.formControl} style={{ marginTop: -18 }}>
+                                <InputLabel id="demo-simple-select-label">{colums.header}</InputLabel>
+                                <Select
+                                    style={{ width: 200 }}
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={filtersValues[colums?.id]}
+                                    onChange={(e) => {
+                                        onChangeFilters(e, colums.id);
+                                        setfiltersValues(prevState => ({ ...prevState, [colums.id]: e?.target?.value }))
+                                    }}
+                                    className="mr-1 filter-input-select"
+                                    placeholder={colums.header} key={index}
+                                >
+                                    {colums.optionSets.map((x, li) => <MenuItem key={li} value={x.code}>{x.displayName}</MenuItem>)}
+                                </Select>
+                            </FormControl>
                         </div>
-                        :
-                        <div>
-                            {colums.valueType === "DATE" || colums.valueType === "TIME" ? <small style={{ fontSize: 11 }}>{colums.header} </small> : <br />}
-                            <Input small value={filters[colums?.id] || ""} key={index} name={colums.id} onChange={(e) => onChangeFilters(e)} className="mr-1 filter-input" valueType={getValueType(colums.valueType)} type={getValueType(colums.valueType)} placeholder={colums.header} />
-                        </div>
+                        : colums.valueType === "DATE" ?
+                            <div style={{ margin: "0 5px" }}>
+                                <MuiPickersUtilsProvider utils={DateFnsUtils} >
+                                    <KeyboardDatePicker
+                                        style={{ width: 200, marginTop: 7 }}
+                                        variant="inline"
+                                        inputVariant="outlined"
+                                        format="yyyy/MM/dd"
+                                        margin="normal"
+                                        id="date-picker-inline"
+                                        label={colums.header}
+                                        value={filtersValues[colums?.id] && format(filtersValues[colums?.id], "yyyy/MM/dd")}
+                                        onChange={(e) => onChangeFilters({ target: { value: e } }, colums.id)}
+                                        KeyboardButtonProps={{
+                                            'aria-label': 'change date',
+                                        }}
+                                        size="small"
+                                    />
+                                </MuiPickersUtilsProvider>
+                            </div>
+                            :
+                            <div key={index} style={{ margin: "0 5px" }}>
+                                <TextField small
+                                    style={{ width: 200 }}
+                                    value={filtersValues[colums?.id] || ""}
+                                    key={index}
+                                    name={colums.id}
+                                    onChange={(e) => onChangeFilters(e, colums.id)}
+                                    className="mr-1 filter-input"
+                                    valueType={getValueType(colums.valueType)}
+                                    type={getValueType(colums.valueType)}
+                                    label={colums.header}
+                                    variant="outlined"
+                                    size="small"
+                                />
+                            </div>
                 ))
             }
 
-            {/* {colums.valueType === 'DATE' && <DateInput value={filters[colums?.id] || ""} key={index} name={colums.id} onChange={(e) => onChangeFilters(e)} className="mr-1 filter-input" valueType={colums.valueType} placeholder={colums.header} />} */}
-            {
-                !allHidden &&
-                <>
-                    <IconButton onClick={onQuerySubmit} value="default" className='mt-3'>
-                        <SearchIcon />
-                    </IconButton>
-                </>
-            }
+            <div style={{ marginTop: 0 }}>
+                {headers.filter(x => !localFilters.includes(x)).length > 0 &&
+                    <Button style={{
+                        color: "rgb(33, 41, 52)",
+                        fontSize: 14,
+                        textTransform: "none",
+                        fontWeight: 400,
+                    }}
+
+                        variant='outlined'
+                        onClick={handleClick}
+                    >
+                        More Filters
+                    </Button>
+                }
+                <MenuFilters
+                    anchorEl={anchorEl}
+                    setAnchorEl={setAnchorEl}
+                    options={headers.filter(x => !localFilters.includes(x))}
+                    addSearchableHeaders={addSearchableHeaders}
+                />
+            </div>
+
+            <IconButton onClick={onQuerySubmit} value="default" className='mt-0'>
+                <SearchIcon />
+            </IconButton>
+
         </div >
     )
 }
