@@ -48,7 +48,7 @@ function AppBar() {
     }, [userOrgUnit?.data]);
 
     return (
-        <div className={style.appBarContainer}>
+        <div className={style.appBarContainer} style={{ marginBottom: 10 }}>
             {
                 itens(selectedOu, setSelectedOu, programId, remove, add, loading, programs).map((iten, index) => (
                     <div key={index} className={style.menuContainer}>
