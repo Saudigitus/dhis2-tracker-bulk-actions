@@ -25,7 +25,7 @@ export default function SimpleMenu({ setopenModalBulkTranfer }) {
                 size="small"
                 variant='outlined'
                 onClick={handleClick}>
-                Bulk action
+                Bulk actions
             </Button>
             <Menu
                 id="simple-menu"
