@@ -41,7 +41,7 @@ function ListContent({ type, program }) {
   }
 
   const onRowsPerPageChange = (event) => {
-    setpageSize(parseInt(event.target.value, 10))
+    setpageSize(parseInt(event.value, 10))
     setpage(1)
   }
 
