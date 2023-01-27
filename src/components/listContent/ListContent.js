@@ -7,6 +7,7 @@ import { useParams } from '../../hooks/common/useQueryParams.js'
 import { useGetOptionSets } from '../../hooks/optionSets/useGetOptionSets.js'
 import { useData } from '../../hooks/tableData/useData.js'
 import { useHeader } from '../../hooks/tableHeader/useHeader.js'
+import TranferEnrollment from '../modal/TranferEnrollment.js'
 import Pagination from '../table/components/Pagination.js'
 import WithBorder from '../table/components/WithBorder.js'
 import WithPadding from '../tamplate/WithPadding.js'
@@ -23,6 +24,7 @@ function ListContent({ type, program }) {
   const [controlRenderOptions, setcontrolRenderOptions] = useState(true)
   const { remove } = useParams()
 
+  const [openModalBulk, setopenModalBulk] = useState(false)
   const [searchParams] = useSearchParams();
   const selectedOu = searchParams.get('ou');
   const startDate = searchParams.get('startDate');
@@ -76,7 +78,7 @@ function ListContent({ type, program }) {
       remove("reload")
     }
   }, [columnData])
-  
+
 
   useEffect(() => {
     if (!loadingHeader) {
@@ -107,6 +109,7 @@ function ListContent({ type, program }) {
                 <OtherFilters
                   onFilterByEnrollment={onFilterByEnrollment}
                   selectedFilter={selectedFilter}
+                  setopenModalBulkTranfer={setopenModalBulk}
                 />
               </WithPadding>
             </WithBorder>
@@ -133,6 +136,10 @@ function ListContent({ type, program }) {
           </Pagination>
         </WithBorder>
       </div>
+      {openModalBulk && <TranferEnrollment
+        open={openModalBulk}
+        setopen={setopenModalBulk}
+      />}
     </>
   )
 }

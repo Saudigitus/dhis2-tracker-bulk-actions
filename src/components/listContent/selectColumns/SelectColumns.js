@@ -29,9 +29,6 @@ function SelectColumns({ headers, updateVariables }) {
     return (
         <React.Fragment>
             <div>
-                <SimpleMenu 
-                setopenModalBulkTranfer={setopenModalBulk}
-                />
                 <span style={{ paddingRight: 10 }} />
                 <Tooltip
                     disableFocusListener
