@@ -9,7 +9,7 @@ function formatDataElements(data) {
                 header: dataElement?.dataElement?.displayName,
                 visible: dataElement?.displayInReports,
                 optionSet: dataElement?.dataElement?.optionSet?.id,
-                valueType: dataElement?.dataElement?.optionSet ? "List" : dataElement?.dataElement?.valueType,
+                valueType: dataElement?.dataElement?.optionSet ? "optionSet" : dataElement?.dataElement?.valueType,
             })
         }
     }
@@ -25,7 +25,7 @@ function formatAttributes(data) {
             header: trackedEntityAttribute?.trackedEntityAttribute?.displayName,
             visible: trackedEntityAttribute?.displayInList,
             searchable: trackedEntityAttribute?.searchable,
-            valueType: trackedEntityAttribute?.trackedEntityAttribute?.optionSet ? "List" : trackedEntityAttribute?.trackedEntityAttribute?.valueType,
+            valueType: trackedEntityAttribute?.trackedEntityAttribute?.optionSet ? "optionSet" : trackedEntityAttribute?.trackedEntityAttribute?.valueType,
             optionSets: trackedEntityAttribute?.trackedEntityAttribute?.optionSet?.options
 
         })

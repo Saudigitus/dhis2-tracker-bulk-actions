@@ -81,7 +81,7 @@ function ContentFilter({ headers, type }) {
         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", marginBottom: 10 }}>
             {
                 localFilters.map((colums, index) => (
-                    <SelectBottom key={index} title={colums.header} />
+                    <SelectBottom key={index} title={colums.header} colum={colums} />
                 ))
             }
             <div style={{ marginTop: 0 }}>
@@ -107,11 +107,7 @@ function ContentFilter({ headers, type }) {
                 />
             </div>
 
-            <IconButton onClick={onQuerySubmit} value="default" className='mt-0'>
-                <SearchIcon />
-            </IconButton>
-
-        </div >
+        </div>
     )
 }
 

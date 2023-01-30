@@ -25,11 +25,11 @@
     height: 100% !important;
     width: 18% !important;
     /* max-width: 40% !important; */
-    white-space: nowrap;
+    /* white-space: nowrap; */
     border-right: 1px solid #a0adba;
     padding: 8px 14px;
     background-color: #F6F6F6 !important;
-    text-overflow: ellipsis;
+    /* text-overflow: ellipsis; */
 }
 
 .menuContainer h4 {
