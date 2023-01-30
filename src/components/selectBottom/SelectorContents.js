@@ -1,6 +1,7 @@
 import { Button } from '@dhis2/ui';
 import { withStyles } from '@material-ui/core';
 import React from 'react'
+import FIlterComponent from './FIlterComponent';
 
 
 const getStyles = (theme) => ({
@@ -16,48 +17,52 @@ const getStyles = (theme) => ({
 
 function SelectorContents(props) {
     // eslint-disable-next-line react/prop-types
-    const { classes, disabledUpdate, onClose, disabledReset, onRemove, isRemovable, colum } = props;
+    const { classes, disabledUpdate, onClose, disabledReset, onRemove, isRemovable, colum, selectorVisible } = props;
     return (
-        <div
-            className={classes.buttonsContainer}
-        >
+        <>
+            <FIlterComponent />
             <div
-                className={classes.buttonContainer}
+                className={classes.buttonsContainer}
             >
-                <Button
-                    primary
-                    // onClick={this.handleUpdateClick}
-                    disabled={disabledUpdate}
-                >
-                    {('Update')}
-                </Button>
-            </div>
-            <div
-                className={classes.buttonContainer}
-            >
-                <Button
-                    dataTest="list-view-filter-cancel-button"
-                    secondary
-                    onClick={onClose}
-                    disabled={disabledReset}
-                >
-                    {('Reset filter')}
-                </Button>
-            </div>
-            {isRemovable &&
-                (<div
+                <div
                     className={classes.buttonContainer}
                 >
                     <Button
-                        dataTest="list-view-filter-remove-button"
-                        destructive
-                        onClick={onRemove}
+                        primary
+                        // onClick={this.handleUpdateClick}
+                        disabled={disabledUpdate}
                     >
-                        {('Remove filter')}
+                        {('Update')}
                     </Button>
-                </div>)
-            }
-        </div>
+                </div>
+                <div
+                    className={classes.buttonContainer}
+                >
+                    <Button
+                        dataTest="list-view-filter-cancel-button"
+                        secondary
+                        onClick={onClose}
+                        disabled={disabledReset}
+
+                    >
+                        {selectorVisible ? 'Close filter' : ('Reset filter')}
+                    </Button>
+                </div>
+                {isRemovable &&
+                    (<div
+                        className={classes.buttonContainer}
+                    >
+                        <Button
+                            dataTest="list-view-filter-remove-button"
+                            destructive
+                            onClick={onRemove}
+                        >
+                            {('Remove filter')}
+                        </Button>
+                    </div>)
+                }
+            </div>
+        </>
     )
 }
 

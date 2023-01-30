@@ -52,8 +52,13 @@ function SelectButton(props) {
     const [selectorVisible, setselectorVisible] = useState(false)
 
     const closeFilterSelector = () => {
-        setselectorVisible(!selectorVisible);
+        setselectorVisible(false);
     }
+
+    const onClose = () => {
+        setselectorVisible(false);
+    }
+
     console.log(colum);
 
     return (
@@ -80,7 +85,11 @@ function SelectButton(props) {
                             if (selectorVisible) {
                                 return (
                                     <WithPadding p={"1.5rem"}>
-                                        <SelectorContents colum={colum} />
+                                        <SelectorContents
+                                            selectorVisible={selectorVisible}
+                                            colum={colum}
+                                            onClose={onClose}
+                                        />
                                     </WithPadding>
                                 )
                             }
@@ -88,6 +97,12 @@ function SelectButton(props) {
                         })()
                     }
                 </Popover>
+                {/* <Tooltip title={i18n.t('Clear')} placement={'bottom'} enterDelay={300}>
+                <ClearIcon
+                    className={classNames(classes.icon, classes.clearIcon)}
+                // onClick={this.handleClearClick}
+                />
+            </Tooltip> */}
             </ButtonComponent >
         </div>
     )
