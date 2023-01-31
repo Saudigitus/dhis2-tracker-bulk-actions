@@ -20,7 +20,9 @@ function SelectorContents(props) {
     const { classes, disabledUpdate, onClose, disabledReset, onRemove, isRemovable, colum, selectorVisible } = props;
     return (
         <>
-            <FIlterComponent />
+            <FIlterComponent
+                type={colum.valueType}
+            />
             <div
                 className={classes.buttonsContainer}
             >
@@ -45,7 +47,7 @@ function SelectorContents(props) {
                         disabled={disabledReset}
 
                     >
-                        {selectorVisible ? 'Close filter' : ('Reset filter')}
+                        {('Reset filter')}
                     </Button>
                 </div>
                 {isRemovable &&
