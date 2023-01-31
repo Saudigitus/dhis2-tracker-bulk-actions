@@ -84,7 +84,8 @@ function ContentFilter({ headers, type }) {
                 header: "Enrollment status",
                 optionSets: [{ code: "ACTIVE", displayName: "Active" }, { code: "COMPLETED", displayName: "Completed" }, { code: "CANCELLED", displayName: "Cancelled" }],
                 valueType: "optionSet",
-                id: "enrollmentStatus"
+                id: "enrollmentStatus",
+                singleSelect: true
             }} />
             <SelectBottom title={"Enrollment date"} value={value["enrollmentDate"]} setvalue={setvalue} colum={{
                 header: "Enrollment date",

@@ -12,13 +12,13 @@ const styles = theme => ({
 });
 
 function MultiSelectBoxes(props) {
-    const { options, classes } = props;
+    const { optionSets, classes } = props;
 
 
-    return options.map(({ text, value, header }, index) => (
+    return optionSets.map(({ text, code: value, displayName: header }, index) => (
         <Checkbox
             key={index}
-            checked={value}
+            checked={false}
             label={header}
             name={`multiSelectBoxes-${index}`}
             // onChange={(e) => { this.handleOptionChange(e, value); }}

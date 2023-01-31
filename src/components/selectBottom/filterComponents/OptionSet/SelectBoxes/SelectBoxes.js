@@ -6,7 +6,7 @@ import { singleOrientations } from '../SingleSelectBoxes/singleSelectBoxes.const
 import { orientations } from './selectBoxes.const';
 
 function SelectBoxes(props) {
-    const { multiSelect, options, optionSet, orientation, ...passOnProps } = props;
+    const { singleSelect, options, optionSet, orientation, ...passOnProps } = props;
 
     // $FlowFixMe even with a cheat flow could not figure out this one
     const outputOptions = useMemo(() => {
@@ -17,9 +17,9 @@ function SelectBoxes(props) {
         return options;
     }, [optionSet, options]);
 
-    const [SelectBoxesTypeComponent, typeOrientation] = multiSelect ?
-        [MultiSelectBoxes, orientations.VERTICAL ? multiOrientations.VERTICAL : multiOrientations.HORIZONTAL] :
-        [SingleSelectBoxes, orientations.VERTICAL ? singleOrientations.VERTICAL : singleOrientations.HORIZONTAL];
+    const [SelectBoxesTypeComponent, typeOrientation] = singleSelect ?
+        [SingleSelectBoxes, orientations.VERTICAL ? singleOrientations.VERTICAL : singleOrientations.HORIZONTAL] : 
+        [MultiSelectBoxes, orientations.VERTICAL ? multiOrientations.VERTICAL : multiOrientations.HORIZONTAL];
 
     return (
         <SelectBoxesTypeComponent
