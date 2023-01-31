@@ -89,7 +89,7 @@ function ContentFilter({ headers, type }) {
             }} />
             <SelectBottom title={"Enrollment date"} value={value["enrollmentDate"]} setvalue={setvalue} colum={{
                 header: "Enrollment date",
-                valueType: "date",
+                valueType: "DATE",
                 id: "enrollmentDate"
             }} />
             {

@@ -1,4 +1,5 @@
 import React from 'react'
+import DateFilterManager from './filterComponents/Date/DateFilterManager';
 import SelectBoxes from './filterComponents/OptionSet/SelectBoxes/SelectBoxes';
 import TextFilter from './filterComponents/Text/Text'
 
@@ -11,6 +12,10 @@ function FIlterComponent(props) {
     switch (type) {
         case "optionSet":
             return <SelectBoxes {...column} />
+        case "DATE":
+            return <DateFilterManager {...column} />
+        case "TEXT":
+            return <TextFilter {...column} />
         default:
             return <div>default</div>
     }
