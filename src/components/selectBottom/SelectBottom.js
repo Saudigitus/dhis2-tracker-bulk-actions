@@ -1,19 +1,15 @@
-import i18n from '@dhis2/d2-i18n';
-import { IconChevronDown16, IconChevronUp16, Tooltip } from '@dhis2/ui';
+import { Button, IconChevronDown16, IconChevronUp16, Tooltip } from '@dhis2/ui';
+import { Popover } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import createSvgIcon from '@material-ui/icons/utils/createSvgIcon';
-import classNames from 'classnames';
-import React, { useState } from 'react'
-import ButtonComponent from '../buttons/Button.js';
-
-const ClearIcon = createSvgIcon(<React.Fragment>
-    <path d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" />
-</React.Fragment>, 'CloseCircle');
+import React, { useState, useRef } from 'react'
+import WithPadding from '../tamplate/WithPadding.js';
+import ActiveFilterButton from './ActiveFilterButton.js';
+import SelectorContents from './SelectorContents.js';
 
 const getStyles = theme => ({
     icon: {
-        fontSize: theme.typography.pxToRem(20),
-        paddingLeft: theme.typography.pxToRem(5)
+        fontSize: 20,
+        paddingLeft: 5
     },
     inactiveFilterButton: {
         backgroundColor: '#f5f5f5'
@@ -28,39 +24,154 @@ const getStyles = theme => ({
         backgroundColor: 'rgb(114, 176, 231) !important'
     },
     clearIcon: {
-        color: theme.palette.text.secondary,
+        color: "secondary",
         '&:hover': {
-            color: theme.palette.text.primary
+            color: "primary"
         }
     }
 });
 
+const POPOVER_ANCHOR_ORIGIN = {
+    vertical: 'bottom',
+    horizontal: 'left',
+};
+
+const POPOVER_TRANSFORM_ORIGIN = {
+    vertical: 'top',
+    horizontal: 'left',
+};
+
 function SelectButton(props) {
     // eslint-disable-next-line react/prop-types
-    const { title, classes } = props;
-    const buttonClasses = classNames(classes.button);
-
+    const { title, classes, colum, value } = props;
+    const anchorRef = useRef(null)
+    let activeFilterButtonInstance = useRef(null)
     const [selectorVisible, setselectorVisible] = useState(false)
+
+    const closeFilterSelector = () => {
+        setselectorVisible(false);
+    }
+
+    const onClose = () => {
+        console.log("object");
+        setselectorVisible(false);
+    }
+
+    const refActiveFilterInstance = (event) => {
+        activeFilterButtonInstance = event;
+    }
+
+    const openFilterSelector = () => {
+        // eslint-disable-next-line react/prop-types
+        const { value } = props;
+        setselectorVisible(true);
+
+        // onmouseleave is sometimes triggered when the popover opens, and sometimes not triggered at all (not even when the mouse actually leaves the button). Clears the hover here to avoid it remaining hovered.
+        if (value) {
+            activeFilterButtonInstance && activeFilterButtonInstance.clearIsHovered();
+        }
+    }
+
+    const handleClearFilter = () => {
+        // eslint-disable-next-line react/prop-types
+        const { itemId, onClearFilter } = props;
+        onClearFilter(itemId);
+    }
+
+    const renderWithAppliedFilter = () => {
+        // eslint-disable-next-line react/prop-types
+        const { selectorVisible, classes, title, buttonText } = props;
+
+        const arrowIconElement = selectorVisible ? (
+            <span className={classes.icon}>
+                <IconChevronUp16 />
+            </span>
+        ) : (
+            <span className={classes.icon}>
+                <IconChevronDown16 />
+            </span>
+        );
+
+        return (
+            <ActiveFilterButton
+                innerRef={refActiveFilterInstance}
+                onChange={openFilterSelector}
+                onClear={handleClearFilter}
+                iconClass={classes.icon}
+                title={title}
+                arrowIconElement={arrowIconElement}
+                buttonText={buttonText}
+            />
+        );
+    }
+
+    const renderWithoutAppliedFilter = () => {
+        // eslint-disable-next-line react/prop-types
+        const { selectorVisible, classes, title, disabled, tooltipContent } = props;
+
+        return disabled ? (
+            <Tooltip content={tooltipContent} closeDelay={50}>
+                {({ onMouseOver, onMouseOut, ref }) => (
+                    <div
+                        ref={(divRef) => {
+                            if (divRef && disabled) {
+                                divRef.onmouseover = onMouseOver;
+                                divRef.onmouseout = onMouseOut;
+                                ref.current = divRef;
+                            }
+                        }}
+                    >
+                        <Button disabled={disabled}>
+                            {title}
+                            <span className={classes.icon}>
+                                {selectorVisible ? <IconChevronUp16 /> : <IconChevronDown16 />}
+                            </span>
+                        </Button>
+                    </div>
+                )}
+            </Tooltip>
+        ) : (
+            <Button onClick={openFilterSelector}>
+                {title}
+                <span className={classes.icon}>
+                    {selectorVisible ? <IconChevronUp16 /> : <IconChevronDown16 />}
+                </span>
+            </Button>
+        );
+    }
 
     return (
         <div style={{ padding: "0.25em 0.5em 0.25em 0em" }}>
-            <ButtonComponent {...props} onClick={() => setselectorVisible(!selectorVisible)}>
-                {title}
-                {selectorVisible ?
-                    <span className={classes.icon}>
-                        <IconChevronUp16 />
-                    </span> :
-                    <span className={classes.icon}>
-                        <IconChevronDown16 />
-                    </span>
+            <div
+                data-test="filter-button-popover-anchor"
+                ref={anchorRef}
+            >
+                {value ? renderWithAppliedFilter() : renderWithoutAppliedFilter()}
+            </div>
+            <Popover
+                open={selectorVisible}
+                anchorEl={anchorRef.current}
+                onClose={closeFilterSelector}
+                anchorOrigin={POPOVER_ANCHOR_ORIGIN}
+                transformOrigin={POPOVER_TRANSFORM_ORIGIN}
+            >
+                {
+                    (() => {
+                        if (selectorVisible) {
+                            return (
+                                <WithPadding p={"1.5rem"}>
+                                    <SelectorContents
+                                        selectorVisible={selectorVisible}
+                                        colum={colum}
+                                        onClose={onClose}
+                                    />
+                                </WithPadding>
+                            )
+                        }
+                        return null;
+                    })()
                 }
-                {/* <Tooltip title={i18n.t('Clear')} placement={'bottom'} enterDelay={300}>
-                <ClearIcon
-                    className={classNames(classes.icon, classes.clearIcon)}
-                // onClick={this.handleClearClick}
-                />
-            </Tooltip> */}
-            </ButtonComponent >
+            </Popover>
         </div>
     )
 }

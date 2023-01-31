@@ -58,7 +58,7 @@ function AppBar() {
                                 <div className={style.selectedItem}>
                                     <div className={style.selectionArea}>
                                         <div className={style.iconArea}>{iten.icone()}</div>
-                                        <div>{iten.selectedItem}</div>
+                                        <div style={{textOverflow:"ellipsis", overflow: "hidden", whiteSpace:"nowrap"}}>{iten.selectedItem}</div>
                                     </div>
                                     <IconButton onClick={iten.setValue} size="small" aria-label="delete">
                                         <ClearIcon style={{ fontSize: '1.2rem' }} />

@@ -8,7 +8,7 @@ export function formatResponseTEI(attributes) {
             required: trackedEntityAttribute?.compulsory,
             name: trackedEntityAttribute?.trackedEntityAttribute?.id,
             labelName: trackedEntityAttribute?.trackedEntityAttribute?.displayName,
-            valueType: trackedEntityAttribute?.trackedEntityAttribute?.optionSet ? "LIST" : trackedEntityAttribute?.trackedEntityAttribute?.valueType,
+            valueType: trackedEntityAttribute?.trackedEntityAttribute?.optionSet ? "optionSet" : trackedEntityAttribute?.trackedEntityAttribute?.valueType,
             options: trackedEntityAttribute?.trackedEntityAttribute?.optionSet?.options || undefined,
             visible: true,
             disabled: trackedEntityAttribute?.trackedEntityAttribute?.generated || false,

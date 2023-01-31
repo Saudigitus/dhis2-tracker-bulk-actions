@@ -19,7 +19,7 @@ export function formatResponseEvents(object) {
                     required: dataElement.compulsory,
                     name: dataElement.id,
                     labelName: dataElement.displayName,
-                    valueType: dataElement?.optionSet ? "LIST" : dataElement.valueType,
+                    valueType: dataElement?.optionSet ? "optionSet" : dataElement.valueType,
                     options: dataElement?.optionSet?.options || undefined,
                     visible: true
                 })
@@ -37,7 +37,7 @@ export function formatResponseEvents(object) {
             retunObject.required = programStageDataElement.compulsory
             retunObject.name = programStageDataElement.dataElement.id
             retunObject.labelName = programStageDataElement.dataElement.displayName
-            retunObject.valueType = programStageDataElement.dataElement?.optionSet ? "LIST" : programStageDataElement.dataElement.valueType
+            retunObject.valueType = programStageDataElement.dataElement?.optionSet ? "optionSet" : programStageDataElement.dataElement.valueType
             retunObject.options = programStageDataElement.dataElement?.optionSet?.options || undefined
             retunObject.visible = true
 
