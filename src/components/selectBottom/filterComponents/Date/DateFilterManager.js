@@ -25,7 +25,7 @@ const getStyles = () => ({
 });
 
 const DateFilterManager = (props) => {
-    const [value, setvalue] = useState(0)
+    const [value, setvalue] = useState()
 
     const handleDateChange = (value) => {
         setvalue(value)
