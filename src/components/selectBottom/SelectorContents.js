@@ -22,6 +22,7 @@ function SelectorContents(props) {
         <>
             <FIlterComponent
                 type={colum.valueType}
+                column={colum}
             />
             <div
                 className={classes.buttonsContainer}
