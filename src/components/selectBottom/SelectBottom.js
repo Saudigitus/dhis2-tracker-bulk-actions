@@ -43,7 +43,7 @@ const POPOVER_TRANSFORM_ORIGIN = {
 
 function SelectButton(props) {
     // eslint-disable-next-line react/prop-types
-    const { title, classes, colum, value, onChange, filled } = props;
+    const { title, classes, colum, value, onChange, filled, onQuerySubmit } = props;
 
     
     const anchorRef = useRef(null)
@@ -168,6 +168,7 @@ function SelectButton(props) {
                                         onClose={onClose}
                                         onChange={onChange}
                                         value={value}
+                                        onQuerySubmit={onQuerySubmit}
                                     />
                                 </WithPadding>
                             )

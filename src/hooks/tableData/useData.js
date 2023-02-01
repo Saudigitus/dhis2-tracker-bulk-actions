@@ -6,28 +6,28 @@ import { formatResponseData } from "../../utils/table/rows/formatResponseData";
 import { useFetchData } from "../common/useFetchData.js";
 
 const fieldsType = {
-    WITH_REGISTRATION: "attributes[attribute,value],trackedEntityInstance,created",
+    WITH_REGISTRATION: "attributes[attribute,value],trackedEntity,createdAt",
     WITHOUT_REGISTRATION: "event,dataValues[value,dataElement],trackedEntityInstance",
     QUERIES: "*"
 }
 
 const resourceType = {
-    WITH_REGISTRATION: "trackedEntityInstances",
+    WITH_REGISTRATION: "tracker/trackedEntities",
     WITHOUT_REGISTRATION: "events",
     QUERIES: "trackedEntityInstances/query",
 }
 
 const paramsType = ({ ou, program, programStage, page, pageSize, programStatus, todayData, filters, filtro, order }) => ({
     WITH_REGISTRATION: {
-        ou: ou || undefined,
+        orgUnit: ou || undefined,
         // ouMode: ou ? "DESCENDANTS" : "ACCESSIBLE",
         order: order,
         attribute: filters,
-        filter: filtro,
+        filter: filtro.length > 0 ? [filtro]: undefined,
         program,
         pageSize: pageSize,
         page: page,
-        totalPages: true,
+        // totalPages: true,
         programStatus: programStatus || undefined
     },
     QUERIES: {
@@ -76,7 +76,7 @@ export const useData = ({ type, ou, program, programStatus = undefined, page, pa
         todayData,
         filters,
         filtro: filter,
-        order: `${orderBy? orderBy: type === "WITH_REGISTRATION" ?
+        order: `${orderBy ? orderBy : type === "WITH_REGISTRATION" ?
             "created" :
             "eventDate"}:${order}`
     }),)

@@ -17,9 +17,9 @@ const getStyles = (theme) => ({
 
 function SelectorContents(props) {
     // eslint-disable-next-line react/prop-types
-    const { classes, disabledUpdate, onClose, disabledReset, onRemove, isRemovable, colum, onChange, value } = props;
+    const { classes, disabledUpdate, onClose, disabledReset, onRemove, isRemovable, colum, onChange, value, onQuerySubmit } = props;
 
-    
+
     return (
         <>
             <FIlterComponent
@@ -37,7 +37,7 @@ function SelectorContents(props) {
                 >
                     <Button
                         primary
-                        // onClick={this.handleUpdateClick}
+                        onClick={onQuerySubmit}
                         disabled={disabledUpdate}
                     >
                         {('Update')}

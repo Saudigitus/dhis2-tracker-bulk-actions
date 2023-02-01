@@ -33,7 +33,7 @@ function ContentFilter({ headers, type }) {
     const [value, setvalue] = useState({})
     const { enrollmentDate, setEnrollmentDate, setattributeFilters } = useContext(GeneratedVaribles);
 
-    var queryBuilder = "";
+    var queryBuilder = [];
 
     useEffect(() => {
         const copyHeader = [...headers]
@@ -56,7 +56,7 @@ function ContentFilter({ headers, type }) {
     }
 
     const onChangeFilters = (value, key, type, pos) => {
-        console.log(value, key, type, pos);
+        // console.log(value, key, type, pos);
         const copyHeader = { ...filtersValues }
         if (type === 'DATE') {
             const date = copyHeader[key] || {}
@@ -67,7 +67,7 @@ function ContentFilter({ headers, type }) {
             }
             copyHeader[key] = date
         } else { verifyIsFilled(value) ? copyHeader[key] = value : delete copyHeader[key] }
-        
+
         setfiltersValues(copyHeader);
     }
 
@@ -80,10 +80,16 @@ function ContentFilter({ headers, type }) {
     }
 
     const onQuerySubmit = () => {
-        for (const [key, value] of Object.entries(filters)) {
-            queryBuilder += `${key}:LIKE:${value},`
+        const copyHeader = { ...filtersValues }
+        for (const [key, value] of Object.entries(copyHeader)) {
+            console.log(value);
+            if (typeof value === 'object') {
+                queryBuilder.push([`${key}:ge:${value.startDate}:le:${value.endDate}`])
+            } else {
+                queryBuilder.push([`${key}:like:${value}`])
+            }
         }
-
+        setFilters(copyHeader)
         setFilter(queryBuilder)
     }
 
@@ -115,6 +121,7 @@ function ContentFilter({ headers, type }) {
                     valueType: "DATE",
                     id: "enrollmentDate"
                 }}
+                onQuerySubmit={onQuerySubmit}
                 onChange={onChangeEnrollmentDate}
                 value={enrollmentDate}
                 filled={Object.keys(enrollmentDate).length > 0 && `${enrollmentDate.startDate && enrollmentDate.startDate}${(enrollmentDate.endDate) && "- " + enrollmentDate.endDate}`}
@@ -125,11 +132,12 @@ function ContentFilter({ headers, type }) {
                         title={colums.header}
                         value={filtersValues[colums.id]}
                         colum={colums}
+                        onQuerySubmit={onQuerySubmit}
                         onChange={onChangeFilters}
                         filled={colums.valueType === "DATE" ?
-                            Object.keys(filtersValues[colums.id] || {}).length > 0 && `${filtersValues[colums.id]?.startDate && filtersValues[colums.id]?.startDate}${(filtersValues[colums.id]?.endDate) && "- " + filtersValues[colums.id]?.endDate}`
+                            Object.keys(filters[colums.id] || {}).length > 0 && `${filters[colums.id]?.startDate && filters[colums.id]?.startDate}${(filters[colums.id]?.endDate) && "- " + filters[colums.id]?.endDate}`
                             :
-                            filtersValues[colums.id] && filtersValues[colums.id]}
+                            filters[colums.id] && filters[colums.id]}
                     />
                 ))
             }
