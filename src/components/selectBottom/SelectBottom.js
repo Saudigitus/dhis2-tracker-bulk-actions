@@ -43,7 +43,7 @@ const POPOVER_TRANSFORM_ORIGIN = {
 
 function SelectButton(props) {
     // eslint-disable-next-line react/prop-types
-    const { title, classes, colum, value } = props;
+    const { title, classes, colum, value, onChange, filled } = props;
     const anchorRef = useRef(null)
     let activeFilterButtonInstance = useRef(null)
     const [selectorVisible, setselectorVisible] = useState(false)
@@ -80,7 +80,7 @@ function SelectButton(props) {
 
     const renderWithAppliedFilter = () => {
         // eslint-disable-next-line react/prop-types
-        const { selectorVisible, classes, title, buttonText } = props;
+        const { selectorVisible, classes, title } = props;
 
         const arrowIconElement = selectorVisible ? (
             <span className={classes.icon}>
@@ -100,7 +100,7 @@ function SelectButton(props) {
                 iconClass={classes.icon}
                 title={title}
                 arrowIconElement={arrowIconElement}
-                buttonText={buttonText}
+                buttonText={filled}
             />
         );
     }
@@ -146,7 +146,7 @@ function SelectButton(props) {
                 data-test="filter-button-popover-anchor"
                 ref={anchorRef}
             >
-                {value ? renderWithAppliedFilter() : renderWithoutAppliedFilter()}
+                {filled ? renderWithAppliedFilter() : renderWithoutAppliedFilter()}
             </div>
             <Popover
                 open={selectorVisible}
@@ -164,6 +164,8 @@ function SelectButton(props) {
                                         selectorVisible={selectorVisible}
                                         colum={colum}
                                         onClose={onClose}
+                                        onChange={onChange}
+                                        value={value}
                                     />
                                 </WithPadding>
                             )

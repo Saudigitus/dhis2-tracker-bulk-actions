@@ -37,7 +37,8 @@ function ContentFilter({ headers, type }) {
     const [localFilters, setlocalFilters] = useState([])
     const [anchorEl, setAnchorEl] = useState(null)
     const [value, setvalue] = useState({})
-    const [enrollmentDate, setEnrollmentDate] = useState(new Date('2014-08-18T21:11:54'));
+    const { enrollmentDate, setEnrollmentDate } = useContext(GeneratedVaribles);
+
     var queryBuilder = "";
 
     useEffect(() => {
@@ -77,6 +78,17 @@ function ContentFilter({ headers, type }) {
 
         setFilter(queryBuilder)
     }
+
+    const onChangeEnrollmentDate = (date, type) => {
+        const localDate = { ...enrollmentDate }
+        if (type === 'start') {
+            localDate["startDate"] = format(date, "yyyy-MM-dd")
+        } else {
+            localDate["endDate"] = format(date, "yyyy-MM-dd")
+        }
+        setEnrollmentDate(localDate);
+    }
+
     // console.log(filtersValues);
 
     // <SelectBottom title={"Enrollment status"} value={value["enrollmentStatus"]} setvalue={setvalue} colum={{
@@ -89,12 +101,15 @@ function ContentFilter({ headers, type }) {
 
     return (
         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", marginBottom: 10, marginTop: 10 }}>
-            <SelectBottom title={"Enrollment date"} value={value["enrollmentDate"]} setvalue={setvalue} colum={{
-                header: "Enrollment date",
-                valueType: "DATE",
-                id: "enrollmentDate"
-            }} 
-            
+            <SelectBottom title={"Enrollment date"}
+                colum={{
+                    header: "Enrollment date",
+                    valueType: "DATE",
+                    id: "enrollmentDate"
+                }}
+                onChange={onChangeEnrollmentDate}
+                value={enrollmentDate}
+                filled={Object.keys(enrollmentDate).length > 0&& `${enrollmentDate.startDate} - ${enrollmentDate.endDate}`}
             />
             {
                 localFilters.map((colums, index) => (

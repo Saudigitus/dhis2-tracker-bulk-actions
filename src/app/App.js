@@ -6,6 +6,7 @@ import "./App.css";
 import { GeneratedVaribles } from '../contexts/GeneratedVaribles.js';
 import { useDataQuery } from '@dhis2/app-runtime';
 import { CenteredContent, CircularLoader } from '@dhis2/ui';
+import { format } from 'date-fns';
 
 const idb =
     window.indexedDB ||
@@ -46,6 +47,7 @@ const MyApp = () => {
     const [userOrgUnit, setuserOrgUnit] = useState({})
     const [tEItransfered, setTEItransfered] = useState([])
     const [allTeisFormated, setallTeisFormated] = useState()
+    const [enrollmentDate, setEnrollmentDate] = useState({});
 
     const { data, loading, error } = useDataQuery(me)
 
@@ -94,7 +96,9 @@ const MyApp = () => {
             tEItransfered,
             setTEItransfered,
             allTeisFormated,
-            setallTeisFormated
+            setallTeisFormated,
+            enrollmentDate,
+            setEnrollmentDate
         }}>
             <AppBarContext.Provider value={{
                 selectedOu: selectedOu,
