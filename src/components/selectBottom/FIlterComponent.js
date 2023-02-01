@@ -8,8 +8,6 @@ function FIlterComponent(props) {
     // eslint-disable-next-line react/prop-types
     const { type, column } = props;
 
-    console.log(type);
-
     switch (type) {
         case "optionSet":
             return <SelectBoxes {...column} />
@@ -19,10 +17,10 @@ function FIlterComponent(props) {
             return <TextFilter {...column} />
         case "TRUE_ONLY":
             return <TrueOnly {...column} />
-        case "INTEGER_ZERO_OR_POSITIVE":
+        case "INTEGER_ZERO_OR_POSITIVE": 
             return <TrueOnly {...column} />
         default:
-            return <div>default</div>
+            return <div>not mapped</div>
     }
 }
 

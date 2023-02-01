@@ -37,6 +37,7 @@ function ContentFilter({ headers, type }) {
     const [localFilters, setlocalFilters] = useState([])
     const [anchorEl, setAnchorEl] = useState(null)
     const [value, setvalue] = useState({})
+    const [enrollmentDate, setEnrollmentDate] = useState(new Date('2014-08-18T21:11:54'));
     var queryBuilder = "";
 
     useEffect(() => {
@@ -78,20 +79,23 @@ function ContentFilter({ headers, type }) {
     }
     // console.log(filtersValues);
 
+    // <SelectBottom title={"Enrollment status"} value={value["enrollmentStatus"]} setvalue={setvalue} colum={{
+    //     header: "Enrollment status",
+    //     optionSets: [{ code: "ACTIVE", displayName: "Active" }, { code: "COMPLETED", displayName: "Completed" }, { code: "CANCELLED", displayName: "Cancelled" }],
+    //     valueType: "optionSet",
+    //     id: "enrollmentStatus",
+    //     singleSelect: true
+    // }} />
+
     return (
         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", marginBottom: 10, marginTop: 10 }}>
-            <SelectBottom title={"Enrollment status"} value={value["enrollmentStatus"]} setvalue={setvalue} colum={{
-                header: "Enrollment status",
-                optionSets: [{ code: "ACTIVE", displayName: "Active" }, { code: "COMPLETED", displayName: "Completed" }, { code: "CANCELLED", displayName: "Cancelled" }],
-                valueType: "optionSet",
-                id: "enrollmentStatus",
-                singleSelect: true
-            }} />
             <SelectBottom title={"Enrollment date"} value={value["enrollmentDate"]} setvalue={setvalue} colum={{
                 header: "Enrollment date",
                 valueType: "DATE",
                 id: "enrollmentDate"
-            }} />
+            }} 
+            
+            />
             {
                 localFilters.map((colums, index) => (
                     <SelectBottom key={index} title={colums.header} value={value[colums.header]} setvalue={setvalue} colum={colums} />

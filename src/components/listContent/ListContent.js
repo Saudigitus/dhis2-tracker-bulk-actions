@@ -85,7 +85,7 @@ function ListContent({ type, program }) {
       getData()
       setreloadData(false)
     }
-  }, [endDate, startDate, selectedOu, order, orderBy, reloadData, page, pageSize, filter, searchParams.get("reload")])
+  }, [endDate, startDate, selectedOu, order, orderBy, reloadData, page, pageSize, filter, searchParams.get("reload"), selectedFilter])
 
 
   return (
