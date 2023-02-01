@@ -48,6 +48,7 @@ const MyApp = () => {
     const [tEItransfered, setTEItransfered] = useState([])
     const [allTeisFormated, setallTeisFormated] = useState()
     const [enrollmentDate, setEnrollmentDate] = useState({});
+    const [attributeFilters, setattributeFilters] = useState({})
 
     const { data, loading, error } = useDataQuery(me)
 
@@ -98,7 +99,9 @@ const MyApp = () => {
             allTeisFormated,
             setallTeisFormated,
             enrollmentDate,
-            setEnrollmentDate
+            setEnrollmentDate,
+            attributeFilters,
+            setattributeFilters
         }}>
             <AppBarContext.Provider value={{
                 selectedOu: selectedOu,

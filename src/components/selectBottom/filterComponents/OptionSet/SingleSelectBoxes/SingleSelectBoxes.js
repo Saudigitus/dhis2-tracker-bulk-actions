@@ -17,7 +17,7 @@ function SingleSelectBoxes(props) {
     // eslint-disable-next-line react/prop-types
     const { optionSets, classes } = props;
 
-    console.log(props);
+    
 
     return optionSets.map(({ code: value, displayName: label }, index) => (
         <Radio

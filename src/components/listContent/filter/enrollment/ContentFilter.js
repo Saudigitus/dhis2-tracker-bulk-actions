@@ -7,12 +7,6 @@ import { AppBarContext } from '../../../../contexts/AppBarContext'
 import { GeneratedVaribles } from '../../../../contexts/GeneratedVaribles';
 import { getValueType } from '../../../../utils/commons/getValueType';
 import MenuFilters from './MenuFilters';
-import DateFnsUtils from '@date-io/date-fns';
-import {
-    MuiPickersUtilsProvider,
-    KeyboardTimePicker,
-    KeyboardDatePicker,
-} from '@material-ui/pickers';
 import { format } from 'date-fns';
 import SelectBottom from '../../../selectBottom/SelectBottom.js'
 
@@ -37,14 +31,15 @@ function ContentFilter({ headers, type }) {
     const [localFilters, setlocalFilters] = useState([])
     const [anchorEl, setAnchorEl] = useState(null)
     const [value, setvalue] = useState({})
-    const { enrollmentDate, setEnrollmentDate } = useContext(GeneratedVaribles);
+    const { enrollmentDate, setEnrollmentDate, setattributeFilters } = useContext(GeneratedVaribles);
 
     var queryBuilder = "";
 
     useEffect(() => {
         const copyHeader = [...headers]
         setlocalFilters(copyHeader.slice(0, 4))
-    }, [headers])
+    }
+        , [headers])
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -60,28 +55,41 @@ function ContentFilter({ headers, type }) {
         setlocalFilters(copyHeaderLocal)
     }
 
-    const onChangeFilters = (event, key) => {
-        // console.log(event?.target?.value);
-        if (event?.target?.value != null) {
-            const copyHeader = { ...filters }
-            copyHeader[key] = event?.target?.value
-            setfiltersValues(copyHeader);
-        } else {
-            delete filters[key]
+    const onChangeFilters = (value, key, type, pos) => {
+        console.log(value, key, type, pos);
+        const copyHeader = { ...filtersValues }
+        if (type === 'DATE') {
+            const date = copyHeader[key] || {}
+            if (pos === 'start') {
+                verifyIsFilled(value) ? date["startDate"] = format(value, "yyyy-MM-dd") : delete date["startDate"]
+            } else {
+                verifyIsFilled(value) ? date["endDate"] = format(value, "yyyy-MM-dd") : delete date["endDate"]
+            }
+            copyHeader[key] = date
+        } else { verifyIsFilled(value) ? copyHeader[key] = value : delete copyHeader[key] }
+        
+        setfiltersValues(copyHeader);
+    }
+
+    function verifyIsFilled(value) {
+        if (value != null) {
+            return true
+        } else if (value === "") {
+            return false
         }
     }
 
     const onQuerySubmit = () => {
-        // for (const [key, value] of Object.entries(filters)) {
-        //     queryBuilder += `${key}:LIKE:${value},`
-        // }
+        for (const [key, value] of Object.entries(filters)) {
+            queryBuilder += `${key}:LIKE:${value},`
+        }
 
         setFilter(queryBuilder)
     }
 
-    const onChangeEnrollmentDate = (date, type) => {
+    const onChangeEnrollmentDate = (date, key, type, pos) => {
         const localDate = { ...enrollmentDate }
-        if (type === 'start') {
+        if (pos === 'start') {
             localDate["startDate"] = format(date, "yyyy-MM-dd")
         } else {
             localDate["endDate"] = format(date, "yyyy-MM-dd")
@@ -109,11 +117,20 @@ function ContentFilter({ headers, type }) {
                 }}
                 onChange={onChangeEnrollmentDate}
                 value={enrollmentDate}
-                filled={Object.keys(enrollmentDate).length > 0&& `${enrollmentDate.startDate} - ${enrollmentDate.endDate}`}
+                filled={Object.keys(enrollmentDate).length > 0 && `${enrollmentDate.startDate && enrollmentDate.startDate}${(enrollmentDate.endDate) && "- " + enrollmentDate.endDate}`}
             />
             {
                 localFilters.map((colums, index) => (
-                    <SelectBottom key={index} title={colums.header} value={value[colums.header]} setvalue={setvalue} colum={colums} />
+                    <SelectBottom key={index}
+                        title={colums.header}
+                        value={filtersValues[colums.id]}
+                        colum={colums}
+                        onChange={onChangeFilters}
+                        filled={colums.valueType === "DATE" ?
+                            Object.keys(filtersValues[colums.id] || {}).length > 0 && `${filtersValues[colums.id]?.startDate && filtersValues[colums.id]?.startDate}${(filtersValues[colums.id]?.endDate) && "- " + filtersValues[colums.id]?.endDate}`
+                            :
+                            filtersValues[colums.id] && filtersValues[colums.id]}
+                    />
                 ))
             }
             <div style={{ marginTop: 0 }}>

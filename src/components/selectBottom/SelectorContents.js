@@ -18,6 +18,8 @@ const getStyles = (theme) => ({
 function SelectorContents(props) {
     // eslint-disable-next-line react/prop-types
     const { classes, disabledUpdate, onClose, disabledReset, onRemove, isRemovable, colum, onChange, value } = props;
+
+    
     return (
         <>
             <FIlterComponent
@@ -25,6 +27,7 @@ function SelectorContents(props) {
                 column={colum}
                 onChange={onChange}
                 value={value}
+                {...props}
             />
             <div
                 className={classes.buttonsContainer}

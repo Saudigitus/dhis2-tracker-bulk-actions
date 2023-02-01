@@ -44,6 +44,8 @@ const POPOVER_TRANSFORM_ORIGIN = {
 function SelectButton(props) {
     // eslint-disable-next-line react/prop-types
     const { title, classes, colum, value, onChange, filled } = props;
+
+    
     const anchorRef = useRef(null)
     let activeFilterButtonInstance = useRef(null)
     const [selectorVisible, setselectorVisible] = useState(false)
@@ -63,11 +65,11 @@ function SelectButton(props) {
 
     const openFilterSelector = () => {
         // eslint-disable-next-line react/prop-types
-        const { value } = props;
+        const { filled } = props;
         setselectorVisible(true);
 
         // onmouseleave is sometimes triggered when the popover opens, and sometimes not triggered at all (not even when the mouse actually leaves the button). Clears the hover here to avoid it remaining hovered.
-        if (value) {
+        if (filled) {
             activeFilterButtonInstance && activeFilterButtonInstance.clearIsHovered();
         }
     }

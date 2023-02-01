@@ -7,10 +7,13 @@ import TrueOnly from './filterComponents/TrueOnly/TrueOnly';
 function FIlterComponent(props) {
     // eslint-disable-next-line react/prop-types
     const { type, column, onChange, value } = props;
+    
 
     switch (type) {
         case "optionSet":
-            return <SelectBoxes {...column} />
+            return <SelectBoxes {...column}
+                onChange={onChange}
+            />
         case "DATE":
             return <DateFilterManager
                 onChange={onChange}
@@ -18,11 +21,23 @@ function FIlterComponent(props) {
                 {...column}
             />
         case "TEXT":
-            return <TextFilter {...column} />
+            return <TextFilter
+                onChange={onChange}
+                value={value}
+                {...column}
+            />
         case "TRUE_ONLY":
-            return <TrueOnly {...column} />
+            return <TrueOnly
+                onChange={onChange}
+                value={value}
+                {...column}
+            />
         case "INTEGER_ZERO_OR_POSITIVE":
-            return <TrueOnly {...column} />
+            return <TrueOnly
+                onChange={onChange}
+                value={value}
+                {...column}
+            />
         default:
             return <div>not mapped</div>
     }

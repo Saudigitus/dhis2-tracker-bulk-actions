@@ -25,10 +25,9 @@ const getStyles = () => ({
 });
 
 const DateFilterManager = (props) => {
-    const { classes, onChange, value } = props;
+    const { classes, onChange, value, id } = props;
 
     return (
-        // $FlowFixMe[cannot-spread-inexact] automated comment
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <div className={classes.fromToContainer}>
                 <div className={classes.inputContainer}>
@@ -39,8 +38,8 @@ const DateFilterManager = (props) => {
                         style={{ width: 150 }}
                         label={"From"}
                         maxDate={value?.endDate}
-                        value={value?.startDate}
-                        onChange={(e) => onChange(e, "start")}
+                        value={value?.startDate ? value?.startDate : null}
+                        onChange={(e) => onChange(e, id, "DATE", "start")}
                     />
                 </div>
                 <div className={classes.toLabelContainer} />
@@ -52,8 +51,8 @@ const DateFilterManager = (props) => {
                         style={{ width: 150 }}
                         minDate={value?.startDate}
                         label={"To"}
-                        value={value?.endDate}
-                        onChange={(e) => onChange(e, "endDate")}
+                        value={value?.endDate ? value?.endDate : null}
+                        onChange={(e) => onChange(e, id, "DATE", "end")}
                     />
                 </div>
             </div>
