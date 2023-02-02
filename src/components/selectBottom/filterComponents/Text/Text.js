@@ -2,16 +2,19 @@ import { TextField } from '@material-ui/core';
 import React from 'react'
 
 function TextFilter(props) {
-    const { value, handleChange } = props;
-
+    // eslint-disable-next-line react/prop-types
+    const { value, onChange, id } = props;
+    // console.log(props);
     return (
         <div>
             <TextField
-                value={value || ''}
-                onChange={handleChange}
+                value={value}
+                onChange={(e) => {
+                    onChange(e.target.value, id)
+                }}
                 placeholder={"Contains Text"}
                 // onBlur={handleBlur}
-                {...props}
+                // {...props}
             />
         </div>
     )

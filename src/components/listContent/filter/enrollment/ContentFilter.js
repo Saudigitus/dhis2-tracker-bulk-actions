@@ -7,12 +7,6 @@ import { AppBarContext } from '../../../../contexts/AppBarContext'
 import { GeneratedVaribles } from '../../../../contexts/GeneratedVaribles';
 import { getValueType } from '../../../../utils/commons/getValueType';
 import MenuFilters from './MenuFilters';
-import DateFnsUtils from '@date-io/date-fns';
-import {
-    MuiPickersUtilsProvider,
-    KeyboardTimePicker,
-    KeyboardDatePicker,
-} from '@material-ui/pickers';
 import { format } from 'date-fns';
 import SelectBottom from '../../../selectBottom/SelectBottom.js'
 
@@ -36,13 +30,17 @@ function ContentFilter({ headers, type }) {
     const [filtersValues, setfiltersValues] = useState({})
     const [localFilters, setlocalFilters] = useState([])
     const [anchorEl, setAnchorEl] = useState(null)
-    const [value, setvalue] = useState({})
-    var queryBuilder = "";
+    const [resetValues, setresetValues] = useState("")
+    const [localEnrollmentDate, setlocalEnrollmentDate] = useState({})
+    const { enrollmentDate, setEnrollmentDate, setattributeFilters } = useContext(GeneratedVaribles);
+
+    var queryBuilder = [];
 
     useEffect(() => {
         const copyHeader = [...headers]
         setlocalFilters(copyHeader.slice(0, 4))
-    }, [headers])
+    }
+        , [headers])
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -58,43 +56,118 @@ function ContentFilter({ headers, type }) {
         setlocalFilters(copyHeaderLocal)
     }
 
-    const onChangeFilters = (event, key) => {
-        // console.log(event?.target?.value);
-        if (event?.target?.value != null) {
-            const copyHeader = { ...filters }
-            copyHeader[key] = event?.target?.value
-            setfiltersValues(copyHeader);
-        } else {
-            delete filters[key]
+    const onChangeFilters = (value, key, type, pos) => {
+        // console.log(value, key, type, pos);
+        const copyHeader = { ...filtersValues }
+        if (type === 'DATE') {
+            const date = copyHeader[key] || {}
+            if (pos === 'start') {
+                verifyIsFilled(value) ? date["startDate"] = format(value, "yyyy-MM-dd") : delete date["startDate"]
+            } else {
+                verifyIsFilled(value) ? date["endDate"] = format(value, "yyyy-MM-dd") : delete date["endDate"]
+            }
+            copyHeader[key] = date
+        } else { verifyIsFilled(value) ? copyHeader[key] = value : delete copyHeader[key] }
+
+        setfiltersValues(copyHeader);
+    }
+
+    function verifyIsFilled(value) {
+        if (value != null) {
+            return true
+        } else if (value === "") {
+            return false
         }
     }
 
     const onQuerySubmit = () => {
-        // for (const [key, value] of Object.entries(filters)) {
-        //     queryBuilder += `${key}:LIKE:${value},`
-        // }
-
+        const copyHeader = { ...filtersValues }
+        for (const [key, value] of Object.entries(copyHeader)) {
+            console.log(value);
+            if (typeof value === 'object') {
+                queryBuilder.push([`${key}:ge:${value.startDate}:le:${value.endDate}`])
+            } else {
+                queryBuilder.push([`${key}:like:${value}`])
+            }
+        }
+        setFilters(copyHeader)
         setFilter(queryBuilder)
     }
-    // console.log(filtersValues);
+
+    const onChangeEnrollmentDate = (date, key, type, pos) => {
+        const localDate = { ...localEnrollmentDate }
+        if (pos === 'start') {
+            localDate["startDate"] = format(date, "yyyy-MM-dd")
+        } else {
+            localDate["endDate"] = format(date, "yyyy-MM-dd")
+        }
+        setlocalEnrollmentDate(localDate);
+    }
+
+    const onResetFilters = (id) => {
+        const copyHeader = { ...filtersValues }
+        const copyFilter = { ...filters }
+        delete copyHeader[id]
+        delete copyFilter[id]
+        setfiltersValues(copyHeader)
+        setFilters(copyFilter)
+        setresetValues(id)
+    }
+
+    const onResetFiltersEnrollmentDate = () => {
+        let resetValues = { ...localEnrollmentDate }
+        let resetValues2 = { ...enrollmentDate }
+
+        resetValues = {}
+        resetValues2 = {}
+        setlocalEnrollmentDate(resetValues)
+        setEnrollmentDate(resetValues2)
+    }
+
+    useEffect(() => {
+        if (resetValues.length > 0) {
+            onQuerySubmit()
+            setresetValues("")
+        }
+    }, [resetValues])
 
     return (
         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", marginBottom: 10, marginTop: 10 }}>
-            <SelectBottom title={"Enrollment status"} value={value["enrollmentStatus"]} setvalue={setvalue} colum={{
-                header: "Enrollment status",
-                optionSets: [{ code: "ACTIVE", displayName: "Active" }, { code: "COMPLETED", displayName: "Completed" }, { code: "CANCELLED", displayName: "Cancelled" }],
-                valueType: "optionSet",
-                id: "enrollmentStatus",
-                singleSelect: true
-            }} />
-            <SelectBottom title={"Enrollment date"} value={value["enrollmentDate"]} setvalue={setvalue} colum={{
-                header: "Enrollment date",
-                valueType: "DATE",
-                id: "enrollmentDate"
-            }} />
+            <SelectBottom title={"Enrollment date"}
+                colum={{
+                    header: "Enrollment date",
+                    valueType: "DATE",
+                    id: "enrollmentDate"
+                }}
+                disableb={Object.keys(enrollmentDate).length > 0 ? enrollmentDate.startDate === localEnrollmentDate.startDate && enrollmentDate.endDate === localEnrollmentDate.endDate : Object.keys(localEnrollmentDate).length > 0 && Object.keys(localEnrollmentDate).length > 0 ? false : true}
+                onQuerySubmit={() => setEnrollmentDate(localEnrollmentDate)}
+                onChange={onChangeEnrollmentDate}
+                value={localEnrollmentDate}
+                disabledReset={!localEnrollmentDate}
+                filled={Object.keys(enrollmentDate || {}).length > 0 && `${enrollmentDate?.startDate && enrollmentDate?.startDate}${(enrollmentDate?.endDate) && "- " + enrollmentDate?.endDate}`}
+                onResetFilters={onResetFiltersEnrollmentDate}
+            />
             {
                 localFilters.map((colums, index) => (
-                    <SelectBottom key={index} title={colums.header} value={value[colums.header]} setvalue={setvalue} colum={colums} />
+                    <SelectBottom key={index}
+                        title={colums.header}
+                        value={filtersValues[colums.id]}
+                        colum={colums}
+                        onQuerySubmit={onQuerySubmit}
+                        onChange={onChangeFilters}
+                        disabledReset={!filtersValues[colums.id]}
+                        disableb={colums.valueType === "DATE" ?
+                            filters.hasOwnProperty(colums.id) ? filters[colums.id].startDate === filtersValues[colums.id].startDate && filters[colums.id].endDate === filtersValues[colums.id].endDate : filtersValues.hasOwnProperty(colums.id) && Object.keys(filtersValues[colums.id]).length > 0 ? false : true
+                            :
+                            filters[colums.id] === filtersValues[colums.id]
+                        }
+                        filled={colums.valueType === "DATE" ?
+                            Object.keys(filters[colums.id] || {}).length > 0 && `${filters[colums.id]?.startDate && filters[colums.id]?.startDate}${(filters[colums.id]?.endDate) && "- " + filters[colums.id]?.endDate}`
+                            :
+                            filters[colums.id] && filters[colums.id]
+                        }
+                        onResetFilters={onResetFilters}
+                    />
                 ))
             }
             <div style={{ marginTop: 0 }}>

@@ -17,7 +17,7 @@ import style from "./listcontent.module.css";
 
 // eslint-disable-next-line react/prop-types
 function ListContent({ type, program }) {
-  const { order, orderBy, setreloadData, reloadData, setallTeisFormated } = useContext(GeneratedVaribles)
+  const { order, orderBy, setreloadData, reloadData, setallTeisFormated, enrollmentDate } = useContext(GeneratedVaribles)
   const { filter } = useContext(AppBarContext);
 
   const [selectedFilter, setselectedFilter] = useState("")
@@ -85,7 +85,7 @@ function ListContent({ type, program }) {
       getData()
       setreloadData(false)
     }
-  }, [endDate, startDate, selectedOu, order, orderBy, reloadData, page, pageSize, filter, searchParams.get("reload")])
+  }, [endDate, startDate, selectedOu, order, orderBy, reloadData, page, pageSize, filter, searchParams.get("reload"), selectedFilter, enrollmentDate])
 
 
   return (

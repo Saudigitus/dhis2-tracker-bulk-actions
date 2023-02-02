@@ -3,7 +3,7 @@ import React from 'react'
 
 function FilterChips(props) {
     return (
-        <Chip {...props} >
+        <Chip small {...props} >
             {props.children}
         </Chip>
     )

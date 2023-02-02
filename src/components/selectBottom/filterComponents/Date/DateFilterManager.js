@@ -17,57 +17,42 @@ const getStyles = () => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop: 6,
+        paddingTop: 0,
     },
     logicErrorContainer: {
-        paddingTop: 10,
+        paddingTop: 0,
     },
 });
 
 const DateFilterManager = (props) => {
-    const [value, setvalue] = useState()
-
-    const handleDateChange = (value) => {
-        setvalue(value)
-    };
-
-    const { header, classes } = props;
+    const { classes, onChange, value, id } = props;
 
     return (
-        // $FlowFixMe[cannot-spread-inexact] automated comment
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <div className={classes.fromToContainer}>
                 <div className={classes.inputContainer}>
                     <KeyboardDatePicker
-                        disableToolbar
+                        // disableToolbar
                         variant="inline"
                         format="yyyy/MM/dd"
-                        margin="normal"
-                        id="date-picker-inline"
-                        style={{ width: 170 }}
+                        style={{ width: 150 }}
                         label={"From"}
-                        value={value}
-                        onChange={handleDateChange}
-                        KeyboardButtonProps={{
-                            'aria-label': 'change date',
-                        }}
+                        maxDate={value?.endDate}
+                        value={value?.startDate ? value?.startDate : null}
+                        onChange={(e) => onChange(e, id, "DATE", "start")}
                     />
                 </div>
-                <div className={classes.toLabelContainer}/>
+                <div className={classes.toLabelContainer} />
                 <div className={classes.inputContainer}>
                     <KeyboardDatePicker
-                        disableToolbar
+                        // disableToolbar
                         variant="inline"
                         format="yyyy/MM/dd"
-                        margin="normal"
-                        id="date-picker-inline"
-                        style={{ width: 170 }}
+                        style={{ width: 150 }}
+                        minDate={value?.startDate}
                         label={"To"}
-                        value={value}
-                        onChange={handleDateChange}
-                        KeyboardButtonProps={{
-                            'aria-label': 'change date',
-                        }}
+                        value={value?.endDate ? value?.endDate : null}
+                        onChange={(e) => onChange(e, id, "DATE", "end")}
                     />
                 </div>
             </div>

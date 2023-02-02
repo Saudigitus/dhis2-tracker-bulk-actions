@@ -10,15 +10,15 @@ const styles = theme => ({
     },
 });
 function TrueOnly(props) {
-    const { header, classes } = props;
+    const { header, classes, id, onChange, value } = props;
     return (
         <div>
             <Checkbox
-                checked={false}
+                checked={value}
                 label={"Yes"}
                 name={`multiSelectBoxes`}
-                // onChange={(e) => { this.handleOptionChange(e, value); }}
-                value={false}
+                onChange={(e) => { onChange(e.checked, id); }}
+                value={value}
                 className={classes.checkbox}
                 dense
             />

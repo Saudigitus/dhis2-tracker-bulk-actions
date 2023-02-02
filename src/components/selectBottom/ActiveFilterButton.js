@@ -25,7 +25,7 @@ const getStyles = (theme) => ({
         },
     },
 });
-
+const MAX_LENGTH_OF_VALUE = 10;
 function ActiveFilterButton(props) {
     // eslint-disable-next-line react/prop-types
     const { onChange, classes, iconClass, title, arrowIconElement, buttonText, onClear } = props
@@ -45,6 +45,16 @@ function ActiveFilterButton(props) {
         onClear();
     }
 
+    const getCappedValue = (value) => {
+        const cappedValue = value.substring(0, MAX_LENGTH_OF_VALUE - 3).trimRight();
+        return `${cappedValue}...`;
+    }
+
+    const getViewValueForFilter = (buttonText) => {
+        const calculatedValue = buttonText.length > MAX_LENGTH_OF_VALUE ? getCappedValue(buttonText) : buttonText;
+        return `: ${calculatedValue}`;
+    }
+
     return (
         <div
             onMouseEnter={setIsHovered}
@@ -55,7 +65,7 @@ function ActiveFilterButton(props) {
                 onClick={onChange}
             >
                 {title}
-                {buttonText}
+                {getViewValueForFilter(buttonText)}
                 {arrowIconElement}
                 <Tooltip
                     content={('Clear')}
@@ -67,7 +77,7 @@ function ActiveFilterButton(props) {
                         onMouseLeave={setIsHovered}
                         className={classNames(iconClass, classes.clearIcon)}
                         onClick={handleClearClick}
-                        
+
                     />
                 </Tooltip>
             </Button>

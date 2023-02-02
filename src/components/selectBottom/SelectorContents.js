@@ -17,12 +17,17 @@ const getStyles = (theme) => ({
 
 function SelectorContents(props) {
     // eslint-disable-next-line react/prop-types
-    const { classes, disabledUpdate, onClose, disabledReset, onRemove, isRemovable, colum, selectorVisible } = props;
+    const { classes, onClose, disabledReset, onRemove, isRemovable, colum, onChange, value, onQuerySubmit, disableb: disabledUpdate } = props;
+
+
     return (
         <>
             <FIlterComponent
                 type={colum.valueType}
                 column={colum}
+                onChange={onChange}
+                value={value}
+                {...props}
             />
             <div
                 className={classes.buttonsContainer}
@@ -32,7 +37,7 @@ function SelectorContents(props) {
                 >
                     <Button
                         primary
-                        // onClick={this.handleUpdateClick}
+                        onClick={onQuerySubmit}
                         disabled={disabledUpdate}
                     >
                         {('Update')}
@@ -51,19 +56,6 @@ function SelectorContents(props) {
                         {('Reset filter')}
                     </Button>
                 </div>
-                {isRemovable &&
-                    (<div
-                        className={classes.buttonContainer}
-                    >
-                        <Button
-                            dataTest="list-view-filter-remove-button"
-                            destructive
-                            onClick={onRemove}
-                        >
-                            {('Remove filter')}
-                        </Button>
-                    </div>)
-                }
             </div>
         </>
     )
