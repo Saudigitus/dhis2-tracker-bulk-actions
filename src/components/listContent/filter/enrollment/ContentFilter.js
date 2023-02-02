@@ -121,6 +121,7 @@ function ContentFilter({ headers, type }) {
                     valueType: "DATE",
                     id: "enrollmentDate"
                 }}
+                disableb={true}
                 onQuerySubmit={onQuerySubmit}
                 onChange={onChangeEnrollmentDate}
                 value={enrollmentDate}
@@ -134,10 +135,17 @@ function ContentFilter({ headers, type }) {
                         colum={colums}
                         onQuerySubmit={onQuerySubmit}
                         onChange={onChangeFilters}
+                        disabledReset={!filtersValues[colums.id]}
+                        disableb={colums.valueType === "DATE" ?
+                            filters[colums.id].startDate === filtersValues[colums.id].startDate && filters[colums.id].endDate === filtersValues[colums.id].endDate
+                            :
+                            filters[colums.id] === filtersValues[colums.id]
+                        }
                         filled={colums.valueType === "DATE" ?
                             Object.keys(filters[colums.id] || {}).length > 0 && `${filters[colums.id]?.startDate && filters[colums.id]?.startDate}${(filters[colums.id]?.endDate) && "- " + filters[colums.id]?.endDate}`
                             :
-                            filters[colums.id] && filters[colums.id]}
+                            filters[colums.id] && filters[colums.id]
+                        }
                     />
                 ))
             }

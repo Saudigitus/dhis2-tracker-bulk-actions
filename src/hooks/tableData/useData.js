@@ -17,40 +17,44 @@ const resourceType = {
     QUERIES: "trackedEntityInstances/query",
 }
 
-const paramsType = ({ ou, program, programStage, page, pageSize, programStatus, todayData, filters, filtro, order }) => ({
-    WITH_REGISTRATION: {
-        orgUnit: ou || undefined,
-        // ouMode: ou ? "DESCENDANTS" : "ACCESSIBLE",
-        order: order,
-        attribute: filters,
-        filter: filtro.length > 0 ? [filtro]: undefined,
-        program,
-        pageSize: pageSize,
-        page: page,
-        // totalPages: true,
-        programStatus: programStatus || undefined
-    },
-    QUERIES: {
-        ou: ou || undefined,
-        // ouMode: ou ? "DESCENDANTS" : "ACCESSIBLE",
-        order: order,
-        attribute: filters,
-        program,
-        paging: false
-    },
-    WITHOUT_REGISTRATION: {
-        orgUnit: ou || undefined,
-        programStage: programStage || undefined,
-        // ouMode: ou ? "DESCENDANTS" : "ACCESSIBLE",
-        ouMode: "SELECTED",
-        order: order,
-        program,
-        pageSize: pageSize,
-        page: page,
-        // totalPages: true,
-        filter: filtro,
-    }
-})
+const paramsType = ({ ou, program, programStage, page, pageSize, programStatus,
+    todayData, filters, filtro, order,
+    enrollmentEnrolledAfter, enrollmentEnrolledBefore }) => ({
+        WITH_REGISTRATION: {
+            orgUnit: ou || undefined,
+            // ouMode: ou ? "DESCENDANTS" : "ACCESSIBLE",
+            order: order,
+            attribute: filters,
+            filter: filtro.length > 0 ? [filtro] : undefined,
+            program,
+            pageSize: pageSize,
+            page: page,
+            // totalPages: true,
+            programStatus: programStatus || undefined,
+            enrollmentEnrolledBefore: enrollmentEnrolledBefore || undefined,
+            enrollmentEnrolledAfter: enrollmentEnrolledAfter || undefined,
+        },
+        QUERIES: {
+            ou: ou || undefined,
+            // ouMode: ou ? "DESCENDANTS" : "ACCESSIBLE",
+            order: order,
+            attribute: filters,
+            program,
+            paging: false
+        },
+        WITHOUT_REGISTRATION: {
+            orgUnit: ou || undefined,
+            programStage: programStage || undefined,
+            // ouMode: ou ? "DESCENDANTS" : "ACCESSIBLE",
+            ouMode: "SELECTED",
+            order: order,
+            program,
+            pageSize: pageSize,
+            page: page,
+            // totalPages: true,
+            filter: filtro,
+        }
+    })
 
 
 const resourceTypes = (props) => ({
@@ -64,7 +68,7 @@ const resourceTypes = (props) => ({
 export const useData = ({ type, ou, program, programStatus = undefined, page, pageSize, todayData, filters }) => {
 
     const { filter } = useContext(AppBarContext);
-    const { order, orderBy } = useContext(GeneratedVaribles);
+    const { order, orderBy, enrollmentDate } = useContext(GeneratedVaribles);
 
     const { error, loading, objects, validationText, getData, totalPages, allData } = useFetchData(resourceTypes({
         type,
@@ -78,7 +82,9 @@ export const useData = ({ type, ou, program, programStatus = undefined, page, pa
         filtro: filter,
         order: `${orderBy ? orderBy : type === "WITH_REGISTRATION" ?
             "created" :
-            "eventDate"}:${order}`
+            "eventDate"}:${order}`,
+        enrollmentEnrolledBefore: enrollmentDate?.endDate,
+        enrollmentEnrolledAfter: enrollmentDate?.startDate
     }),)
 
     return {
