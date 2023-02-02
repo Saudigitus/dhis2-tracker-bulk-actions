@@ -43,9 +43,9 @@ const POPOVER_TRANSFORM_ORIGIN = {
 
 function SelectButton(props) {
     // eslint-disable-next-line react/prop-types
-    const { title, classes, colum, value, onChange, filled, onQuerySubmit, disableb, disabledReset } = props;
+    const { title, classes, colum, value, onChange, filled, onQuerySubmit, disableb, disabledReset, onResetFilters } = props;
 
-    
+
     const anchorRef = useRef(null)
     let activeFilterButtonInstance = useRef(null)
     const [selectorVisible, setselectorVisible] = useState(false)
@@ -55,7 +55,7 @@ function SelectButton(props) {
     }
 
     const onClose = () => {
-        console.log("object");
+        onResetFilters(colum.id)
         setselectorVisible(false);
     }
 

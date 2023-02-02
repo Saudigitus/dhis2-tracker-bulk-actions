@@ -30,7 +30,7 @@ function ContentFilter({ headers, type }) {
     const [filtersValues, setfiltersValues] = useState({})
     const [localFilters, setlocalFilters] = useState([])
     const [anchorEl, setAnchorEl] = useState(null)
-    const [value, setvalue] = useState({})
+    const [resetValues, setresetValues] = useState("")
     const { enrollmentDate, setEnrollmentDate, setattributeFilters } = useContext(GeneratedVaribles);
 
     var queryBuilder = [];
@@ -103,7 +103,22 @@ function ContentFilter({ headers, type }) {
         setEnrollmentDate(localDate);
     }
 
-    // console.log(filtersValues);
+    const onResetFilters = (id) => {
+        const copyHeader = { ...filtersValues }
+        const copyFilter = { ...filters }
+        delete copyHeader[id]
+        delete copyFilter[id]
+        setfiltersValues(copyHeader)
+        setFilters(copyFilter)
+        setresetValues(id)
+    }
+
+    useEffect(() => {
+        if (resetValues.length > 0) {
+            onQuerySubmit()
+            setresetValues("")
+        }
+    }, [resetValues])
 
     // <SelectBottom title={"Enrollment status"} value={value["enrollmentStatus"]} setvalue={setvalue} colum={{
     //     header: "Enrollment status",
@@ -137,7 +152,7 @@ function ContentFilter({ headers, type }) {
                         onChange={onChangeFilters}
                         disabledReset={!filtersValues[colums.id]}
                         disableb={colums.valueType === "DATE" ?
-                            filters[colums.id].startDate === filtersValues[colums.id].startDate && filters[colums.id].endDate === filtersValues[colums.id].endDate
+                            filters.hasOwnProperty(colums.id) ? filters[colums.id].startDate === filtersValues[colums.id].startDate && filters[colums.id].endDate === filtersValues[colums.id].endDate : filtersValues.hasOwnProperty(colums.id) && Object.keys(filtersValues[colums.id]).length > 0 ? false : true
                             :
                             filters[colums.id] === filtersValues[colums.id]
                         }
@@ -146,6 +161,7 @@ function ContentFilter({ headers, type }) {
                             :
                             filters[colums.id] && filters[colums.id]
                         }
+                        onResetFilters={onResetFilters}
                     />
                 ))
             }
