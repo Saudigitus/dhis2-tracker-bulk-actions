@@ -49,6 +49,9 @@ const MyApp = () => {
     const [allTeisFormated, setallTeisFormated] = useState()
     const [enrollmentDate, setEnrollmentDate] = useState({});
     const [attributeFilters, setattributeFilters] = useState({})
+    const [programAcess, setprogramAcess] = useState(true)
+    const [programSelected, setprogramSelected] = useState({})
+    const [orgUnitSelected, setorgUnitSelected] = useState({})
 
     const { data, loading, error } = useDataQuery(me)
 
@@ -101,7 +104,13 @@ const MyApp = () => {
             enrollmentDate,
             setEnrollmentDate,
             attributeFilters,
-            setattributeFilters
+            setattributeFilters,
+            programAcess,
+            setprogramAcess,
+            orgUnitSelected,
+            setorgUnitSelected,
+            programSelected,
+            setprogramSelected
         }}>
             <AppBarContext.Provider value={{
                 selectedOu: selectedOu,

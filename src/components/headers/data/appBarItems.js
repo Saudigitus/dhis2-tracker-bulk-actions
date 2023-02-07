@@ -5,7 +5,7 @@ import React from 'react'
 import { OrgUnitCard } from '../../OrgUnitTree';
 import ProgramSelect from '../../programSelect/ProgramSelect';
 
-const itens = (selected, setSelectedOu, programId, remove, add, loading, programs) => [
+const itens = (selected, setSelectedOu, programId, remove, add, loading, programs, setprogramSelected, setorgUnitSelected) => [
     {
         title: "Select Program",
         icone: () => <EventIcon style={{ fontSize: '1.2rem', color: 'rgba(0, 0, 0, 0.54)' }} />,
@@ -13,6 +13,7 @@ const itens = (selected, setSelectedOu, programId, remove, add, loading, program
         action: () => <ProgramSelect options={programs} loading={loading} onChange={
             (e) => {
                 add("programId", e.value);
+                setprogramSelected(e)
             }
         } />,
         value: programId,
@@ -29,6 +30,7 @@ const itens = (selected, setSelectedOu, programId, remove, add, loading, program
                     selected: e.selected,
                     displayName: e.displayName
                 });
+                setorgUnitSelected(e.selected[0].split('/').pop())
                 add("ou", e.selected[0].split('/').pop());
                 add("ouName", e.displayName)
             }

@@ -22,7 +22,7 @@
     padding-top: 20px;
 }
 
-.pageStyle{
+.pageStyle {
     margin: 20px 20px;
     background-color: #F5F5F5;
 }
@@ -40,7 +40,11 @@
     flex-grow: 0;
 }
 
-.backButton{
+.backButton {
     margin: 20px 20px;
 
+}
+
+.noAccess {
+    margin: 20px 20px;
 }

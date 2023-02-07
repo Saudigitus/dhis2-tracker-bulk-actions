@@ -3,7 +3,7 @@ import { formatResponse } from "../../utils/table/columns/formatResponse";
 import { useFetchData } from "../common/useFetchData.js";
 
 const fieldsType = {
-    WITH_REGISTRATION: "programTrackedEntityAttributes[displayInList,searchable,trackedEntityAttribute[id,displayName,valueType,optionSet[options[code,displayName]]]]",
+    WITH_REGISTRATION: "programTrackedEntityAttributes[displayInList,searchable,trackedEntityAttribute[id,displayName,valueType,optionSet[options[code,displayName]]]],organisationUnits",
     WITHOUT_REGISTRATION: "programStages[programStageDataElements[displayInReports,dataElement[id,displayName,valueType,optionSet[id]]]]"
 }
 

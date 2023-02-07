@@ -17,7 +17,7 @@ function AppBar() {
     const { remove, add, useQuery } = useParams()
     const { loading, programs } = useGetPrograms("WITH_REGISTRATION")
     const { setInitOu, initOU, } = useContext(AppBarContext)
-    const { userOrgUnit = { error: "", data: "" } } = useContext(GeneratedVaribles)
+    const { userOrgUnit = { error: "", data: "" }, setprogramSelected, setorgUnitSelected } = useContext(GeneratedVaribles)
     const ou = useQuery().get("ou")
     const ouName = useQuery().get("ouName")
 
@@ -50,7 +50,7 @@ function AppBar() {
     return (
         <div className={style.appBarContainer} style={{ marginBottom: 10 }}>
             {
-                itens(selectedOu, setSelectedOu, programId, remove, add, loading, programs).map((iten, index) => (
+                itens(selectedOu, setSelectedOu, programId, remove, add, loading, programs, setprogramSelected, setorgUnitSelected).map((iten, index) => (
                     <div key={index} className={style.menuContainer}>
                         <h4>{iten.title}</h4>
                         {
