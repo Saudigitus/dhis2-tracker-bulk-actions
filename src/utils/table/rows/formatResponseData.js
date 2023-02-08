@@ -16,7 +16,6 @@ function formatDataElementsEvents(data) {
 
 function formatAttributesTracked(data) {
     const column = []
-    console.log(data);
     for (const trackedEntityInstance of data.instances || []) {
         const columnObj = {}
         columnObj["id"] = trackedEntityInstance.trackedEntityInstance

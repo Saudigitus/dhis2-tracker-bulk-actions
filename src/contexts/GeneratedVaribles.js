@@ -25,6 +25,12 @@ export const GeneratedVaribles = createContext({
     enrollmentDate: {},
     setEnrollmentDate: {},
     attributeFilters: {},
-    setattributeFilters: {}
+    setattributeFilters: {},
+    programAcess: {},
+    setprogramAcess: {},
+    orgUnitSelected: {},
+    setorgUnitSelected: {},
+    programSelected: {},
+    setprogramSelected: {}
 })
 

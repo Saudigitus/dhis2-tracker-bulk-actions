@@ -13,6 +13,7 @@ import { Check, Close } from '@material-ui/icons';
 import React, { useState, useContext } from 'react'
 import { GeneratedVaribles } from '../../contexts/GeneratedVaribles'
 import { useParams } from '../../hooks/common/useQueryParams';
+import { useVerifyOuAcess } from '../../hooks/programs/useVerifyOuAcess';
 import { useTransferTEI } from '../../hooks/transferTEI/useTransferTEI';
 import { OrgUnitCard } from '../OrgUnitTree';
 // import { OptionFields } from '../genericFields/fields/SingleSelect'
@@ -38,6 +39,7 @@ const TranferEnrollment = ({ open, setopen }) => {
     const ouName = useQuery().get("ouName")
     const [orgUnitSelected, setorgUnitSelected] = useState({})
     const { loading, tranfer } = useTransferTEI()
+    const { verifyAcess } = useVerifyOuAcess()
 
     function nameOfTEIType() {
         return programs.find(x => x.value === programId)?.trackedEntityType?.name || ""
@@ -81,7 +83,11 @@ const TranferEnrollment = ({ open, setopen }) => {
                                             /> :
                                             <div style={{ display: "flex" }}>
                                                 <Label>
-                                                    {orgUnitSelected.displayName}
+                                                    {verifyAcess(currentDetailsProgram()?.value, orgUnitSelected.id) ?
+                                                        orgUnitSelected.displayName
+                                                        :
+                                                        "Selected program is invalid for selected registering unit"
+                                                    }
                                                 </Label>
                                                 <IconButton size='small' onClick={() => setorgUnitSelected({})}
                                                     style={{ marginLeft: "auto", marginTop: -5 }}>
@@ -132,7 +138,11 @@ const TranferEnrollment = ({ open, setopen }) => {
                     {tEItransfered.length === 0 && <Button
                         primary
                         name="insert-preset"
-                        disabled={!orgUnitSelected?.id || selectRows.length === 0}
+                        disabled={
+                            !orgUnitSelected?.id ||
+                            selectRows.length === 0 ||
+                            !verifyAcess(currentDetailsProgram()?.value, orgUnitSelected.id)
+                        }
                         onClick={() => tranfer(currentDetailsProgram(), orgUnitSelected.id, selectRows)}
                     >
                         {('Transfer')}
