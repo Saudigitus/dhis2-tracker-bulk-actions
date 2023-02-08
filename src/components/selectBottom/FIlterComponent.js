@@ -7,12 +7,14 @@ import TrueOnly from './filterComponents/TrueOnly/TrueOnly';
 function FIlterComponent(props) {
     // eslint-disable-next-line react/prop-types
     const { type, column, onChange, value } = props;
-    
+
 
     switch (type) {
         case "optionSet":
             return <SelectBoxes {...column}
                 onChange={onChange}
+                value={value}
+                {...column}
             />
         case "DATE":
             return <DateFilterManager

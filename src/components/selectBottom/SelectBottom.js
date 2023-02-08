@@ -98,7 +98,7 @@ function SelectButton(props) {
             <ActiveFilterButton
                 innerRef={refActiveFilterInstance}
                 onChange={openFilterSelector}
-                onClear={handleClearFilter}
+                onClear={onClose}
                 iconClass={classes.icon}
                 title={title}
                 arrowIconElement={arrowIconElement}
