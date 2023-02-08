@@ -1,14 +1,11 @@
 
-import { Input } from '@dhis2/ui';
-import { Button, FormControl, IconButton, InputLabel, makeStyles, MenuItem, Select, TextField } from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
+import { Button, makeStyles } from '@material-ui/core';
+import { format } from 'date-fns';
 import React, { useState, useContext, useEffect } from 'react';
 import { AppBarContext } from '../../../../contexts/AppBarContext'
 import { GeneratedVaribles } from '../../../../contexts/GeneratedVaribles';
-import { getValueType } from '../../../../utils/commons/getValueType';
-import MenuFilters from './MenuFilters';
-import { format } from 'date-fns';
 import SelectBottom from '../../../selectBottom/SelectBottom.js'
+import MenuFilters from './MenuFilters';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -21,18 +18,15 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
 function ContentFilter({ headers, type }) {
-    const classes = useStyles();
     const [filters, setFilters] = useState({});
     const { setFilter } = useContext(AppBarContext);
-    const { allOptionSets } = useContext(GeneratedVaribles)
     const [filtersValues, setfiltersValues] = useState({})
     const [localFilters, setlocalFilters] = useState([])
     const [anchorEl, setAnchorEl] = useState(null)
     const [resetValues, setresetValues] = useState("")
     const [localEnrollmentDate, setlocalEnrollmentDate] = useState({})
-    const { enrollmentDate, setEnrollmentDate, setattributeFilters } = useContext(GeneratedVaribles);
+    const { enrollmentDate, setEnrollmentDate } = useContext(GeneratedVaribles);
 
     var queryBuilder = [];
 
@@ -47,7 +41,6 @@ function ContentFilter({ headers, type }) {
     };
 
     const addSearchableHeaders = (e) => {
-        // console.log(e);
         const copyHeader = [...headers]
         const copyHeaderLocal = [...localFilters]
 
@@ -56,8 +49,11 @@ function ContentFilter({ headers, type }) {
         setlocalFilters(copyHeaderLocal)
     }
 
+    const onChangeFiltersMultipleOptionSets = (values, key, type, pos) => {
+        onChangeFilters(values, key, type, pos)
+    }
+
     const onChangeFilters = (value, key, type, pos) => {
-        // console.log(value, key, type, pos);
         const copyHeader = { ...filtersValues }
         if (type === 'DATE') {
             const date = copyHeader[key] || {}
@@ -83,11 +79,14 @@ function ContentFilter({ headers, type }) {
     const onQuerySubmit = () => {
         const copyHeader = { ...filtersValues }
         for (const [key, value] of Object.entries(copyHeader)) {
-            console.log(value);
             if (typeof value === 'object') {
                 queryBuilder.push([`${key}:ge:${value.startDate}:le:${value.endDate}`])
             } else {
-                queryBuilder.push([`${key}:like:${value}`])
+                if (value.includes(';')) {
+                    queryBuilder.push([`${key}:in:${value}`])
+                } else {
+                    queryBuilder.push([`${key}:like:${value}`])
+                }
             }
         }
         setFilters(copyHeader)
@@ -154,7 +153,7 @@ function ContentFilter({ headers, type }) {
                         value={filtersValues[colums.id]}
                         colum={colums}
                         onQuerySubmit={onQuerySubmit}
-                        onChange={onChangeFilters}
+                        onChange={colums.valueType === "optionSet" ? onChangeFiltersMultipleOptionSets : onChangeFilters}
                         disabledReset={!filtersValues[colums.id]}
                         disableb={colums.valueType === "DATE" ?
                             filters.hasOwnProperty(colums.id) ? filters[colums.id].startDate === filtersValues[colums.id].startDate && filters[colums.id].endDate === filtersValues[colums.id].endDate : filtersValues.hasOwnProperty(colums.id) && Object.keys(filtersValues[colums.id]).length > 0 ? false : true
