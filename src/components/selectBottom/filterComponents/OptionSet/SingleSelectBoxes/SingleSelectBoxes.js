@@ -15,17 +15,22 @@ const styles = () => ({
 
 function SingleSelectBoxes(props) {
     // eslint-disable-next-line react/prop-types
-    const { optionSets, classes } = props;
+    const { optionSets, classes, id, onChange, value="", valueType } = props;
 
-    
+    const handleOptionChange = (e) => {
+        onChange(e.value, id)
+    }
+    const isChecked = (localValue) => {
+        return !!(value && value.includes(localValue));
+    }
 
     return optionSets.map(({ code: value, displayName: label }, index) => (
         <Radio
             key={index}
-            checked={false}
+            checked={isChecked(value)}
             label={label}
             name={`singleSelectBoxes-${index}`}
-            // onChange={(e) => { this.handleOptionChange(e, value); }}
+            onChange={(e) => { handleOptionChange(e); }}
             value={value}
             className={classes.checkbox}
             dense
