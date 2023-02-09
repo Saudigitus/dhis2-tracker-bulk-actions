@@ -85,8 +85,9 @@ function ContentFilter({ headers, type }) {
                 if (typeof value === 'boolean') {
                     queryBuilder.push([`${key}:eq:${value}`])
                 } else
-                    if (value.includes(';')) {
-                        queryBuilder.push([`${key}:in:${value}`])
+                    if (value.includes(',')) {
+                        const newValue = value.replaceAll(",", ";")
+                        queryBuilder.push([`${key}:in:${newValue}`])
                     } else {
                         console.log(key, typeof value);
                         queryBuilder.push([`${key}:like:${value}`])
