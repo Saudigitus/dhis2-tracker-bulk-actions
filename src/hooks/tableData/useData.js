@@ -6,7 +6,7 @@ import { formatResponseData } from "../../utils/table/rows/formatResponseData";
 import { useFetchData } from "../common/useFetchData.js";
 
 const fieldsType = {
-    WITH_REGISTRATION: "attributes[attribute,value],trackedEntity,createdAt",
+    WITH_REGISTRATION: "attributes[attribute,value],trackedEntity~rename(trackedEntityInstance),createdAt",
     WITHOUT_REGISTRATION: "event,dataValues[value,dataElement],trackedEntityInstance",
     QUERIES: "*"
 }
