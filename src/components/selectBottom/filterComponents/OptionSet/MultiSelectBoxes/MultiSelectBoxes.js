@@ -18,19 +18,22 @@ function MultiSelectBoxes(props) {
     const handleOptionChange = (e) => {
         checkedValues = value;
         if (e.checked) {
-            checkedValues = checkedValues + e.value + ";"
+            checkedValues = checkedValues + e.value + ","
         } else {
-            checkedValues = checkedValues.replace(e.value + ";", "")
+            const localValue = checkedValues.split(",")
+            checkedValues = localValue.filter(x => x !== e.value).join(",");
         }
         onChange(checkedValues, id, valueType)
         checkedValues = ""
     }
 
     const isChecked = (localValue) => {
-        return !!(value && value.includes(localValue));
+        if (value.length === 0) {
+            return false;
+        }
+        return value.split(",").filter(x => x === localValue).length > 0;
     }
 
-    // console.log(props, checkedValues);
     return optionSets.map(({ text, code: value, displayName: header }, index) => (
         <Checkbox
             key={index}
