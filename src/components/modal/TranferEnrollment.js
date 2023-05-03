@@ -106,7 +106,13 @@ const TranferEnrollment = ({ open, setopen }) => {
                                 <div style={{ display: "flex", marginBottom: 8, marginTop: 8, width: '100%' }}>
                                     <div>
 
-                                        <Label color="muted" style={{ marginLeft: "5px" }}>{x.name}</Label >
+                                        <Label color="muted" style={{ marginLeft: "5px" }}>
+                                            <strong>{x.name.split(";")[0].split(":")[0]} </strong>
+                                            {x.name.split(";")[0].split(":")[1]}
+                                            {" "}
+                                            <strong>{x.name.split(";")[1].split(":")[0]} </strong>
+                                            {x.name.split(";")[1].split(":")[1]}
+                                        </Label >
 
                                     </div>
                                     <div style={{ marginLeft: "auto", width: 250, height: "auto" }}>
