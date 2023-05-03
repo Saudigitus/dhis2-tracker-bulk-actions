@@ -22,9 +22,9 @@
 }
 
 .menuContainer {
-    height: 100% !important;
-    width: 18% !important;
-    /* max-width: 40% !important; */
+    min-height: 100% !important;
+    min-width: 255.16px !important;
+    max-width: 33% !important;
     /* white-space: nowrap; */
     border-right: 1px solid #a0adba;
     padding: 8px 14px;

@@ -12,8 +12,8 @@ const OrgUnitCard = ({ expanded, selected, onChange }) => {
 
   return (
     <div className={style.orgUnitCard}>
-      {/*      <Input onChange={(event) => setQuery(event.value)} label="An input" name="input" placeholder="search" />
-  <Divider />*/}
+     <Input onChange={(event) => setQuery(event.value)} label="An input" name="input" placeholder="Pesquisar..." />
+      <Divider />
       <div className={style.cardTree}>
         <OrgUnitTreeComponent query={query} initiallyExpanded={expanded} selected={selected} onChange={onChange} />
       </div>

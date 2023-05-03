@@ -35,7 +35,7 @@ function DialogSelectColumns(props) {
 
     const handleSave = () => {
         // eslint-disable-next-line react/prop-types
-        updateVariables(columnsList)
+        updateVariables(columnsList.length ? columnsList : headers)
         onClose()
     };
 
