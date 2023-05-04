@@ -34,7 +34,7 @@ function Testing({ name, Component }) {
 }
 
 const TranferEnrollment = ({ open, setopen }) => {
-    const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows } = useContext(GeneratedVaribles)
+    const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows, allTeisFormated } = useContext(GeneratedVaribles)
     const { useQuery } = useParams()
     const programId = useQuery().get("programId")
     const ouName = useQuery().get("ouName")
@@ -52,7 +52,19 @@ const TranferEnrollment = ({ open, setopen }) => {
         return programs.find(x => x.value === programId)
     }
 
-    console.log("tEItransfered", tEItransfered)
+    function getTeiDetails() {
+        const teisSelected = []
+        for (const tei of selectRows) {
+            const selectedTei = allTeisFormated.find(x => x.id === tei)
+
+            const teiData = `${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.displayName}: ${selectedTei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.id]};${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.displayName}: ${selectedTei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.id]}`
+            teisSelected.push({ name: teiData })
+
+        }
+        return teisSelected
+    }
+    const selectedTeis = getTeiDetails(currentDetailsProgram())
+
     return (
         <Modal large open={open} position={'middle'} onClose={() => setopen(false)}>
             <ModalTitle>{('Bulk enrollment')}</ModalTitle>
@@ -110,7 +122,13 @@ const TranferEnrollment = ({ open, setopen }) => {
                                 <div style={{ display: "flex", marginBottom: 8, marginTop: 8, width: '100%' }}>
                                     <div>
 
-                                        <Label color="muted" style={{ marginLeft: "5px" }}>{x.name}</Label >
+                                        <Label color="muted" style={{ marginLeft: "5px" }}>
+                                            <strong>{x.name.split(";")[0].split(":")[0]} </strong>
+                                            {x.name.split(";")[0].split(":")[1]}
+                                            {" "}
+                                            <strong>{x.name.split(";")[1].split(":")[0]} </strong>
+                                            {x.name.split(";")[1].split(":")[1]}
+                                        </Label >
 
                                     </div>
                                     <div style={{ marginLeft: "auto", width: 250, height: "auto" }}>
@@ -154,7 +172,7 @@ const TranferEnrollment = ({ open, setopen }) => {
                     </Button>}
                 </ButtonStrip>
             </ModalActions>
-      {(openModalConfirmBulk && tEItransfered.length === 0) && <ConfirmBulkAction show={openModalConfirmBulk} handleClose={handleCloseConfirmAction} action={() => tranfer(currentDetailsProgram(), orgUnitSelected.id, selectRows)} loading={loading} selectRows={selectRows} nameOfTEIType={nameOfTEIType} ouName={ouName} orgUnitSelected={orgUnitSelected} />}
+      {(openModalConfirmBulk && tEItransfered.length === 0) && <ConfirmBulkAction show={openModalConfirmBulk} handleClose={handleCloseConfirmAction} action={() => tranfer(currentDetailsProgram(), orgUnitSelected.id, selectRows)} loading={loading} selectRows={selectRows} selectedTeis={selectedTeis} nameOfTEIType={nameOfTEIType} ouName={ouName} orgUnitSelected={orgUnitSelected} />}
 
         </Modal >
     )
