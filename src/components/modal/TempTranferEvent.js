@@ -33,7 +33,7 @@ function Testing({ name, Component }) {
     )
 }
 
-const TranferEnrollment = ({ open, setopen }) => {
+const TempTranferEvent = ({ open, setopen }) => {
     const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows } = useContext(GeneratedVaribles)
     const { useQuery } = useParams()
     const programId = useQuery().get("programId")
@@ -52,17 +52,16 @@ const TranferEnrollment = ({ open, setopen }) => {
         return programs.find(x => x.value === programId)
     }
 
-    console.log("tEItransfered", tEItransfered)
     return (
         <Modal large open={open} position={'middle'} onClose={() => setopen(false)}>
-            <ModalTitle>{('Permanent transfer')}</ModalTitle>
+            <ModalTitle>{('Temporary transfer')}</ModalTitle>
             <p />
             <ModalContent>
                 {loading && <LinearProgress />}
                 {
                     tEItransfered.length === 0 ?
                         <div style={{ marginTop: 18, marginLeft: 0, marginBottom: 0 }}>
-                            Transfer {selectRows.length} {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected.displayName || "Organisation Unit"}`}</strong>
+                            Temporary transfer {selectRows.length} {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected.displayName || "Organisation Unit"}`}</strong>
                             <div style={{ background: "rgb(243, 245, 247)", height: "20px", marginTop: 10 }}></div>
                             <Box width="100%">
                                 {Testing({
@@ -75,10 +74,67 @@ const TranferEnrollment = ({ open, setopen }) => {
                                 })}
                                 <p />
                             </Box>
+                                                        
+                            <Divider />
+                            <Box width="100%">
+                                {Testing({
+                                    name: "Program Stage",
+                                    Component: () => (
+                                        Object.keys(orgUnitSelected).length == 0 ?
+                                            <OrgUnitCard type={"bulk"}
+                                                value={orgUnitSelected?.selected}
+                                                onChange={(e) => setorgUnitSelected(e)}
+                                            /> :
+                                            <div style={{ display: "flex" }}>
+                                                <Label>
+                                                    {verifyAcess(currentDetailsProgram()?.value, orgUnitSelected.id) ?
+                                                        orgUnitSelected.displayName
+                                                        :
+                                                        "Selected program is invalid for selected registering unit"
+                                                    }
+                                                </Label>
+                                                <IconButton size='small' onClick={() => setorgUnitSelected({})}
+                                                    style={{ marginLeft: "auto", marginTop: -5 }}>
+                                                    <Close size='small' />
+                                                </IconButton>
+                                            </div>
+                                    )
+                                })}
+                                <p />
+                            </Box>
+
                             <Divider />
                             <Box width="100%">
                                 {Testing({
                                     name: "Organisation Unit",
+                                    Component: () => (
+                                        Object.keys(orgUnitSelected).length == 0 ?
+                                            <OrgUnitCard type={"bulk"}
+                                                value={orgUnitSelected?.selected}
+                                                onChange={(e) => setorgUnitSelected(e)}
+                                            /> :
+                                            <div style={{ display: "flex" }}>
+                                                <Label>
+                                                    {verifyAcess(currentDetailsProgram()?.value, orgUnitSelected.id) ?
+                                                        orgUnitSelected.displayName
+                                                        :
+                                                        "Selected program is invalid for selected registering unit"
+                                                    }
+                                                </Label>
+                                                <IconButton size='small' onClick={() => setorgUnitSelected({})}
+                                                    style={{ marginLeft: "auto", marginTop: -5 }}>
+                                                    <Close size='small' />
+                                                </IconButton>
+                                            </div>
+                                    )
+                                })}
+                                <p />
+                            </Box>
+
+                            <Divider />
+                            <Box width="100%">
+                                {Testing({
+                                    name: "Report Date",
                                     Component: () => (
                                         Object.keys(orgUnitSelected).length == 0 ?
                                             <OrgUnitCard type={"bulk"}
@@ -160,10 +216,10 @@ const TranferEnrollment = ({ open, setopen }) => {
                     </Button>}
                 </ButtonStrip>
             </ModalActions>
-            {(openModalConfirmBulk && tEItransfered.length === 0) && <ConfirmBulkAction show={openModalConfirmBulk} handleClose={handleCloseConfirmAction} action={() => tranfer(currentDetailsProgram(), orgUnitSelected.id, selectRows)} loading={loading} selectRows={selectRows} nameOfTEIType={nameOfTEIType} ouName={ouName} orgUnitSelected={orgUnitSelected} />}
+      {(openModalConfirmBulk && tEItransfered.length === 0) && <ConfirmBulkAction show={openModalConfirmBulk} handleClose={handleCloseConfirmAction} action={() => tranfer(currentDetailsProgram(), orgUnitSelected.id, selectRows)} loading={loading} selectRows={selectRows} nameOfTEIType={nameOfTEIType} ouName={ouName} orgUnitSelected={orgUnitSelected} />}
 
         </Modal >
     )
 }
 
-export default TranferEnrollment
+export default TempTranferEvent

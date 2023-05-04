@@ -20,7 +20,7 @@ export default function SimpleMenu({ anchorEl, setAnchorEl, setopenModalBulkTran
                 transformOrigin={{ vertical: 'top', horizontal: 'center' }}
             >
                 <MenuItem onClick={() => { setopenModalBulkTranfer(true); setAnchorEl(null); modalType("transfer") }}>Permanent Transfer</MenuItem>
-                {/*<MenuItem>Complete Enrollment</MenuItem>*/}
+                <MenuItem onClick={() => { setopenModalBulkTranfer(true); setAnchorEl(null); modalType("TEMPtransfer") }}>Temporary Transfer</MenuItem>
             </Menu>
         </>
     )

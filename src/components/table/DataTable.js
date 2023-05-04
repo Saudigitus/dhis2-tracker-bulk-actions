@@ -103,7 +103,7 @@ const TableComponent = (props) => {
     function verifyIndeter() {
         const intersection = columnData.filter(x => selectRows.includes(x.id));
 
-        if (intersection.length == 10 ) {
+        if (intersection.length == 10) {
             return false
         }
 
@@ -178,7 +178,7 @@ const TableComponent = (props) => {
                         // label={props.text}
                         indeterminate={verifyIndeter()}
                         className={props.classes.checkbox}
-                        valid dense />
+                        dense />
                 </HeaderCell>
                 {headerCells}
             </Row>
@@ -248,7 +248,7 @@ const TableComponent = (props) => {
                                             onChange={() => selectedSingleRow(row.id)}
                                             // label={props.text}
                                             className={props.classes.checkbox}
-                                            valid dense />
+                                            dense />
                                     </Cell>
                                     {cells}
                                 </Row>
