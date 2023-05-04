@@ -2,6 +2,7 @@ import Paper from '@material-ui/core/Paper';
 import React, { useContext } from 'react'
 import { useSearchParams } from 'react-router-dom';
 import { ListContent, WithPadding } from '../../components';
+import { GeneratedVaribles } from '../../contexts/GeneratedVaribles';
 import { useVerifyOuAcess } from '../../hooks/programs/useVerifyOuAcess';
 import generalPagesStyles from "../Pages.module.css";
 // eslint-disable-next-line import/extensions
@@ -13,6 +14,7 @@ function List() {
     const programId = searchParams.get('programId');
     const ouId = searchParams.get('ou');
     const { verifyAcess } = useVerifyOuAcess()
+    const { programs = [] } = useContext(GeneratedVaribles)
 
     return (
         <>
@@ -28,9 +30,11 @@ function List() {
                             </>
                         </Paper>
                         :
+                        programs?.length > 0 &&
                         <span style={{ color: "#E53935" }}>
                             Selected program is invalid for selected registering unit
                         </span>
+
                     }
                 </div>
             }

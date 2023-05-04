@@ -1,9 +1,9 @@
-import React from 'react';
-import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import React from 'react';
 
-export default function SimpleMenu({ anchorEl, setAnchorEl, setopenModalBulkTranfer }) {
+// eslint-disable-next-line react/prop-types
+export default function SimpleMenu({ anchorEl, setAnchorEl, setopenModalBulkTranfer, modalType }) {
     const handleClose = () => {
         setAnchorEl(null);
     };
@@ -19,8 +19,9 @@ export default function SimpleMenu({ anchorEl, setAnchorEl, setopenModalBulkTran
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                 transformOrigin={{ vertical: 'top', horizontal: 'center' }}
             >
-                <MenuItem onClick={() => { setopenModalBulkTranfer(true); setAnchorEl(null) }}>Permanent Tranfer</MenuItem>
+                <MenuItem onClick={() => { setopenModalBulkTranfer(true); setAnchorEl(null); modalType("transfer") }}>Permanent Transfer</MenuItem>
+                {/*<MenuItem>Complete Enrollment</MenuItem>*/}
             </Menu>
         </>
-    );
+    )
 }

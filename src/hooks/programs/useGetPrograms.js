@@ -13,7 +13,7 @@ const resource = (type, fields) => ({
 })
 
 
-export const useGetPrograms = (type, fields = "id~rename(value),displayName~rename(label),organisationUnits") => {
+export const useGetPrograms = (type, fields = "id~rename(value),displayName~rename(label),organisationUnits,trackedEntityType[id,trackedEntityTypeAttributes[trackedEntityAttribute[displayName,id]]]") => {
     const { showPopUpNotification } = useShowAlerts()
     const { setprograms } = useContext(GeneratedVaribles)
     const { objects, loading, error } = useFetchData(
