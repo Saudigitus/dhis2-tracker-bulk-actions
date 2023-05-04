@@ -14,6 +14,7 @@ import WithPadding from '../tamplate/WithPadding.js'
 import Content from './Content.js'
 import OtherFilters from './filter/other/OtherFilters.js'
 import style from "./listcontent.module.css";
+import { ConfirmBulkAction } from '../modal/ConfirmBulkAction.js'
 
 // eslint-disable-next-line react/prop-types
 function ListContent({ type, program }) {
@@ -25,6 +26,8 @@ function ListContent({ type, program }) {
   const { remove } = useParams()
 
   const [openModalBulk, setopenModalBulk] = useState(false)
+  const [openModalConfirmBulk, setOpenModalConfirmBulk] = useState(false)
+  const handleCloseConfirmAction = () => setOpenModalConfirmBulk(false);
   const [searchParams] = useSearchParams();
   const selectedOu = searchParams.get('ou');
   const startDate = searchParams.get('startDate');
@@ -140,6 +143,8 @@ function ListContent({ type, program }) {
         open={openModalBulk}
         setopen={setopenModalBulk}
       />}
+
+
     </>
   )
 }

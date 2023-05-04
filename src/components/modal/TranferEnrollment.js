@@ -16,6 +16,7 @@ import { useParams } from '../../hooks/common/useQueryParams';
 import { useVerifyOuAcess } from '../../hooks/programs/useVerifyOuAcess';
 import { useTransferTEI } from '../../hooks/transferTEI/useTransferTEI';
 import { OrgUnitCard } from '../OrgUnitTree';
+import { ConfirmBulkAction } from './ConfirmBulkAction';
 // import { OptionFields } from '../genericFields/fields/SingleSelect'
 
 function Testing({ name, Component }) {
@@ -40,6 +41,8 @@ const TranferEnrollment = ({ open, setopen }) => {
     const [orgUnitSelected, setorgUnitSelected] = useState({})
     const { loading, tranfer } = useTransferTEI()
     const { verifyAcess } = useVerifyOuAcess()
+    const [openModalConfirmBulk, setOpenModalConfirmBulk] = useState(false)
+    const handleCloseConfirmAction = () => setOpenModalConfirmBulk(false);
 
     function nameOfTEIType() {
         return programs.find(x => x.value === programId)?.trackedEntityType?.name || ""
@@ -49,6 +52,7 @@ const TranferEnrollment = ({ open, setopen }) => {
         return programs.find(x => x.value === programId)
     }
 
+    console.log("tEItransfered", tEItransfered)
     return (
         <Modal large open={open} position={'middle'} onClose={() => setopen(false)}>
             <ModalTitle>{('Bulk enrollment')}</ModalTitle>
@@ -143,12 +147,15 @@ const TranferEnrollment = ({ open, setopen }) => {
                             selectRows.length === 0 ||
                             !verifyAcess(currentDetailsProgram()?.value, orgUnitSelected.id)
                         }
-                        onClick={() => tranfer(currentDetailsProgram(), orgUnitSelected.id, selectRows)}
+                        //onClick={() => tranfer(currentDetailsProgram(), orgUnitSelected.id, selectRows)}
+                        onClick={() => setOpenModalConfirmBulk(true)}
                     >
                         {('Transfer')}
                     </Button>}
                 </ButtonStrip>
             </ModalActions>
+      {(openModalConfirmBulk && tEItransfered.length === 0) && <ConfirmBulkAction show={openModalConfirmBulk} handleClose={handleCloseConfirmAction} action={() => tranfer(currentDetailsProgram(), orgUnitSelected.id, selectRows)} loading={loading} selectRows={selectRows} nameOfTEIType={nameOfTEIType} ouName={ouName} orgUnitSelected={orgUnitSelected} />}
+
         </Modal >
     )
 }
