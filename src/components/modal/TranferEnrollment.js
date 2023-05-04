@@ -58,12 +58,14 @@ const TranferEnrollment = ({ open, setopen }) => {
             const selectedTei = allTeisFormated.find(x => x.id === tei)
 
             const teiData = `${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.displayName}: ${selectedTei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.id]};${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.displayName}: ${selectedTei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.id]}`
-            teisSelected.push({ name: teiData })
+            teisSelected.push({ id: tei, name: teiData, isSelected: true })
 
         }
         return teisSelected
     }
     const selectedTeis = getTeiDetails(currentDetailsProgram())
+
+
 
     return (
         <Modal large open={open} position={'middle'} onClose={() => setopen(false)}>
@@ -74,7 +76,7 @@ const TranferEnrollment = ({ open, setopen }) => {
                 {
                     tEItransfered.length === 0 ?
                         <div style={{ marginTop: 18, marginLeft: 0, marginBottom: 0 }}>
-                            Transfer {selectRows.length} {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected.displayName || "Organisation Unit"}`}</strong>
+                            Transfer <strong>{selectRows.length}</strong>  {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected.displayName || "Organisation Unit"}`}</strong>
                             <div style={{ background: "rgb(243, 245, 247)", height: "20px", marginTop: 10 }}></div>
                             <Box width="100%">
                                 {Testing({
@@ -172,7 +174,7 @@ const TranferEnrollment = ({ open, setopen }) => {
                     </Button>}
                 </ButtonStrip>
             </ModalActions>
-      {(openModalConfirmBulk && tEItransfered.length === 0) && <ConfirmBulkAction show={openModalConfirmBulk} handleClose={handleCloseConfirmAction} action={() => tranfer(currentDetailsProgram(), orgUnitSelected.id, selectRows)} loading={loading} selectRows={selectRows} selectedTeis={selectedTeis} nameOfTEIType={nameOfTEIType} ouName={ouName} orgUnitSelected={orgUnitSelected} />}
+      {(openModalConfirmBulk && tEItransfered.length === 0) && <ConfirmBulkAction show={openModalConfirmBulk} handleClose={handleCloseConfirmAction} action={() => tranfer(currentDetailsProgram(), orgUnitSelected.id, selectRows)} loading={loading} selectRows={selectRows} setselectRows={setselectRows} selectedTeis={selectedTeis} nameOfTEIType={nameOfTEIType} ouName={ouName} orgUnitSelected={orgUnitSelected} />}
 
         </Modal >
     )
