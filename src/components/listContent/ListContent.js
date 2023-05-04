@@ -6,7 +6,6 @@ import { useParams } from '../../hooks/common/useQueryParams.js'
 import { useGetOptionSets } from '../../hooks/optionSets/useGetOptionSets.js'
 import { useData } from '../../hooks/tableData/useData.js'
 import { useHeader } from '../../hooks/tableHeader/useHeader.js'
-import CompleteEnrollments from '../modal/CompleteEnrollments.js'
 import TranferEnrollment from '../modal/TranferEnrollment.js'
 import Pagination from '../table/components/Pagination.js'
 import WithBorder from '../table/components/WithBorder.js'
@@ -134,15 +133,9 @@ function ListContent({ type, program }) {
           </Pagination>
         </WithBorder>
       </div>
-      {modalType === "transfer" ?
+      {modalType === "transfer" &&
         openModalBulk &&
         <TranferEnrollment
-          open={openModalBulk}
-          setopen={setopenModalBulk}
-        />
-        :
-        openModalBulk &&
-        <CompleteEnrollments
           open={openModalBulk}
           setopen={setopenModalBulk}
         />
