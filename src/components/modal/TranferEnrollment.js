@@ -33,7 +33,7 @@ function Testing({ name, Component }) {
     )
 }
 
-const TranferEnrollment = ({ open, setopen }) => {
+const TranferEnrollment = ({ open, setopen, selectedTeis, modalType, nameOfTEIType, currentDetailsProgram }) => {
     const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows, allTeisFormated } = useContext(GeneratedVaribles)
     const { useQuery } = useParams()
     const programId = useQuery().get("programId")
@@ -43,27 +43,6 @@ const TranferEnrollment = ({ open, setopen }) => {
     const { verifyAcess } = useVerifyOuAcess()
     const [openModalConfirmBulk, setOpenModalConfirmBulk] = useState(false)
     const handleCloseConfirmAction = () => setOpenModalConfirmBulk(false);
-
-    function nameOfTEIType() {
-        return programs.find(x => x.value === programId)?.trackedEntityType?.name || ""
-    }
-
-    function currentDetailsProgram() {
-        return programs.find(x => x.value === programId)
-    }
-
-    function getTeiDetails() {
-        const teisSelected = []
-        for (const tei of selectRows) {
-            const selectedTei = allTeisFormated.find(x => x.id === tei)
-
-            const teiData = `${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.displayName}: ${selectedTei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.id]};${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.displayName}: ${selectedTei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.id]}`
-            teisSelected.push({ id: tei, name: teiData, isSelected: true })
-
-        }
-        return teisSelected
-    }
-    const selectedTeis = getTeiDetails(currentDetailsProgram())
 
     return (
         <Modal large open={open} position={'middle'} onClose={() => setopen(false)}>
@@ -165,28 +144,14 @@ const TranferEnrollment = ({ open, setopen }) => {
                             selectRows.length === 0 ||
                             !verifyAcess(currentDetailsProgram()?.value, orgUnitSelected.id)
                         }
-                        //onClick={() => tranfer(currentDetailsProgram(), orgUnitSelected.id, selectRows)}
                         onClick={() => setOpenModalConfirmBulk(true)}
                     >
                         {('Continue')}
                     </Button>}
                 </ButtonStrip>
             </ModalActions>
+      {(openModalConfirmBulk && tEItransfered.length === 0) && <ConfirmBulkAction modalType={modalType} show={openModalConfirmBulk} handleClose={handleCloseConfirmAction} action={() => tranfer(currentDetailsProgram(), orgUnitSelected.id, selectRows)} loading={loading} selectRows={selectRows} setselectRows={setselectRows} selectedTeis={selectedTeis} nameOfTEIType={nameOfTEIType} ouName={ouName} orgUnitSelected={orgUnitSelected} label={"Transfer"} />}
 
-            {(openModalConfirmBulk && tEItransfered.length === 0) &&
-                <ConfirmBulkAction
-                    show={openModalConfirmBulk}
-                    handleClose={handleCloseConfirmAction}
-                    action={() => transferTEI(currentDetailsProgram(), orgUnitSelected.id, selectRows)}
-                    loading={loading}
-                    selectRows={selectRows}
-                    setselectRows={setselectRows}
-                    selectedTeis={selectedTeis}
-                    nameOfTEIType={nameOfTEIType}
-                    ouName={ouName}
-                    orgUnitSelected={orgUnitSelected}
-                />
-            }
         </Modal >
     )
 }

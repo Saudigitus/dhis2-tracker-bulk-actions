@@ -14,12 +14,13 @@ import Content from './Content.js'
 import OtherFilters from './filter/other/OtherFilters.js'
 import style from "./listcontent.module.css";
 import { ConfirmBulkAction } from '../modal/ConfirmBulkAction.js'
+import { useDeleteTEI } from '../../hooks/deleteTEI/useDeleteTEI.js'
 import TempTranferEvent from '../modal/TempTranferEvent.js'
 import ChangeStatusEnrollment from '../modal/ChangeStatusEnrollment.js'
 
 // eslint-disable-next-line react/prop-types
 function ListContent({ type, program }) {
-  const { order, orderBy, setreloadData, reloadData, setallTeisFormated, enrollmentDate } = useContext(GeneratedVaribles)
+  const { order, orderBy, setreloadData, reloadData, setallTeisFormated, enrollmentDate, selectRows = [], setselectRows, programs = [], allTeisFormated } = useContext(GeneratedVaribles)
   const { filter } = useContext(AppBarContext);
 
   const [selectedFilter, setselectedFilter] = useState("")
@@ -30,6 +31,8 @@ function ListContent({ type, program }) {
   const [openModalConfirmBulk, setOpenModalConfirmBulk] = useState(false)
   const handleCloseConfirmAction = () => setOpenModalConfirmBulk(false);
   const [searchParams] = useSearchParams();
+  const programId = searchParams.get("programId")
+  const ouName = searchParams.get("ouName")
   const selectedOu = searchParams.get('ou');
   const startDate = searchParams.get('startDate');
   const endDate = searchParams.get('endDate');
@@ -38,6 +41,7 @@ function ListContent({ type, program }) {
   const [modalType, setmodalType] = useState("transfer")
   const { headers = [], loading, getData: getDataHeader } = useHeader({ type, program })
   const { totalPages, loading: loadingHeader, columnData, getData } = useData({ type, ou: selectedOu, program, programStatus: selectedFilter, page, pageSize })
+  const { loading: loadingDelete, deleteTEI } = useDeleteTEI({handleCloseConfirmAction})
 
   const optionSets = headers.filter(x => x.optionSet)?.map(x => x.optionSet);
 
@@ -89,6 +93,27 @@ function ListContent({ type, program }) {
     }
   }, [endDate, startDate, selectedOu, order, orderBy, reloadData, page, pageSize, filter, searchParams.get("reload"), selectedFilter, enrollmentDate])
 
+  function nameOfTEIType() {
+    return `${programs.find(x => x.value === programId)?.trackedEntityType?.name}(s)` || ""
+}
+
+function currentDetailsProgram() {
+    return programs.find(x => x.value === programId)
+}
+
+function getTeiDetails() {
+  const teisSelected = []
+  for (const tei of selectRows) {
+      const selectedTei = allTeisFormated?.find(x => x.id === tei)
+
+      const teiData = `${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.displayName}: ${selectedTei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.id] || "---"};${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.displayName}: ${selectedTei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.id] || "---"}`
+      teisSelected.push({ id: tei, name: teiData, isSelected: true })
+
+  }
+  return teisSelected
+}
+const selectedTeis = getTeiDetails(currentDetailsProgram())
+
   return (
     <>
       {type === "WITHOUT_REGISTRATION" &&
@@ -111,8 +136,10 @@ function ListContent({ type, program }) {
                   onFilterByEnrollment={onFilterByEnrollment}
                   selectedFilter={selectedFilter}
                   setopenModalBulkTranfer={setopenModalBulk}
+                  setopenModalBulkDelete={setOpenModalConfirmBulk}
                   modalType={setmodalType}
-                />
+                  disableDelete={!selectRows.length}
+                  />
               </WithPadding>
             </WithBorder>
           }
@@ -141,8 +168,12 @@ function ListContent({ type, program }) {
       {modalType === "transfer" ?
         openModalBulk &&
         <TranferEnrollment
+          modalType={modalType}
           open={openModalBulk}
           setopen={setopenModalBulk}
+          selectedTeis={selectedTeis}
+          nameOfTEIType={nameOfTEIType}
+          currentDetailsProgram={currentDetailsProgram}
         />
         : modalType === "TEMPtransfer" ?
           openModalBulk &&
@@ -158,6 +189,23 @@ function ListContent({ type, program }) {
             />
             : null
       }
+
+      {modalType === 'delete' && openModalConfirmBulk && (
+        <ConfirmBulkAction
+          modalType={modalType}
+          show={openModalConfirmBulk}
+          handleClose={handleCloseConfirmAction}
+          //action={handleCloseConfirmAction}
+          loading={loadingDelete}
+          selectRows={selectRows}
+          setselectRows={setselectRows}
+          selectedTeis={selectedTeis}
+          nameOfTEIType={nameOfTEIType}
+          ouName={ouName}
+          label={"Delete"}
+          action={() => deleteTEI(currentDetailsProgram(), selectRows)}
+        />
+      )}        
     </>
   )
 }

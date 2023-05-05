@@ -7,7 +7,7 @@ import { Modal } from 'react-bootstrap'
 
 // eslint-disable-next-line react/prop-types
 
-const ConfirmBulkAction = ({ show, handleClose, action, loading, selectRows, setselectRows, selectedTeis, nameOfTEIType, ouName, orgUnitSelected }) => {
+const ConfirmBulkAction = ({ modalType, show, handleClose, action, loading, selectRows, setselectRows, selectedTeis, nameOfTEIType, ouName, orgUnitSelected, label }) => {
     const [checked, setChecked] = useState(false);
     const [rejectedRows, setRejectedRows] = useState([]);
     const [approvedRows, setApprovedRows] = useState([...selectedTeis]);
@@ -44,10 +44,11 @@ const ConfirmBulkAction = ({ show, handleClose, action, loading, selectRows, set
             <Modal.Body>
                 <h3 className='py-3 text-center'>Atention</h3>
                 <span className=''>
-                    Are you sure you want to transfer <strong>{selectRows.length}</strong> {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected.displayName || "Organisation Unit"}`}</strong>?
+                    {modalType==="transfer" && <span> Are you sure you want to transfer <strong>{selectRows.length}</strong> {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected?.displayName || "Organisation Unit"}`}</strong>?</span>}
+                    {modalType==="delete" && <span> Are you sure you want to <strong className='text-danger'>delete</strong>  <strong>{selectRows.length}</strong> {nameOfTEIType()} from<strong >{` ${ouName} `}</strong>?</span>}
                 </span>
               
-                <br />
+                <br /><Divider />
                 <div style={{maxHeight: 400, overflow: 'auto', overflowX: 'hidden'}}>
                     {approvedRows?.map((x, index) =>
                         <>
@@ -85,7 +86,7 @@ const ConfirmBulkAction = ({ show, handleClose, action, loading, selectRows, set
                     Sair
                 </Button>
                 <Button disabled={!checked || !selectRows.length} onClick={action} name="Primary button" destructive value="default">
-                    {loading ? <CircularLoader small /> : "Tranfer"}
+                    {loading ? <CircularLoader small /> :  label}
                 </Button>
             </Modal.Footer>
         </Modal>
