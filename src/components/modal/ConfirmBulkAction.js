@@ -51,8 +51,8 @@ const ConfirmBulkAction = ({ show, handleClose, action, loading, selectRows, set
                 <div style={{maxHeight: 400, overflow: 'auto', overflowX: 'hidden'}}>
                     {approvedRows?.map((x, index) =>
                         <>
-                            <div style={{ display: "flex", marginBottom: 5, marginTop: 5, marginLeft: 20, width: '100%' }}>
-                                <Label color="muted" style={{ marginLeft: "5px", textDecoration: "line-through" }}>
+                            <div style={{ display: "flex", alignItems: "center", marginBottom: 5, marginTop: 5, marginLeft: 20, width: '100%' }}>
+                                <Label className={rejectedRows.includes(x.id) && 'line-through'} color="muted" style={{ marginLeft: "5px"}}>
                                     {index+1}. {x?.name?.split(";")[0].split(":")[0]} 
                                     <strong>{x?.name?.split(";")[0].split(":")[1]}</strong>
                                     {", "}
@@ -61,11 +61,11 @@ const ConfirmBulkAction = ({ show, handleClose, action, loading, selectRows, set
                                 </Label>
                                 <div style={{ marginLeft: "auto", width: 250, height: "auto" }}>
                                     {rejectedRows.includes(x.id) ? 
-                                        <IconButton size='small' title='Cancelar' onClick={()=> undoRejectRows(x.id)}>
+                                        <IconButton size='small' title='Refazer' color='primary' onClick={()=> undoRejectRows(x.id)}>
                                             <Refresh color="inherit" fontSize='small' />
                                         </IconButton>
                                         : 
-                                        <IconButton size='small' title='Refazer' onClick={()=> rejectRows(x.id)}>
+                                        <IconButton size='small' title='Cancelar' onClick={()=> rejectRows(x.id)}>
                                             <Close color="inherit" fontSize='small' />
                                         </IconButton>
                                     }

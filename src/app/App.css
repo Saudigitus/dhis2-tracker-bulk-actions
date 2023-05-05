@@ -208,3 +208,7 @@ body {
     text-overflow: ellipsis;
 }
 
+.line-through{
+    text-decoration: line-through !important;
+}
+
