@@ -34,7 +34,7 @@ function Testing({ name, Component }) {
 }
 
 const TranferEnrollment = ({ open, setopen }) => {
-    const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows } = useContext(GeneratedVaribles)
+    const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows, allTeisFormated } = useContext(GeneratedVaribles)
     const { useQuery } = useParams()
     const programId = useQuery().get("programId")
     const ouName = useQuery().get("ouName")
@@ -52,6 +52,19 @@ const TranferEnrollment = ({ open, setopen }) => {
         return programs.find(x => x.value === programId)
     }
 
+    function getTeiDetails() {
+        const teisSelected = []
+        for (const tei of selectRows) {
+            const selectedTei = allTeisFormated.find(x => x.id === tei)
+
+            const teiData = `${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.displayName}: ${selectedTei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.id]};${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.displayName}: ${selectedTei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.id]}`
+            teisSelected.push({ id: tei, name: teiData, isSelected: true })
+
+        }
+        return teisSelected
+    }
+    const selectedTeis = getTeiDetails(currentDetailsProgram())
+
     return (
         <Modal large open={open} position={'middle'} onClose={() => setopen(false)}>
             <ModalTitle>{('Permanent transfer')}</ModalTitle>
@@ -61,7 +74,7 @@ const TranferEnrollment = ({ open, setopen }) => {
                 {
                     tEItransfered.length === 0 ?
                         <div style={{ marginTop: 18, marginLeft: 0, marginBottom: 0 }}>
-                            Transfer {selectRows.length} {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected.displayName || "Organisation Unit"}`}</strong>
+                            Transfer <strong>{selectRows.length}</strong>  {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected.displayName || "Organisation Unit"}`}</strong>
                             <div style={{ background: "rgb(243, 245, 247)", height: "20px", marginTop: 10 }}></div>
                             <Box width="100%">
                                 {Testing({
@@ -155,20 +168,24 @@ const TranferEnrollment = ({ open, setopen }) => {
                         //onClick={() => tranfer(currentDetailsProgram(), orgUnitSelected.id, selectRows)}
                         onClick={() => setOpenModalConfirmBulk(true)}
                     >
-                        {('Transfer')}
+                        {('Continue')}
                     </Button>}
                 </ButtonStrip>
             </ModalActions>
-            {(openModalConfirmBulk && tEItransfered.length === 0) &&
-                <ConfirmBulkAction
-                    show={openModalConfirmBulk}
-                    handleClose={handleCloseConfirmAction}
-                    action={() => transferTEI(currentDetailsProgram(), orgUnitSelected.id, selectRows)}
-                    loading={loading} selectRows={selectRows}
-                    nameOfTEIType={nameOfTEIType}
-                    ouName={ouName}
-                    orgUnitSelected={orgUnitSelected}
-                />}
+
+      {(openModalConfirmBulk && tEItransfered.length === 0) && 
+      <ConfirmBulkAction 
+      show={openModalConfirmBulk} 
+      handleClose={handleCloseConfirmAction} 
+      action={() => tranfer(currentDetailsProgram(), orgUnitSelected.id, selectRows)} 
+      loading={loading} 
+      selectRows={selectRows} 
+      setselectRows={setselectRows} 
+      selectedTeis={selectedTeis} 
+      nameOfTEIType={nameOfTEIType} 
+      ouName={ouName} 
+      orgUnitSelected={orgUnitSelected} 
+      />}
 
         </Modal >
     )
