@@ -14,6 +14,7 @@ import Content from './Content.js'
 import OtherFilters from './filter/other/OtherFilters.js'
 import style from "./listcontent.module.css";
 import { ConfirmBulkAction } from '../modal/ConfirmBulkAction.js'
+import TempTranferEvent from '../modal/TempTranferEvent.js'
 
 // eslint-disable-next-line react/prop-types
 function ListContent({ type, program }) {
@@ -136,12 +137,19 @@ function ListContent({ type, program }) {
           </Pagination>
         </WithBorder>
       </div>
-      {modalType === "transfer" &&
+      {modalType === "transfer" ?
         openModalBulk &&
         <TranferEnrollment
           open={openModalBulk}
           setopen={setopenModalBulk}
         />
+        : modalType === "TEMPtransfer" ?
+          openModalBulk &&
+          <TempTranferEvent
+            open={openModalBulk}
+            setopen={setopenModalBulk}
+          />
+          : null
       }
     </>
   )
