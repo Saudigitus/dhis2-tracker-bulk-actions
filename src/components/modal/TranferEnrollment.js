@@ -170,7 +170,7 @@ const TranferEnrollment = ({ open, setopen }) => {
                         //onClick={() => tranfer(currentDetailsProgram(), orgUnitSelected.id, selectRows)}
                         onClick={() => setOpenModalConfirmBulk(true)}
                     >
-                        {('Transfer')}
+                        {('Continue')}
                     </Button>}
                 </ButtonStrip>
             </ModalActions>

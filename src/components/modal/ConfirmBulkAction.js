@@ -69,8 +69,6 @@ const ConfirmBulkAction = ({ show, handleClose, action, loading, selectRows, set
                                             <Close color="inherit" fontSize='small' />
                                         </IconButton>
                                     }
-                                    
-                                    
                                 </div>
                             </div>
                             {approvedRows.length>1 && <Divider />}
