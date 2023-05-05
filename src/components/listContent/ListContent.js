@@ -16,6 +16,7 @@ import style from "./listcontent.module.css";
 import { ConfirmBulkAction } from '../modal/ConfirmBulkAction.js'
 import { useDeleteTEI } from '../../hooks/deleteTEI/useDeleteTEI.js'
 import TempTranferEvent from '../modal/TempTranferEvent.js'
+import ChangeStatusEnrollment from '../modal/ChangeStatusEnrollment.js'
 
 // eslint-disable-next-line react/prop-types
 function ListContent({ type, program }) {
@@ -180,7 +181,13 @@ const selectedTeis = getTeiDetails(currentDetailsProgram())
             open={openModalBulk}
             setopen={setopenModalBulk}
           />
-          : null
+          : modalType === "ChangeStatus" ?
+            openModalBulk &&
+            <ChangeStatusEnrollment
+              open={openModalBulk}
+              setopen={setopenModalBulk}
+            />
+            : null
       }
 
       {modalType === 'delete' && openModalConfirmBulk && (

@@ -12,11 +12,13 @@ import { Divider, IconButton, LinearProgress } from '@material-ui/core'
 import { Check, Close } from '@material-ui/icons';
 import React, { useState, useContext } from 'react'
 import { GeneratedVaribles } from '../../contexts/GeneratedVaribles'
+import { useTransferTEI } from '../../hooks/bulkoperations/useTransfer';
 import { useParams } from '../../hooks/common/useQueryParams';
 import { useVerifyOuAcess } from '../../hooks/programs/useVerifyOuAcess';
-import { useTransferTEI } from '../../hooks/bulkoperations/useTransfer';
 import { OrgUnitCard } from '../OrgUnitTree';
+import ProgramSelect from '../programSelect/ProgramSelect';
 import { ConfirmBulkAction } from './ConfirmBulkAction';
+import { useChangeStatus } from '../../hooks/bulkoperations/useChangeStatus';
 // import { OptionFields } from '../genericFields/fields/SingleSelect'
 
 function Testing({ name, Component }) {
@@ -33,27 +35,62 @@ function Testing({ name, Component }) {
     )
 }
 
-const TranferEnrollment = ({ open, setopen, selectedTeis, modalType, nameOfTEIType, currentDetailsProgram }) => {
+const ChangeStatusEnrollment = ({ open, setopen }) => {
     const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows, allTeisFormated } = useContext(GeneratedVaribles)
     const { useQuery } = useParams()
     const programId = useQuery().get("programId")
     const ouName = useQuery().get("ouName")
-    const [orgUnitSelected, setorgUnitSelected] = useState({})
-    const { loading, transferTEI } = useTransferTEI()
+    const [statusSelected, setstatusSelected] = useState("")
+    const { loading, changeProgramStatus } = useChangeStatus()
     const { verifyAcess } = useVerifyOuAcess()
     const [openModalConfirmBulk, setOpenModalConfirmBulk] = useState(false)
     const handleCloseConfirmAction = () => setOpenModalConfirmBulk(false);
 
+    function nameOfTEIType() {
+        return programs.find(x => x.value === programId)?.trackedEntityType?.name || ""
+    }
+
+    function currentDetailsProgram() {
+        return programs.find(x => x.value === programId)
+    }
+
+    function getTeiDetails() {
+        const teisSelected = []
+        for (const tei of selectRows) {
+            const selectedTei = allTeisFormated.find(x => x.id === tei)
+
+            const teiData = `${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.displayName}: ${selectedTei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.id]};${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.displayName}: ${selectedTei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.id]}`
+            teisSelected.push({ id: tei, name: teiData, isSelected: true })
+
+        }
+        return teisSelected
+    }
+    const selectedTeis = getTeiDetails(currentDetailsProgram())
+
+
+    const status = [{
+        label: "ACTIVE",
+        value: "ACTIVE"
+    },
+    {
+        label: "COMPLETED",
+        value: "COMPLETED"
+    },
+    {
+        label: "CANCELLED",
+        value: "CANCELLED"
+    }]
+
     return (
         <Modal large open={open} position={'middle'} onClose={() => setopen(false)}>
-            <ModalTitle>{('Permanent transfer')}</ModalTitle>
+            <ModalTitle>{('Change Status')}</ModalTitle>
             <p />
             <ModalContent>
                 {loading && <LinearProgress />}
                 {
                     tEItransfered.length === 0 ?
                         <div style={{ marginTop: 18, marginLeft: 0, marginBottom: 0 }}>
-                            Transfer <strong>{selectRows.length}</strong>  {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected.displayName || "Organisation Unit"}`}</strong>
+                            Change status of <strong>{selectRows.length}</strong>  {nameOfTEIType()} to<strong >{` ${statusSelected || "Status"}`}</strong>
                             <div style={{ background: "rgb(243, 245, 247)", height: "20px", marginTop: 10 }}></div>
                             <Box width="100%">
                                 {Testing({
@@ -69,22 +106,20 @@ const TranferEnrollment = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
                             <Divider />
                             <Box width="100%">
                                 {Testing({
-                                    name: "Organisation Unit",
+                                    name: "Program Status",
                                     Component: () => (
-                                        Object.keys(orgUnitSelected).length == 0 ?
-                                            <OrgUnitCard type={"bulk"}
-                                                value={orgUnitSelected?.selected}
-                                                onChange={(e) => setorgUnitSelected(e)}
-                                            /> :
+                                        !statusSelected ?
+                                            <ProgramSelect options={status} loading={loading} onChange={
+                                                (e) => {
+                                                    setstatusSelected(e.value)
+                                                }
+                                            } />
+                                            :
                                             <div style={{ display: "flex" }}>
                                                 <Label>
-                                                    {verifyAcess(currentDetailsProgram()?.value, orgUnitSelected.id) ?
-                                                        orgUnitSelected.displayName
-                                                        :
-                                                        "Selected program is invalid for selected registering unit"
-                                                    }
+                                                    {statusSelected}
                                                 </Label>
-                                                <IconButton size='small' onClick={() => setorgUnitSelected({})}
+                                                <IconButton size='small' onClick={() => setstatusSelected({})}
                                                     style={{ marginLeft: "auto", marginTop: -5 }}>
                                                     <Close size='small' />
                                                 </IconButton>
@@ -140,20 +175,33 @@ const TranferEnrollment = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
                         primary
                         name="insert-preset"
                         disabled={
-                            !orgUnitSelected?.id ||
-                            selectRows.length === 0 ||
-                            !verifyAcess(currentDetailsProgram()?.value, orgUnitSelected.id)
+                            !statusSelected ||
+                            selectRows.length === 0
                         }
+                        //onClick={() => tranfer(currentDetailsProgram(), statusSelected, selectRows)}
                         onClick={() => setOpenModalConfirmBulk(true)}
                     >
                         {('Continue')}
                     </Button>}
                 </ButtonStrip>
             </ModalActions>
-      {(openModalConfirmBulk && tEItransfered.length === 0) && <ConfirmBulkAction modalType={modalType} show={openModalConfirmBulk} handleClose={handleCloseConfirmAction} action={() => tranfer(currentDetailsProgram(), orgUnitSelected.id, selectRows)} loading={loading} selectRows={selectRows} setselectRows={setselectRows} selectedTeis={selectedTeis} nameOfTEIType={nameOfTEIType} ouName={ouName} orgUnitSelected={orgUnitSelected} label={"Transfer"} />}
 
+            {(openModalConfirmBulk && tEItransfered.length === 0) &&
+                <ConfirmBulkAction
+                    show={openModalConfirmBulk}
+                    handleClose={handleCloseConfirmAction}
+                    action={() => changeProgramStatus(currentDetailsProgram(), statusSelected, selectRows)}
+                    loading={loading}
+                    selectRows={selectRows}
+                    setselectRows={setselectRows}
+                    selectedTeis={selectedTeis}
+                    nameOfTEIType={nameOfTEIType}
+                    ouName={statusSelected}
+                    orgUnitSelected={{}}
+                />
+            }
         </Modal >
     )
 }
 
-export default TranferEnrollment
+export default ChangeStatusEnrollment

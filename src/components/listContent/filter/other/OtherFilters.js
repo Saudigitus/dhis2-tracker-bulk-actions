@@ -58,6 +58,7 @@ function OtherFilters({ onFilterByEnrollment, selectedFilter, setopenModalBulkTr
                         setopenModalBulkTranfer={setopenModalBulkTranfer}
                         setopenModalBulkDelete={setopenModalBulkDelete}
                         modalType={modalType}
+                        programStatus={selectedFilter}
                         disableDelete={disableDelete}
                     />
                 </div>
