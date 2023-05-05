@@ -1,4 +1,3 @@
-import { CenteredContent, CircularLoader } from '@dhis2/ui'
 import React, { useState, useEffect, useContext } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { AppBarContext } from '../../contexts/AppBarContext.js'
@@ -15,6 +14,7 @@ import Content from './Content.js'
 import OtherFilters from './filter/other/OtherFilters.js'
 import style from "./listcontent.module.css";
 import { ConfirmBulkAction } from '../modal/ConfirmBulkAction.js'
+import TempTranferEvent from '../modal/TempTranferEvent.js'
 
 // eslint-disable-next-line react/prop-types
 function ListContent({ type, program }) {
@@ -34,6 +34,7 @@ function ListContent({ type, program }) {
   const endDate = searchParams.get('endDate');
   const [page, setpage] = useState(1)
   const [pageSize, setpageSize] = useState(10)
+  const [modalType, setmodalType] = useState("transfer")
   const { headers = [], loading, getData: getDataHeader } = useHeader({ type, program })
   const { totalPages, loading: loadingHeader, columnData, getData } = useData({ type, ou: selectedOu, program, programStatus: selectedFilter, page, pageSize })
 
@@ -59,14 +60,12 @@ function ListContent({ type, program }) {
       index) => arr.indexOf(item) === index);
   }
 
-
   useEffect(() => {
     if (optionSets?.length > 0 && controlRenderOptions) {
       setcontrolRenderOptions(false)
       getOptionsByOptionSet(removeDuplicates(optionSets))
     }
   }, [headers])
-
 
   useEffect(() => {
     getDataHeader()
@@ -82,14 +81,12 @@ function ListContent({ type, program }) {
     }
   }, [columnData])
 
-
   useEffect(() => {
     if (!loadingHeader) {
       getData()
       setreloadData(false)
     }
   }, [endDate, startDate, selectedOu, order, orderBy, reloadData, page, pageSize, filter, searchParams.get("reload"), selectedFilter, enrollmentDate])
-
 
   return (
     <>
@@ -113,6 +110,7 @@ function ListContent({ type, program }) {
                   onFilterByEnrollment={onFilterByEnrollment}
                   selectedFilter={selectedFilter}
                   setopenModalBulkTranfer={setopenModalBulk}
+                  modalType={setmodalType}
                 />
               </WithPadding>
             </WithBorder>
@@ -139,12 +137,20 @@ function ListContent({ type, program }) {
           </Pagination>
         </WithBorder>
       </div>
-      {openModalBulk && <TranferEnrollment
-        open={openModalBulk}
-        setopen={setopenModalBulk}
-      />}
-
-
+      {modalType === "transfer" ?
+        openModalBulk &&
+        <TranferEnrollment
+          open={openModalBulk}
+          setopen={setopenModalBulk}
+        />
+        : modalType === "TEMPtransfer" ?
+          openModalBulk &&
+          <TempTranferEvent
+            open={openModalBulk}
+            setopen={setopenModalBulk}
+          />
+          : null
+      }
     </>
   )
 }

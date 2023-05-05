@@ -16,10 +16,13 @@ import { useParams } from '../../hooks/common/useQueryParams';
 import { useVerifyOuAcess } from '../../hooks/programs/useVerifyOuAcess';
 import { useTransferTEI } from '../../hooks/transfer/useTransfer';
 import { OrgUnitCard } from '../OrgUnitTree';
+import ProgramSelect from '../programSelect/ProgramSelect';
 import { ConfirmBulkAction } from './ConfirmBulkAction';
+import DatePicker from '../datepicker/DatePicker';
+import { format } from 'date-fns';
 // import { OptionFields } from '../genericFields/fields/SingleSelect'
 
-function Testing({ name, Component }) {
+function Wrapper({ name, Component }) {
     return (
         <div style={{ display: "flex", marginTop: 15, marginBottom: 0 }}>
             <div>
@@ -33,13 +36,15 @@ function Testing({ name, Component }) {
     )
 }
 
-const TranferEnrollment = ({ open, setopen }) => {
-    const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows, allTeisFormated } = useContext(GeneratedVaribles)
+const TempTranferEvent = ({ open, setopen }) => {
+    const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows } = useContext(GeneratedVaribles)
     const { useQuery } = useParams()
     const programId = useQuery().get("programId")
     const ouName = useQuery().get("ouName")
     const [orgUnitSelected, setorgUnitSelected] = useState({})
-    const { loading, transferTEI } = useTransferTEI()
+    const [programStageSelected, setprogramStageSelected] = useState({})
+    const [reportDateSelected, setreportDateSelected] = useState("")
+    const { loading, transferEvent } = useTransferTEI()
     const { verifyAcess } = useVerifyOuAcess()
     const [openModalConfirmBulk, setOpenModalConfirmBulk] = useState(false)
     const handleCloseConfirmAction = () => setOpenModalConfirmBulk(false);
@@ -52,32 +57,19 @@ const TranferEnrollment = ({ open, setopen }) => {
         return programs.find(x => x.value === programId)
     }
 
-    function getTeiDetails() {
-        const teisSelected = []
-        for (const tei of selectRows) {
-            const selectedTei = allTeisFormated.find(x => x.id === tei)
-
-            const teiData = `${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.displayName}: ${selectedTei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.id]};${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.displayName}: ${selectedTei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.id]}`
-            teisSelected.push({ id: tei, name: teiData, isSelected: true })
-
-        }
-        return teisSelected
-    }
-    const selectedTeis = getTeiDetails(currentDetailsProgram())
-
     return (
         <Modal large open={open} position={'middle'} onClose={() => setopen(false)}>
-            <ModalTitle>{('Permanent transfer')}</ModalTitle>
+            <ModalTitle>{('Temporary transfer')}</ModalTitle>
             <p />
             <ModalContent>
                 {loading && <LinearProgress />}
                 {
                     tEItransfered.length === 0 ?
                         <div style={{ marginTop: 18, marginLeft: 0, marginBottom: 0 }}>
-                            Transfer <strong>{selectRows.length}</strong>  {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected.displayName || "Organisation Unit"}`}</strong>
+                            Temporary transfer {selectRows.length} {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected.displayName || "Organisation Unit"}`}</strong> and <strong >{` ${programStageSelected.label || "Program Stage"}`}</strong>
                             <div style={{ background: "rgb(243, 245, 247)", height: "20px", marginTop: 10 }}></div>
                             <Box width="100%">
-                                {Testing({
+                                {Wrapper({
                                     name: "Program",
                                     Component: () => (
                                         <Label>
@@ -87,9 +79,38 @@ const TranferEnrollment = ({ open, setopen }) => {
                                 })}
                                 <p />
                             </Box>
+
+                            {/*Program Stage*/}
                             <Divider />
                             <Box width="100%">
-                                {Testing({
+                                {Wrapper({
+                                    name: "Program Stage",
+                                    Component: () => (
+                                        Object.keys(programStageSelected).length == 0 ?
+                                            <ProgramSelect options={currentDetailsProgram().programStages} loading={loading} onChange={
+                                                (e) => {
+                                                    setprogramStageSelected(e)
+                                                }
+                                            } />
+                                            :
+                                            <div style={{ display: "flex" }}>
+                                                <Label>
+                                                    {programStageSelected.label}
+                                                </Label>
+                                                <IconButton size='small' onClick={() => setprogramStageSelected({})}
+                                                    style={{ marginLeft: "auto", marginTop: -5 }}>
+                                                    <Close size='small' />
+                                                </IconButton>
+                                            </div>
+                                    )
+                                })}
+                                <p />
+                            </Box>
+
+                            {/* Organisation Unit*/}
+                            <Divider />
+                            <Box width="100%">
+                                {Wrapper({
                                     name: "Organisation Unit",
                                     Component: () => (
                                         Object.keys(orgUnitSelected).length == 0 ?
@@ -106,6 +127,32 @@ const TranferEnrollment = ({ open, setopen }) => {
                                                     }
                                                 </Label>
                                                 <IconButton size='small' onClick={() => setorgUnitSelected({})}
+                                                    style={{ marginLeft: "auto", marginTop: -5 }}>
+                                                    <Close size='small' />
+                                                </IconButton>
+                                            </div>
+                                    )
+                                })}
+                                <p />
+                            </Box>
+
+                            {/* Report Date*/}
+                            <Divider />
+                            <Box width="100%">
+                                {Wrapper({
+                                    name: "Report Date",
+                                    Component: () => (
+                                        !reportDateSelected ?
+                                            <DatePicker
+                                                onChange={(e) => setreportDateSelected(e)}
+                                                value={reportDateSelected}
+                                            />
+                                            :
+                                            <div style={{ display: "flex" }}>
+                                                <Label>
+                                                    {format((reportDateSelected), "yyyy-MM-dd")}
+                                                </Label>
+                                                <IconButton size='small' onClick={() => setreportDateSelected()}
                                                     style={{ marginLeft: "auto", marginTop: -5 }}>
                                                     <Close size='small' />
                                                 </IconButton>
@@ -163,32 +210,31 @@ const TranferEnrollment = ({ open, setopen }) => {
                         disabled={
                             !orgUnitSelected?.id ||
                             selectRows.length === 0 ||
-                            !verifyAcess(currentDetailsProgram()?.value, orgUnitSelected.id)
+                            !verifyAcess(currentDetailsProgram()?.value, orgUnitSelected.id) ||
+                            !programStageSelected?.code ||
+                            !reportDateSelected
                         }
-                        //onClick={() => tranfer(currentDetailsProgram(), orgUnitSelected.id, selectRows)}
                         onClick={() => setOpenModalConfirmBulk(true)}
                     >
-                        {('Continue')}
+                        {('Transfer')}
                     </Button>}
                 </ButtonStrip>
             </ModalActions>
-
-      {(openModalConfirmBulk && tEItransfered.length === 0) && 
-      <ConfirmBulkAction 
-      show={openModalConfirmBulk} 
-      handleClose={handleCloseConfirmAction} 
-      action={() => tranfer(currentDetailsProgram(), orgUnitSelected.id, selectRows)} 
-      loading={loading} 
-      selectRows={selectRows} 
-      setselectRows={setselectRows} 
-      selectedTeis={selectedTeis} 
-      nameOfTEIType={nameOfTEIType} 
-      ouName={ouName} 
-      orgUnitSelected={orgUnitSelected} 
-      />}
+            {(openModalConfirmBulk && tEItransfered.length === 0) &&
+                <ConfirmBulkAction
+                    show={openModalConfirmBulk}
+                    handleClose={handleCloseConfirmAction}
+                    action={() => transferEvent(currentDetailsProgram(), orgUnitSelected.id, programStageSelected, format((reportDateSelected), "yyyy-MM-dd"), selectRows)}
+                    loading={loading}
+                    selectRows={selectRows}
+                    nameOfTEIType={nameOfTEIType}
+                    ouName={ouName}
+                    orgUnitSelected={orgUnitSelected}
+                    programStageSelected={programStageSelected}
+                />}
 
         </Modal >
     )
 }
 
-export default TranferEnrollment
+export default TempTranferEvent

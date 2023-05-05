@@ -6,13 +6,13 @@ import { formatResponseData } from "../../utils/table/rows/formatResponseData";
 import { useFetchData } from "../common/useFetchData.js";
 
 const fieldsType = {
-    WITH_REGISTRATION: "attributes[attribute,value],trackedEntity~rename(trackedEntityInstance),createdAt",
+    WITH_REGISTRATION: "attributes[attribute,value],trackedEntityInstance,createdAt",
     WITHOUT_REGISTRATION: "event,dataValues[value,dataElement],trackedEntityInstance",
     QUERIES: "*"
 }
 
 const resourceType = {
-    WITH_REGISTRATION: "tracker/trackedEntities",
+    WITH_REGISTRATION: "trackedEntityInstances",
     WITHOUT_REGISTRATION: "events",
     QUERIES: "trackedEntityInstances/query",
 }
@@ -21,7 +21,7 @@ const paramsType = ({ ou, program, programStage, page, pageSize, programStatus,
     todayData, filters, filtro, order,
     enrollmentEnrolledAfter, enrollmentEnrolledBefore }) => ({
         WITH_REGISTRATION: {
-            orgUnit: ou || undefined,
+            ou: ou || undefined,
             // ouMode: ou ? "DESCENDANTS" : "ACCESSIBLE",
             order: order,
             attribute: filters,
@@ -31,8 +31,8 @@ const paramsType = ({ ou, program, programStage, page, pageSize, programStatus,
             page: page,
             // totalPages: true,
             programStatus: programStatus || undefined,
-            enrollmentEnrolledBefore: enrollmentEnrolledBefore || undefined,
-            enrollmentEnrolledAfter: enrollmentEnrolledAfter || undefined,
+            startDate: enrollmentEnrolledBefore || undefined,
+            endDate: enrollmentEnrolledAfter || undefined,
         },
         QUERIES: {
             ou: ou || undefined,

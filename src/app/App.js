@@ -39,7 +39,7 @@ const MyApp = () => {
     const [externalUser, setexternalUser] = useState("")
     const [externalBaseUrl, setexternalBaseUrl] = useState("")
     const [allOptionSets, setallOptionSets] = useState({})
-    const [order, setOrder] = useState('asc');
+    const [order, setOrder] = useState('desc');
     const [orderBy, setOrderBy] = useState('');
     const [reloadData, setreloadData] = useState(false)
     const [selectRows, setselectRows] = useState([])
