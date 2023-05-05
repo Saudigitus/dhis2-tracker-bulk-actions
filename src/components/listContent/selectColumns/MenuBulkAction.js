@@ -3,7 +3,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import React from 'react';
 
 // eslint-disable-next-line react/prop-types
-export default function SimpleMenu({ anchorEl, setAnchorEl, setopenModalBulkTranfer, modalType, setopenModalBulkDelete, disableDeletex,programStatus }) {
+export default function SimpleMenu({ anchorEl, setAnchorEl, setopenModalBulkTranfer, modalType, setopenModalBulkDelete, disableDelete,programStatus }) {
 
     const handleClose = () => {
         setAnchorEl(null);
