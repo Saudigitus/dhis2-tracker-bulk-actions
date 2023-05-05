@@ -14,7 +14,7 @@ import React, { useState, useContext } from 'react'
 import { GeneratedVaribles } from '../../contexts/GeneratedVaribles'
 import { useParams } from '../../hooks/common/useQueryParams';
 import { useVerifyOuAcess } from '../../hooks/programs/useVerifyOuAcess';
-import { useTransferTEI } from '../../hooks/transferTEI/useTransferTEI';
+import { useTransferTEI } from '../../hooks/transfer/useTransfer';
 import { OrgUnitCard } from '../OrgUnitTree';
 import ProgramSelect from '../programSelect/ProgramSelect';
 import { ConfirmBulkAction } from './ConfirmBulkAction';
@@ -44,7 +44,7 @@ const TempTranferEvent = ({ open, setopen }) => {
     const [orgUnitSelected, setorgUnitSelected] = useState({})
     const [programStageSelected, setprogramStageSelected] = useState({})
     const [reportDateSelected, setreportDateSelected] = useState("")
-    const { loading, tranfer } = useTransferTEI()
+    const { loading, transferEvent } = useTransferTEI()
     const { verifyAcess } = useVerifyOuAcess()
     const [openModalConfirmBulk, setOpenModalConfirmBulk] = useState(false)
     const handleCloseConfirmAction = () => setOpenModalConfirmBulk(false);
@@ -95,11 +95,7 @@ const TempTranferEvent = ({ open, setopen }) => {
                                             :
                                             <div style={{ display: "flex" }}>
                                                 <Label>
-                                                    {programStageSelected.repeatable ?
-                                                        programStageSelected.label
-                                                        :
-                                                        "Selected program stage is non repeatable"
-                                                    }
+                                                    {programStageSelected.label}
                                                 </Label>
                                                 <IconButton size='small' onClick={() => setprogramStageSelected({})}
                                                     style={{ marginLeft: "auto", marginTop: -5 }}>
@@ -214,16 +210,28 @@ const TempTranferEvent = ({ open, setopen }) => {
                         disabled={
                             !orgUnitSelected?.id ||
                             selectRows.length === 0 ||
-                            !verifyAcess(currentDetailsProgram()?.value, orgUnitSelected.id)
+                            !verifyAcess(currentDetailsProgram()?.value, orgUnitSelected.id) ||
+                            !programStageSelected?.code ||
+                            !reportDateSelected
                         }
-                        //onClick={() => tranfer(currentDetailsProgram(), orgUnitSelected.id, selectRows)}
                         onClick={() => setOpenModalConfirmBulk(true)}
                     >
                         {('Transfer')}
                     </Button>}
                 </ButtonStrip>
             </ModalActions>
-            {(openModalConfirmBulk && tEItransfered.length === 0) && <ConfirmBulkAction show={openModalConfirmBulk} handleClose={handleCloseConfirmAction} action={() => tranfer(currentDetailsProgram(), orgUnitSelected.id, selectRows)} loading={loading} selectRows={selectRows} nameOfTEIType={nameOfTEIType} ouName={ouName} orgUnitSelected={orgUnitSelected} />}
+            {(openModalConfirmBulk && tEItransfered.length === 0) &&
+                <ConfirmBulkAction
+                    show={openModalConfirmBulk}
+                    handleClose={handleCloseConfirmAction}
+                    action={() => transferEvent(currentDetailsProgram(), orgUnitSelected.id, programStageSelected, format((reportDateSelected), "yyyy-MM-dd"), selectRows)}
+                    loading={loading}
+                    selectRows={selectRows}
+                    nameOfTEIType={nameOfTEIType}
+                    ouName={ouName}
+                    orgUnitSelected={orgUnitSelected}
+                    programStageSelected={programStageSelected}
+                />}
 
         </Modal >
     )

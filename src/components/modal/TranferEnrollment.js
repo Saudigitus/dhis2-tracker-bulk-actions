@@ -14,7 +14,7 @@ import React, { useState, useContext } from 'react'
 import { GeneratedVaribles } from '../../contexts/GeneratedVaribles'
 import { useParams } from '../../hooks/common/useQueryParams';
 import { useVerifyOuAcess } from '../../hooks/programs/useVerifyOuAcess';
-import { useTransferTEI } from '../../hooks/transferTEI/useTransferTEI';
+import { useTransferTEI } from '../../hooks/transfer/useTransfer';
 import { OrgUnitCard } from '../OrgUnitTree';
 import { ConfirmBulkAction } from './ConfirmBulkAction';
 // import { OptionFields } from '../genericFields/fields/SingleSelect'
@@ -39,7 +39,7 @@ const TranferEnrollment = ({ open, setopen }) => {
     const programId = useQuery().get("programId")
     const ouName = useQuery().get("ouName")
     const [orgUnitSelected, setorgUnitSelected] = useState({})
-    const { loading, tranfer } = useTransferTEI()
+    const { loading, transferTEI } = useTransferTEI()
     const { verifyAcess } = useVerifyOuAcess()
     const [openModalConfirmBulk, setOpenModalConfirmBulk] = useState(false)
     const handleCloseConfirmAction = () => setOpenModalConfirmBulk(false);
@@ -52,7 +52,6 @@ const TranferEnrollment = ({ open, setopen }) => {
         return programs.find(x => x.value === programId)
     }
 
-    console.log("tEItransfered", tEItransfered)
     return (
         <Modal large open={open} position={'middle'} onClose={() => setopen(false)}>
             <ModalTitle>{('Permanent transfer')}</ModalTitle>
@@ -160,7 +159,16 @@ const TranferEnrollment = ({ open, setopen }) => {
                     </Button>}
                 </ButtonStrip>
             </ModalActions>
-            {(openModalConfirmBulk && tEItransfered.length === 0) && <ConfirmBulkAction show={openModalConfirmBulk} handleClose={handleCloseConfirmAction} action={() => tranfer(currentDetailsProgram(), orgUnitSelected.id, selectRows)} loading={loading} selectRows={selectRows} nameOfTEIType={nameOfTEIType} ouName={ouName} orgUnitSelected={orgUnitSelected} />}
+            {(openModalConfirmBulk && tEItransfered.length === 0) &&
+                <ConfirmBulkAction
+                    show={openModalConfirmBulk}
+                    handleClose={handleCloseConfirmAction}
+                    action={() => transferTEI(currentDetailsProgram(), orgUnitSelected.id, selectRows)}
+                    loading={loading} selectRows={selectRows}
+                    nameOfTEIType={nameOfTEIType}
+                    ouName={ouName}
+                    orgUnitSelected={orgUnitSelected}
+                />}
 
         </Modal >
     )
