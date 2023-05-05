@@ -3,7 +3,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import React from 'react';
 
 // eslint-disable-next-line react/prop-types
-export default function SimpleMenu({ anchorEl, setAnchorEl, setopenModalBulkTranfer, modalType }) {
+export default function SimpleMenu({ anchorEl, setAnchorEl, setopenModalBulkTranfer, modalType, programStatus }) {
     const handleClose = () => {
         setAnchorEl(null);
     };
@@ -21,6 +21,7 @@ export default function SimpleMenu({ anchorEl, setAnchorEl, setopenModalBulkTran
             >
                 <MenuItem onClick={() => { setopenModalBulkTranfer(true); setAnchorEl(null); modalType("transfer") }}>Permanent Transfer</MenuItem>
                 <MenuItem onClick={() => { setopenModalBulkTranfer(true); setAnchorEl(null); modalType("TEMPtransfer") }}>Temporary Transfer</MenuItem>
+                <MenuItem disabled={!programStatus} onClick={() => { setopenModalBulkTranfer(true); setAnchorEl(null); modalType("ChangeStatus") }}>Change Status</MenuItem>
             </Menu>
         </>
     )

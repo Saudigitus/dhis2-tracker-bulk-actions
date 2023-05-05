@@ -57,6 +57,7 @@ function OtherFilters({ onFilterByEnrollment, selectedFilter, setopenModalBulkTr
                         setAnchorEl={setAnchorEl}
                         setopenModalBulkTranfer={setopenModalBulkTranfer}
                         modalType={modalType}
+                        programStatus={selectedFilter}
                     />
                 </div>
 

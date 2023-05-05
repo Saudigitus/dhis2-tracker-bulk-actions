@@ -14,7 +14,7 @@ import React, { useState, useContext } from 'react'
 import { GeneratedVaribles } from '../../contexts/GeneratedVaribles'
 import { useParams } from '../../hooks/common/useQueryParams';
 import { useVerifyOuAcess } from '../../hooks/programs/useVerifyOuAcess';
-import { useTransferTEI } from '../../hooks/transfer/useTransfer';
+import { useTransferTEI } from '../../hooks/bulkoperations/useTransfer';
 import { OrgUnitCard } from '../OrgUnitTree';
 import { ConfirmBulkAction } from './ConfirmBulkAction';
 // import { OptionFields } from '../genericFields/fields/SingleSelect'
