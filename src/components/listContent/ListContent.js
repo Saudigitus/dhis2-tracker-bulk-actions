@@ -14,6 +14,7 @@ import Content from './Content.js'
 import OtherFilters from './filter/other/OtherFilters.js'
 import style from "./listcontent.module.css";
 import { ConfirmBulkAction } from '../modal/ConfirmBulkAction.js'
+import { useDeleteTEI } from '../../hooks/deleteTEI/useDeleteTEI.js'
 
 // eslint-disable-next-line react/prop-types
 function ListContent({ type, program }) {
@@ -38,6 +39,7 @@ function ListContent({ type, program }) {
   const [modalType, setmodalType] = useState("transfer")
   const { headers = [], loading, getData: getDataHeader } = useHeader({ type, program })
   const { totalPages, loading: loadingHeader, columnData, getData } = useData({ type, ou: selectedOu, program, programStatus: selectedFilter, page, pageSize })
+  const { loading: loadingDelete, deleteTEI } = useDeleteTEI({handleCloseConfirmAction})
 
   const optionSets = headers.filter(x => x.optionSet)?.map(x => x.optionSet);
 
@@ -100,9 +102,9 @@ function currentDetailsProgram() {
 function getTeiDetails() {
   const teisSelected = []
   for (const tei of selectRows) {
-      const selectedTei = allTeisFormated.find(x => x.id === tei)
+      const selectedTei = allTeisFormated?.find(x => x.id === tei)
 
-      const teiData = `${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.displayName}: ${selectedTei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.id]};${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.displayName}: ${selectedTei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.id]}`
+      const teiData = `${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.displayName}: ${selectedTei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.id] || "---"};${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.displayName}: ${selectedTei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.id] || "---"}`
       teisSelected.push({ id: tei, name: teiData, isSelected: true })
 
   }
@@ -178,14 +180,15 @@ const selectedTeis = getTeiDetails(currentDetailsProgram())
           modalType={modalType}
           show={openModalConfirmBulk}
           handleClose={handleCloseConfirmAction}
-          action={handleCloseConfirmAction}
-          loading={loading}
+          //action={handleCloseConfirmAction}
+          loading={loadingDelete}
           selectRows={selectRows}
           setselectRows={setselectRows}
           selectedTeis={selectedTeis}
           nameOfTEIType={nameOfTEIType}
           ouName={ouName}
           label={"Delete"}
+          action={() => deleteTEI(currentDetailsProgram(), selectRows)}
         />
       )}        
     </>
