@@ -37,7 +37,7 @@ function Wrapper({ name, Component }) {
 }
 
 const TempTranferEvent = ({ open, setopen }) => {
-    const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows } = useContext(GeneratedVaribles)
+    const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows, allTeisFormated } = useContext(GeneratedVaribles)
     const { useQuery } = useParams()
     const programId = useQuery().get("programId")
     const ouName = useQuery().get("ouName")
@@ -56,6 +56,20 @@ const TempTranferEvent = ({ open, setopen }) => {
     function currentDetailsProgram() {
         return programs.find(x => x.value === programId)
     }
+
+    function getTeiDetails() {
+        const teisSelected = []
+        for (const tei of selectRows) {
+            const selectedTei = allTeisFormated.find(x => x.id === tei)
+
+            const teiData = `${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.displayName}: ${selectedTei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.id]};${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.displayName}: ${selectedTei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.id]}`
+            teisSelected.push({ id: tei, name: teiData, isSelected: true })
+
+        }
+        return teisSelected
+    }
+    
+    const selectedTeis = getTeiDetails(currentDetailsProgram())
 
     return (
         <Modal large open={open} position={'middle'} onClose={() => setopen(false)}>
@@ -227,11 +241,14 @@ const TempTranferEvent = ({ open, setopen }) => {
                     action={() => transferEvent(currentDetailsProgram(), orgUnitSelected.id, programStageSelected, format((reportDateSelected), "yyyy-MM-dd"), selectRows)}
                     loading={loading}
                     selectRows={selectRows}
+                    setselectRows={setselectRows}
+                    selectedTeis={selectedTeis}
                     nameOfTEIType={nameOfTEIType}
                     ouName={ouName}
                     orgUnitSelected={orgUnitSelected}
                     programStageSelected={programStageSelected}
-                />}
+                />
+            }
 
         </Modal >
     )

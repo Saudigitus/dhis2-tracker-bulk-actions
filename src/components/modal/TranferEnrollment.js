@@ -173,20 +173,20 @@ const TranferEnrollment = ({ open, setopen }) => {
                 </ButtonStrip>
             </ModalActions>
 
-      {(openModalConfirmBulk && tEItransfered.length === 0) && 
-      <ConfirmBulkAction 
-      show={openModalConfirmBulk} 
-      handleClose={handleCloseConfirmAction} 
-      action={() => tranfer(currentDetailsProgram(), orgUnitSelected.id, selectRows)} 
-      loading={loading} 
-      selectRows={selectRows} 
-      setselectRows={setselectRows} 
-      selectedTeis={selectedTeis} 
-      nameOfTEIType={nameOfTEIType} 
-      ouName={ouName} 
-      orgUnitSelected={orgUnitSelected} 
-      />}
-
+            {(openModalConfirmBulk && tEItransfered.length === 0) &&
+                <ConfirmBulkAction
+                    show={openModalConfirmBulk}
+                    handleClose={handleCloseConfirmAction}
+                    action={() => transferTEI(currentDetailsProgram(), orgUnitSelected.id, selectRows)}
+                    loading={loading}
+                    selectRows={selectRows}
+                    setselectRows={setselectRows}
+                    selectedTeis={selectedTeis}
+                    nameOfTEIType={nameOfTEIType}
+                    ouName={ouName}
+                    orgUnitSelected={orgUnitSelected}
+                />
+            }
         </Modal >
     )
 }
