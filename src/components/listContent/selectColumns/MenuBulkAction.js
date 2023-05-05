@@ -22,6 +22,7 @@ export default function SimpleMenu({ anchorEl, setAnchorEl, setopenModalBulkTran
                 <MenuItem onClick={() => { setopenModalBulkTranfer(true); setAnchorEl(null); modalType("transfer") }}>Permanent Transfer</MenuItem>
                 <MenuItem disabled={disableDelete} onClick={() => { setopenModalBulkDelete(true); setAnchorEl(null); modalType("delete") }}>Delete</MenuItem>
                 {/*<MenuItem>Complete Enrollment</MenuItem>*/}
+                <MenuItem onClick={() => { setopenModalBulkTranfer(true); setAnchorEl(null); modalType("TEMPtransfer") }}>Temporary Transfer</MenuItem>
             </Menu>
         </>
     )

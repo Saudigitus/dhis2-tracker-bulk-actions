@@ -75,5 +75,3 @@ export function useTransferTEI() {
         tranfer,
         complete
     }
-
-}
