@@ -40,8 +40,8 @@ function ListContent({ type, program }) {
   const [pageSize, setpageSize] = useState(10)
   const [modalType, setmodalType] = useState("transfer")
   const { headers = [], loading, getData: getDataHeader } = useHeader({ type, program })
-  const { totalPages, loading: loadingHeader, columnData, getData } = useData({ type, ou: selectedOu, program, programStatus: selectedFilter, page, pageSize })
-  const { loading: loadingDelete, deleteTEI } = useDeleteTEI({handleCloseConfirmAction})
+  const { totalPages, loading: loadingHeader, columnData, getData, teiEnrollment } = useData({ type, ou: selectedOu, program, programStatus: selectedFilter, page, pageSize })
+  const { loading: loadingDelete, deleteTEI } = useDeleteTEI({ handleCloseConfirmAction })
 
   const optionSets = headers.filter(x => x.optionSet)?.map(x => x.optionSet);
 
@@ -95,24 +95,24 @@ function ListContent({ type, program }) {
 
   function nameOfTEIType() {
     return `${programs.find(x => x.value === programId)?.trackedEntityType?.name}(s)` || ""
-}
+  }
 
-function currentDetailsProgram() {
+  function currentDetailsProgram() {
     return programs.find(x => x.value === programId)
-}
+  }
 
-function getTeiDetails() {
-  const teisSelected = []
-  for (const tei of selectRows) {
+  function getTeiDetails() {
+    const teisSelected = []
+    for (const tei of selectRows) {
       const selectedTei = allTeisFormated?.find(x => x.id === tei)
 
       const teiData = `${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.displayName}: ${selectedTei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.id] || "---"};${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.displayName}: ${selectedTei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.id] || "---"}`
       teisSelected.push({ id: tei, name: teiData, isSelected: true })
 
+    }
+    return teisSelected
   }
-  return teisSelected
-}
-const selectedTeis = getTeiDetails(currentDetailsProgram())
+  const selectedTeis = getTeiDetails(currentDetailsProgram())
 
   return (
     <>
@@ -139,7 +139,7 @@ const selectedTeis = getTeiDetails(currentDetailsProgram())
                   setopenModalBulkDelete={setOpenModalConfirmBulk}
                   modalType={setmodalType}
                   disableDelete={!selectRows.length}
-                  />
+                />
               </WithPadding>
             </WithBorder>
           }
@@ -180,12 +180,16 @@ const selectedTeis = getTeiDetails(currentDetailsProgram())
           <TempTranferEvent
             open={openModalBulk}
             setopen={setopenModalBulk}
+            modalType={modalType}
           />
           : modalType === "ChangeStatus" ?
             openModalBulk &&
             <ChangeStatusEnrollment
               open={openModalBulk}
               setopen={setopenModalBulk}
+              modalType={modalType}
+              initStatus={selectedFilter}
+              teiEnrollment={teiEnrollment}
             />
             : null
       }
@@ -205,7 +209,7 @@ const selectedTeis = getTeiDetails(currentDetailsProgram())
           label={"Delete"}
           action={() => deleteTEI(currentDetailsProgram(), selectRows)}
         />
-      )}        
+      )}
     </>
   )
 }

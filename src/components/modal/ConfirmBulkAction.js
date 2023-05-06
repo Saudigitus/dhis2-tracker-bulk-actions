@@ -4,10 +4,21 @@ import { IconButton } from '@material-ui/core';
 import { Check, Close, Refresh } from '@material-ui/icons';
 import React, { useState } from 'react'
 import { Modal } from 'react-bootstrap'
+import SingleSelectField from '../SingleSelectComponent/SingleSelectField';
 
 // eslint-disable-next-line react/prop-types
 
-const ConfirmBulkAction = ({ modalType, show, handleClose, action, loading, selectRows, setselectRows, selectedTeis, nameOfTEIType, ouName, orgUnitSelected, label }) => {
+const ConfirmBulkAction = ({
+    modalType, show,
+    handleClose, action,
+    loading, selectRows,
+    setselectRows, selectedTeis,
+    nameOfTEIType, ouName,
+    orgUnitSelected, label,
+    initStatus, endStatus,
+    teiEnrollment, localTeiEnrollment,
+    setlocalTeiEnrollment
+}) => {
     const [checked, setChecked] = useState(false);
     const [rejectedRows, setRejectedRows] = useState([]);
     const [approvedRows, setApprovedRows] = useState([...selectedTeis]);
@@ -15,7 +26,7 @@ const ConfirmBulkAction = ({ modalType, show, handleClose, action, loading, sele
         setChecked(event.checked)
     }
 
-    const rejectRows =(id)=>{
+    const rejectRows = (id) => {
         const copySelectRows = [...selectRows]
         const teiToRemove = copySelectRows.indexOf(id)
         if (teiToRemove !== -1) {
@@ -25,7 +36,7 @@ const ConfirmBulkAction = ({ modalType, show, handleClose, action, loading, sele
         }
     }
 
-    const undoRejectRows =(id)=>{
+    const undoRejectRows = (id) => {
         const copySelectRows = [...selectRows]
         const teiToRemove = rejectedRows.indexOf(id)
         if (teiToRemove !== -1) {
@@ -44,39 +55,51 @@ const ConfirmBulkAction = ({ modalType, show, handleClose, action, loading, sele
             <Modal.Body>
                 <h3 className='py-3 text-center'>Atention</h3>
                 <span className=''>
-                    {modalType==="transfer" && <span> Are you sure you want to transfer <strong>{selectRows.length}</strong> {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected?.displayName || "Organisation Unit"}`}</strong>?</span>}
-                    {modalType==="delete" && <span> Are you sure you want to <strong className='text-danger'>delete</strong>  <strong>{selectRows.length}</strong> {nameOfTEIType()} from<strong >{` ${ouName} `}</strong>?</span>}
+                    {modalType === "transfer" && <span> Are you sure you want to transfer <strong>{selectRows.length}</strong> {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected?.displayName || "Organisation Unit"}`}</strong>?</span>}
+                    {modalType === "delete" && <span> Are you sure you want to <strong className='text-danger'>delete</strong>  <strong>{selectRows.length}</strong> {nameOfTEIType()} from<strong >{` ${ouName} `}</strong>?</span>}
+                    {modalType === "ChangeStatus" && <span> Are you sure you want to <strong className='text-danger'>change status </strong>from <strong >{` ${initStatus}`}</strong> to <strong >{`${endStatus}`}</strong>?</span>}
                 </span>
-              
+
                 <br /><Divider />
-                <div style={{maxHeight: 400, overflow: 'auto', overflowX: 'hidden'}}>
+                <div style={{ maxHeight: 400, overflow: 'auto', overflowX: 'hidden' }}>
                     {approvedRows?.map((x, index) =>
                         <>
                             <div style={{ display: "flex", alignItems: "center", marginBottom: 5, marginTop: 5, marginLeft: 20, width: '100%' }}>
-                                <Label className={rejectedRows.includes(x.id) && 'line-through'} color="muted" style={{ marginLeft: "5px"}}>
-                                    {index+1}. {x?.name?.split(";")[0].split(":")[0]} 
-                                    <strong>{x?.name?.split(";")[0].split(":")[1]}</strong>
-                                    {", "}
-                                    {x?.name?.split(";")[1].split(":")[0]}
-                                    <strong>{x?.name?.split(";")[1].split(":")[1]} </strong>
-                                </Label>
-                                <div style={{ marginLeft: "auto", width: 250, height: "auto" }}>
-                                    {rejectedRows.includes(x.id) ? 
-                                        <IconButton size='small' title='Refazer' color='primary' onClick={()=> undoRejectRows(x.id)}>
+                                <>
+                                    <Label className={rejectedRows.includes(x.id) && 'line-through'} color="muted" style={{ marginLeft: "5px" }}>
+                                        {index + 1}. {x?.name?.split(";")[0].split(":")[0]}
+                                        <strong>{x?.name?.split(";")[0].split(":")[1]}</strong>
+                                        {", "}
+                                        {x?.name?.split(";")[1].split(":")[0]}
+                                        <strong>{x?.name?.split(";")[1].split(":")[1]} </strong>
+                                    </Label>
+                                    {modalType === "ChangeStatus" && <div style={{ width: 250 }}>
+                                        <SingleSelectField disabled={rejectedRows.includes(x.id)} helperText={"EnrollmentDate"} value={localTeiEnrollment[x.id]} options={teiEnrollment[x.id]?.enrollments} loading={false}
+                                            onChange={
+                                                (v, e) => {
+                                                    setlocalTeiEnrollment({ ...localTeiEnrollment, [x.id]: e.value })
+                                                }
+                                            }
+                                        />
+                                    </div>}
+                                </>
+                                <div style={{ marginLeft: "auto", width: 90, height: "auto" }}>
+                                    {rejectedRows.includes(x.id) ?
+                                        <IconButton size='small' title='Refazer' color='primary' onClick={() => undoRejectRows(x.id)}>
                                             <Refresh color="inherit" fontSize='small' />
                                         </IconButton>
-                                        : 
-                                        <IconButton size='small' title='Cancelar' onClick={()=> rejectRows(x.id)}>
+                                        :
+                                        <IconButton size='small' title='Cancelar' onClick={() => rejectRows(x.id)}>
                                             <Close color="inherit" fontSize='small' />
                                         </IconButton>
                                     }
                                 </div>
                             </div>
-                            {approvedRows.length>1 && <Divider />}
+                            {approvedRows.length > 1 && <Divider />}
                         </>
                     )}
                 </div>
-                
+
                 <span>
                     <Checkbox disabled={loading} className="checkbox-style" onChange={onChange} checked={checked} label="Agree" name="Ex" value={checked} />
                 </span>
@@ -85,8 +108,9 @@ const ConfirmBulkAction = ({ modalType, show, handleClose, action, loading, sele
                 <Button disabled={loading} name="Basic button" onClick={handleClose} value="default">
                     Sair
                 </Button>
-                <Button disabled={!checked || !selectRows.length} onClick={action} name="Primary button" destructive value="default">
-                    {loading ? <CircularLoader small /> :  label}
+                <Button disabled={!checked || !selectRows.length || Object.keys(localTeiEnrollment).length != Object.keys(selectRows).length} 
+                onClick={action} name="Primary button" destructive value="default">
+                    {loading ? <CircularLoader small /> : label}
                 </Button>
             </Modal.Footer>
         </Modal>

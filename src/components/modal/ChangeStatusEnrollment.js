@@ -35,7 +35,7 @@ function Testing({ name, Component }) {
     )
 }
 
-const ChangeStatusEnrollment = ({ open, setopen }) => {
+const ChangeStatusEnrollment = ({ open, setopen, modalType, initStatus, teiEnrollment }) => {
     const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows, allTeisFormated } = useContext(GeneratedVaribles)
     const { useQuery } = useParams()
     const programId = useQuery().get("programId")
@@ -45,6 +45,7 @@ const ChangeStatusEnrollment = ({ open, setopen }) => {
     const { verifyAcess } = useVerifyOuAcess()
     const [openModalConfirmBulk, setOpenModalConfirmBulk] = useState(false)
     const handleCloseConfirmAction = () => setOpenModalConfirmBulk(false);
+    const [localTeiEnrollment, setlocalTeiEnrollment] = useState({})
 
     function nameOfTEIType() {
         return programs.find(x => x.value === programId)?.trackedEntityType?.name || ""
@@ -109,7 +110,7 @@ const ChangeStatusEnrollment = ({ open, setopen }) => {
                                     name: "Program Status",
                                     Component: () => (
                                         !statusSelected ?
-                                            <SingleSelectField helperText={"Select Status"} value={statusSelected} options={status} loading={loading} onChange={
+                                            <SingleSelectField helperText={"Select Status"} value={statusSelected} options={status.filter(x => x.value != initStatus)} loading={loading} onChange={
                                                 (v, e) => {
                                                     setstatusSelected(e.value)
                                                 }
@@ -190,7 +191,7 @@ const ChangeStatusEnrollment = ({ open, setopen }) => {
                 <ConfirmBulkAction
                     show={openModalConfirmBulk}
                     handleClose={handleCloseConfirmAction}
-                    action={() => changeProgramStatus(currentDetailsProgram(), statusSelected, selectRows)}
+                    action={() => changeProgramStatus(currentDetailsProgram(), statusSelected, selectRows, localTeiEnrollment)}
                     loading={loading}
                     selectRows={selectRows}
                     setselectRows={setselectRows}
@@ -198,6 +199,13 @@ const ChangeStatusEnrollment = ({ open, setopen }) => {
                     nameOfTEIType={nameOfTEIType}
                     ouName={statusSelected}
                     orgUnitSelected={{}}
+                    label={"Change Status"}
+                    modalType={modalType}
+                    initStatus={initStatus}
+                    endStatus={statusSelected}
+                    teiEnrollment={teiEnrollment}
+                    localTeiEnrollment={localTeiEnrollment}
+                    setlocalTeiEnrollment={setlocalTeiEnrollment}
                 />
             }
         </Modal >

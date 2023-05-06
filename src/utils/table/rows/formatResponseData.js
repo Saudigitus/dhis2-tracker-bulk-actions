@@ -14,26 +14,42 @@ function formatDataElementsEvents(data) {
     return column
 }
 
-function formatAttributesTracked(data) {
+function formatAttributesTracked(data, programStatus) {
     const column = []
+    const teiEnrollment = {}
+
     for (const trackedEntityInstance of data || []) {
         const columnObj = {}
-        columnObj["id"] = trackedEntityInstance.trackedEntityInstance
 
+        columnObj["id"] = trackedEntityInstance.trackedEntityInstance
         for (const attribute of trackedEntityInstance?.attributes || []) {
             columnObj[attribute?.attribute] = attribute?.value
         }
 
         column.push(columnObj)
+        teiEnrollment[trackedEntityInstance.trackedEntityInstance] = { enrollments: formatEnrollments(trackedEntityInstance.enrollments, programStatus) }
     }
 
-    return column
+    return {
+        column: column,
+        teiEnrollment: teiEnrollment
+    }
 }
 
-export const formatResponseData = (type, data) => {
+
+function formatEnrollments(enrollments, programStatus) {
+    const enrol = []
+    for (const enrollment of enrollments.filter(x => x.status === programStatus) || []) {
+        enrol.push({ value: enrollment.enrollment, label: enrollment.enrollmentDate })
+    }
+
+    return enrol
+}
+
+export const formatResponseData = (type, data, programStatus) => {
     if (data) {
         if (type === "WITH_REGISTRATION") {
-            return formatAttributesTracked(data)
+            return formatAttributesTracked(data, programStatus)
         } else if (type === "WITHOUT_REGISTRATION") {
             return formatDataElementsEvents(data)
         }

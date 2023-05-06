@@ -6,7 +6,7 @@ import { formatResponseData } from "../../utils/table/rows/formatResponseData";
 import { useFetchData } from "../common/useFetchData.js";
 
 const fieldsType = {
-    WITH_REGISTRATION: "attributes[attribute,value],trackedEntityInstance,createdAt",
+    WITH_REGISTRATION: "attributes[attribute,value],trackedEntityInstance,createdAt,enrollments[enrollmentDate,enrollment,status]",
     WITHOUT_REGISTRATION: "event,dataValues[value,dataElement],trackedEntityInstance",
     QUERIES: "*"
 }
@@ -87,8 +87,11 @@ export const useData = ({ type, ou, program, programStatus = undefined, page, pa
         enrollmentEnrolledAfter: enrollmentDate?.startDate
     }),)
 
+    const formated = formatResponseData(type, objects, programStatus)
+
     return {
-        columnData: formatResponseData(type, objects),
+        columnData: formated?.column,
+        teiEnrollment: formated?.teiEnrollment,
         error,
         loading,
         data: objects,

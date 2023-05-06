@@ -31,6 +31,8 @@ export const GeneratedVaribles = createContext({
     orgUnitSelected: {},
     setorgUnitSelected: {},
     programSelected: {},
-    setprogramSelected: {}
+    setprogramSelected: {},
+    teiEnrollment: {},
+    setteiEnrollment: {}
 })
 
