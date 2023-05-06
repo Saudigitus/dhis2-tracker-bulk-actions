@@ -16,7 +16,7 @@ import { useParams } from '../../hooks/common/useQueryParams';
 import { useVerifyOuAcess } from '../../hooks/programs/useVerifyOuAcess';
 import { useTransferTEI } from '../../hooks/bulkoperations/useTransfer';
 import { OrgUnitCard } from '../OrgUnitTree';
-import ProgramSelect from '../programSelect/ProgramSelect';
+import SingleSelectField from '../SingleSelectComponent/SingleSelectField';
 import { ConfirmBulkAction } from './ConfirmBulkAction';
 import DatePicker from '../datepicker/DatePicker';
 import { format } from 'date-fns';
@@ -101,7 +101,7 @@ const TempTranferEvent = ({ open, setopen }) => {
                                     name: "Program Stage",
                                     Component: () => (
                                         Object.keys(programStageSelected).length == 0 ?
-                                            <ProgramSelect helperText={"Select ProgramStage"} value={programStageSelected} options={currentDetailsProgram().programStages} loading={loading} onChange={
+                                            <SingleSelectField helperText={"Select ProgramStage"} value={programStageSelected} options={currentDetailsProgram().programStages} loading={loading} onChange={
                                                 (v, e) => {
                                                     setprogramStageSelected(e)
                                                 }

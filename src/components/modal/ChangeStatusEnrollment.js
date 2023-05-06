@@ -16,7 +16,7 @@ import { useTransferTEI } from '../../hooks/bulkoperations/useTransfer';
 import { useParams } from '../../hooks/common/useQueryParams';
 import { useVerifyOuAcess } from '../../hooks/programs/useVerifyOuAcess';
 import { OrgUnitCard } from '../OrgUnitTree';
-import ProgramSelect from '../programSelect/ProgramSelect';
+import SingleSelectField from '../SingleSelectComponent/SingleSelectField';
 import { ConfirmBulkAction } from './ConfirmBulkAction';
 import { useChangeStatus } from '../../hooks/bulkoperations/useChangeStatus';
 // import { OptionFields } from '../genericFields/fields/SingleSelect'
@@ -109,7 +109,7 @@ const ChangeStatusEnrollment = ({ open, setopen }) => {
                                     name: "Program Status",
                                     Component: () => (
                                         !statusSelected ?
-                                            <ProgramSelect helperText={"Select Status"} value={statusSelected} options={status} loading={loading} onChange={
+                                            <SingleSelectField helperText={"Select Status"} value={statusSelected} options={status} loading={loading} onChange={
                                                 (v, e) => {
                                                     setstatusSelected(e.value)
                                                 }

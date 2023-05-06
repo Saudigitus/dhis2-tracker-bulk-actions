@@ -3,7 +3,7 @@ import AccountTreeIcon from '@material-ui/icons/AccountTree';
 import EventIcon from '@material-ui/icons/Event';
 import React from 'react'
 import { OrgUnitCard } from '../../OrgUnitTree';
-import ProgramSelect from '../../programSelect/ProgramSelect';
+import ProgramSelect from '../../SingleSelectComponent/SingleSelectField';
 
 const itens = (selected, setSelectedOu, programId, remove, add, loading, programs, setprogramSelected, setorgUnitSelected) => [
     {

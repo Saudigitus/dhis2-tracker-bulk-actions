@@ -53,7 +53,7 @@ const OptionSetAutocomplete = ({ options, value, onChange, helperText }) => {
 };
 
 
-function ProgramSelect({ onChange, value, loading, options, helperText }) {
+function SingleSelectField({ onChange, value, loading, options, helperText }) {
 
   if (loading) {
     return (
@@ -75,5 +75,5 @@ function ProgramSelect({ onChange, value, loading, options, helperText }) {
   )
 }
 
-export default ProgramSelect
+export default SingleSelectField
 
