@@ -72,7 +72,7 @@ const TranferEnrollment = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
                                     name: "Organisation Unit",
                                     Component: () => (
                                         Object.keys(orgUnitSelected).length == 0 ?
-                                            <OrgUnitCard type={"bulk"}
+                                            <OrgUnitCard modal={true}
                                                 value={orgUnitSelected?.selected}
                                                 onChange={(e) => setorgUnitSelected(e)}
                                             /> :
@@ -150,7 +150,7 @@ const TranferEnrollment = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
                     </Button>}
                 </ButtonStrip>
             </ModalActions>
-      {(openModalConfirmBulk && tEItransfered.length === 0) && <ConfirmBulkAction modalType={modalType} show={openModalConfirmBulk} handleClose={handleCloseConfirmAction} action={() => tranfer(currentDetailsProgram(), orgUnitSelected.id, selectRows)} loading={loading} selectRows={selectRows} setselectRows={setselectRows} selectedTeis={selectedTeis} nameOfTEIType={nameOfTEIType} ouName={ouName} orgUnitSelected={orgUnitSelected} label={"Transfer"} />}
+            {(openModalConfirmBulk && tEItransfered.length === 0) && <ConfirmBulkAction modalType={modalType} show={openModalConfirmBulk} handleClose={handleCloseConfirmAction} action={() => tranfer(currentDetailsProgram(), orgUnitSelected.id, selectRows)} loading={loading} selectRows={selectRows} setselectRows={setselectRows} selectedTeis={selectedTeis} nameOfTEIType={nameOfTEIType} ouName={ouName} orgUnitSelected={orgUnitSelected} label={"Transfer"} />}
 
         </Modal >
     )

@@ -3,15 +3,15 @@ import AccountTreeIcon from '@material-ui/icons/AccountTree';
 import EventIcon from '@material-ui/icons/Event';
 import React from 'react'
 import { OrgUnitCard } from '../../OrgUnitTree';
-import ProgramSelect from '../../programSelect/ProgramSelect';
+import ProgramSelect from '../../SingleSelectComponent/SingleSelectField';
 
 const itens = (selected, setSelectedOu, programId, remove, add, loading, programs, setprogramSelected, setorgUnitSelected) => [
     {
         title: "Select Program",
         icone: () => <EventIcon style={{ fontSize: '1.2rem', color: 'rgba(0, 0, 0, 0.54)' }} />,
         selectedItem: programs?.find((program) => program.value === programId)?.label,
-        action: () => <ProgramSelect options={programs} loading={loading} onChange={
-            (e) => {
+        action: () => <ProgramSelect helperText={"Select Program"}  options={programs} loading={loading} onChange={
+            (v, e) => {
                 add("programId", e.value);
                 setprogramSelected(e)
             }

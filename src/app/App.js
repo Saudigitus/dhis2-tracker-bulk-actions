@@ -122,7 +122,8 @@ const MyApp = () => {
                 initOU: initOU,
                 setInitOu: setInitOu,
                 setFilter: setFilter,
-                filter: filter
+                filter: filter,
+                myOU: data
             }}>
                 <div className="">
                     <Layout />

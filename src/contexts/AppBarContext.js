@@ -1,7 +1,9 @@
 /* eslint-disable react/prop-types */
 import React, { createContext } from "react";
 
-const AppBarContext = createContext();
+const AppBarContext = createContext({
+    myOU: {},
+});
 
 const AppBarProvider = ({ children }) => {
     return (
