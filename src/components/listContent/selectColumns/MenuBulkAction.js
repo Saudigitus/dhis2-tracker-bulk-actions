@@ -25,6 +25,7 @@ export default function SimpleMenu({ anchorEl, setAnchorEl, setopenModalBulkTran
                 {/*<MenuItem>Complete Enrollment</MenuItem>*/}
                 <MenuItem onClick={() => { setopenModalBulkTranfer(true); setAnchorEl(null); modalType("TEMPtransfer") }}>Temporary Transfer</MenuItem>
                 <MenuItem disabled={!programStatus} onClick={() => { setopenModalBulkTranfer(true); setAnchorEl(null); modalType("ChangeStatus") }}>Change Status</MenuItem>
+                <MenuItem onClick={() => { setopenModalBulkTranfer(true); setAnchorEl(null); modalType("diffProgram") }}>Enroll in different program</MenuItem>
             </Menu>
         </>
     )
