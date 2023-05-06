@@ -36,6 +36,7 @@ function Wrapper({ name, Component }) {
     )
 }
 
+// eslint-disable-next-line react/prop-types
 const TempTranferEvent = ({ open, setopen }) => {
     const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows, allTeisFormated } = useContext(GeneratedVaribles)
     const { useQuery } = useParams()

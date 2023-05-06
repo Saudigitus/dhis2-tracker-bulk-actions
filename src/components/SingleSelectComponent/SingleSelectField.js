@@ -1,4 +1,4 @@
-import { CenteredContent, CircularLoader, Divider, Input } from '@dhis2/ui';
+import { CenteredContent, CircularLoader } from '@dhis2/ui';
 import React from 'react'
 // eslint-disable-next-line import/order
 import { Autocomplete } from '@material-ui/lab';
@@ -55,6 +55,7 @@ const OptionSetAutocomplete = ({ options, value, onChange, helperText, disabled 
 };
 
 
+// eslint-disable-next-line react/prop-types
 function SingleSelectField({ onChange, value, loading, options, helperText, disabled }) {
 
   if (loading) {

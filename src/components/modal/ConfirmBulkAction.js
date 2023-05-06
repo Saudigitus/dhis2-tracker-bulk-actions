@@ -108,8 +108,8 @@ const ConfirmBulkAction = ({
                 <Button disabled={loading} name="Basic button" onClick={handleClose} value="default">
                     Sair
                 </Button>
-                <Button disabled={!checked || !selectRows.length || Object.keys(localTeiEnrollment).length != Object.keys(selectRows).length} 
-                onClick={action} name="Primary button" destructive value="default">
+                <Button disabled={!checked || !selectRows?.length || modalType === "ChangeStatus" && (Object.keys(localTeiEnrollment)?.length != selectRows?.length)}
+                    onClick={action} name="Primary button" destructive value="default">
                     {loading ? <CircularLoader small /> : label}
                 </Button>
             </Modal.Footer>
