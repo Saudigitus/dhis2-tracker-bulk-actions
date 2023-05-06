@@ -10,8 +10,8 @@ const itens = (selected, setSelectedOu, programId, remove, add, loading, program
         title: "Select Program",
         icone: () => <EventIcon style={{ fontSize: '1.2rem', color: 'rgba(0, 0, 0, 0.54)' }} />,
         selectedItem: programs?.find((program) => program.value === programId)?.label,
-        action: () => <ProgramSelect options={programs} loading={loading} onChange={
-            (e) => {
+        action: () => <ProgramSelect helperText={"Select Program"}  options={programs} loading={loading} onChange={
+            (v, e) => {
                 add("programId", e.value);
                 setprogramSelected(e)
             }

@@ -68,7 +68,7 @@ const TempTranferEvent = ({ open, setopen }) => {
         }
         return teisSelected
     }
-    
+
     const selectedTeis = getTeiDetails(currentDetailsProgram())
 
     return (
@@ -101,8 +101,8 @@ const TempTranferEvent = ({ open, setopen }) => {
                                     name: "Program Stage",
                                     Component: () => (
                                         Object.keys(programStageSelected).length == 0 ?
-                                            <ProgramSelect options={currentDetailsProgram().programStages} loading={loading} onChange={
-                                                (e) => {
+                                            <ProgramSelect helperText={"Select ProgramStage"} value={programStageSelected} options={currentDetailsProgram().programStages} loading={loading} onChange={
+                                                (v, e) => {
                                                     setprogramStageSelected(e)
                                                 }
                                             } />
@@ -128,7 +128,7 @@ const TempTranferEvent = ({ open, setopen }) => {
                                     name: "Organisation Unit",
                                     Component: () => (
                                         Object.keys(orgUnitSelected).length == 0 ?
-                                            <OrgUnitCard type={"bulk"}
+                                            <OrgUnitCard modal={true}
                                                 value={orgUnitSelected?.selected}
                                                 onChange={(e) => setorgUnitSelected(e)}
                                             /> :
@@ -230,7 +230,7 @@ const TempTranferEvent = ({ open, setopen }) => {
                         }
                         onClick={() => setOpenModalConfirmBulk(true)}
                     >
-                        {('Transfer')}
+                        {('Continue')}
                     </Button>}
                 </ButtonStrip>
             </ModalActions>

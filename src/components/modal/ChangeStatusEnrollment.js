@@ -109,8 +109,8 @@ const ChangeStatusEnrollment = ({ open, setopen }) => {
                                     name: "Program Status",
                                     Component: () => (
                                         !statusSelected ?
-                                            <ProgramSelect options={status} loading={loading} onChange={
-                                                (e) => {
+                                            <ProgramSelect helperText={"Select Status"} value={statusSelected} options={status} loading={loading} onChange={
+                                                (v, e) => {
                                                     setstatusSelected(e.value)
                                                 }
                                             } />
