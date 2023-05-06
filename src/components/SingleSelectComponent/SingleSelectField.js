@@ -22,7 +22,7 @@ const useStyles = makeStyles({
 
 
 // eslint-disable-next-line react/prop-types
-const OptionSetAutocomplete = ({ options, value, onChange, helperText }) => {
+const OptionSetAutocomplete = ({ options, value, onChange, helperText, disabled }) => {
   const classes = useStyles();
 
   return (
@@ -33,6 +33,7 @@ const OptionSetAutocomplete = ({ options, value, onChange, helperText }) => {
       getOptionLabel={(option) => option?.label}
       getOptionSelected={(option, value) => option.value === value}
       value={options.filter(element => element.value === value)?.[0]}
+      disabled={disabled}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -45,6 +46,7 @@ const OptionSetAutocomplete = ({ options, value, onChange, helperText }) => {
             },
           }}
           placeholder={helperText}
+          disabled={disabled}
         />
       )}
       onChange={onChange}
@@ -53,7 +55,7 @@ const OptionSetAutocomplete = ({ options, value, onChange, helperText }) => {
 };
 
 
-function SingleSelectField({ onChange, value, loading, options, helperText }) {
+function SingleSelectField({ onChange, value, loading, options, helperText, disabled }) {
 
   if (loading) {
     return (
@@ -70,6 +72,7 @@ function SingleSelectField({ onChange, value, loading, options, helperText }) {
         options={options}
         value={value}
         helperText={helperText}
+        disabled={disabled}
       />
     </div>
   )

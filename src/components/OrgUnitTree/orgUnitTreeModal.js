@@ -48,7 +48,7 @@ function OrgUnitTreeModal({ selected, onChange, singleSelection = true, initiall
         if (query) {
             const delayDebounceFn = setTimeout(() => {
                 fetcher()
-            }, 600)
+            }, 1000)
             return () => clearTimeout(delayDebounceFn)
         } else {
             setData(myOU)

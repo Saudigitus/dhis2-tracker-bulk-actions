@@ -3,28 +3,23 @@ import { useContext, useState } from 'react'
 import { GeneratedVaribles } from '../../contexts/GeneratedVaribles'
 import { useParams } from '../common/useQueryParams'
 
-const TRACKER_UPDATE = {
-    resource: "trackedEntityInstances",
-    type: 'create',
-    // id: ({ id }) => id,
+const ENROLLMENTS_UPDATE = {
+    resource: "enrollments",
+    type: 'update',
+    id: ({ id }) => id,
     data: ({ data }) => data
 }
 
-const TRACKERQUERY = {
+const ENROLLMENTQUERY = {
     results: {
-        resource: "trackedEntityInstances",
+        resource: "enrollments",
         id: ({ id }) => id,
-        params: ({ program, ou }) => ({
-            program: program,
-            ou: ou,
-            fields: "*"
-        })
     }
 }
 
 export function useChangeStatus() {
     const engine = useDataEngine()
-    const { setTEItransfered, tEItransfered, allTeisFormated, programSelected, setselectRows, orgUnitSelected } = useContext(GeneratedVaribles)
+    const { setTEItransfered, allTeisFormated, setselectRows } = useContext(GeneratedVaribles)
     const [loading, setloading] = useState(false)
     const { add } = useParams()
 
@@ -33,26 +28,25 @@ export function useChangeStatus() {
         return (`${program.trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.displayName}: ${teiToMove?.[program.trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.id]};${program.trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.displayName}: ${teiToMove?.[program.trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.id]}`)
     }
 
-    const changeProgramStatus = async (program, status, teis) => {
+    // eslint-disable-next-line max-params
+    const changeProgramStatus = async (program, status, teis, teiEnrollment) => {
         setloading(true)
         const copyTEITransfered = []
         for (const tei of teis) {
-            const teiValue = await engine.query(TRACKERQUERY, {
+            const enrollmentValue = await engine.query(ENROLLMENTQUERY, {
                 variables: {
-                    id: tei,
-                    program: program?.value,
-                    ou: orgUnitSelected?.id
+                    id: teiEnrollment[tei],
                 }
             })
 
-            let teiToUpdate = teiValue?.results
+            const teiToUpdate = enrollmentValue?.results
             teiToUpdate.status = status
-            teiToUpdate = { ...teiToUpdate, program: program?.value }
+            delete enrollmentValue.events
         
-            await engine.mutate(TRACKER_UPDATE, {
+            await engine.mutate(ENROLLMENTS_UPDATE, {
                 variables: {
                     data: teiToUpdate,
-                    id: tei
+                    id: teiEnrollment[tei]
                 }
             }).then(e => {
                 copyTEITransfered.push({ name: getTeiDetails(tei, program), status: "Saved successfuly" })
