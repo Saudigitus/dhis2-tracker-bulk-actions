@@ -9,7 +9,7 @@ import {
     Label
 } from '@dhis2/ui'
 import { Divider, IconButton, LinearProgress } from '@material-ui/core'
-import { Check, Close } from '@material-ui/icons';
+import { Check, Close, InfoOutlined } from '@material-ui/icons';
 import React, { useState, useContext } from 'react'
 import { GeneratedVaribles } from '../../contexts/GeneratedVaribles'
 import { useParams } from '../../hooks/common/useQueryParams';
@@ -17,6 +17,8 @@ import { useVerifyOuAcess } from '../../hooks/programs/useVerifyOuAcess';
 import { useTransferTEI } from '../../hooks/bulkoperations/useTransfer';
 import { OrgUnitCard } from '../OrgUnitTree';
 import { ConfirmBulkAction } from './ConfirmBulkAction';
+import styles from './summary.module.css';
+
 // import { OptionFields } from '../genericFields/fields/SingleSelect'
 
 function Testing({ name, Component }) {
@@ -47,14 +49,13 @@ const TranferEnrollment = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
     return (
         <Modal large open={open} position={'middle'} onClose={() => setopen(false)}>
             <ModalTitle>{('Permanent transfer')}</ModalTitle>
-            <p />
             <ModalContent>
+            <div style={{ background: "rgb(243, 245, 247)", height: "20px", marginTop: 10 }}></div>
                 {loading && <LinearProgress />}
                 {
                     tEItransfered.length === 0 ?
                         <div style={{ marginTop: 18, marginLeft: 0, marginBottom: 0 }}>
                             Transfer <strong>{selectRows.length}</strong>  {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected.displayName || "Organisation Unit"}`}</strong>
-                            <div style={{ background: "rgb(243, 245, 247)", height: "20px", marginTop: 10 }}></div>
                             <Box width="100%">
                                 {Testing({
                                     name: "Program",
@@ -96,10 +97,10 @@ const TranferEnrollment = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
 
                         </div>
                         :
-                        tEItransfered.map(x =>
+                        tEItransfered.map((x, index) =>
                             <>
-                                <div style={{ display: "flex", marginBottom: 8, marginTop: 8, width: '100%' }}>
-                                    <div>
+                                <div style={{ display: "flex", marginTop: 18, width: '100%' }}>
+                                    <div className='d-flex align-items-center'>
 
                                         <Label color="muted" style={{ marginLeft: "5px" }}>
                                             <strong>{x.name.split(";")[0].split(":")[0]} </strong>
@@ -110,11 +111,17 @@ const TranferEnrollment = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
                                         </Label >
 
                                     </div>
-                                    <div style={{ marginLeft: "auto", width: 250, height: "auto" }}>
+                                    <div style={{ marginLeft: "auto", width: 100, height: "auto" }}>
                                         {x.status === "Saved successfuly" ?
-                                            <Check color="primary" />
+                                            <span className={styles.successStatus}>Success</span>
                                             :
-                                            <Close color="error" />
+                                            <div className='d-flex align-items-center'>
+                                                <span className={styles.errorStatus}>Error</span> 
+                                                <IconButton style={{color: "#C21A3D", marginBottom: 10}} size='small' title='More details'>
+                                                    <InfoOutlined fontSize='small' />
+                                                </IconButton>
+                                            </div>
+                                            
                                         }
                                     </div>
 

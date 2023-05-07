@@ -60,8 +60,9 @@ const ConfirmBulkAction = ({
                     {modalType === "delete" && <span> Are you sure you want to <strong className='text-danger'>delete</strong>  <strong>{selectRows.length}</strong> {nameOfTEIType()} from<strong >{` ${ouName} `}</strong>?</span>}
                     {modalType === "ChangeStatus" && <span> Are you sure you want to <strong className='text-danger'>change status </strong>from <strong >{` ${initStatus}`}</strong> to <strong >{`${endStatus}`}</strong>?</span>}
                 </span>
+                <div style={{ background: "rgb(243, 245, 247)", height: "20px", marginTop: 10 }}></div>
 
-                <br /><Divider />
+                <br />
                 <div style={{ maxHeight: 400, overflow: 'auto', overflowX: 'hidden' }}>
                     {approvedRows?.map((x, index) =>
                         <>
@@ -108,7 +109,7 @@ const ConfirmBulkAction = ({
             </Modal.Body>
             <Modal.Footer>
                 <Button disabled={loading} name="Basic button" onClick={handleClose} value="default">
-                    Sair
+                    Cancel
                 </Button>
                 <Button disabled={!checked || !selectRows?.length || modalType === "ChangeStatus" && (Object.keys(localTeiEnrollment)?.length != selectRows?.length)}
                     onClick={action} name="Primary button" destructive value="default">
