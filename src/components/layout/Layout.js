@@ -15,8 +15,10 @@
  * Enhance this component
  */
 
+import { CenteredContent, CircularLoader } from '@dhis2/ui'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
+import { useGetPrograms } from '../../hooks/programs/useGetPrograms'
 // eslint-disable-next-line import/extensions
 import { Routes } from '../routes'
 // eslint-disable-next-line import/extensions
@@ -26,6 +28,16 @@ import styles from './Layout.module.css'
 
 
 function Layout() {
+    const { loading } = useGetPrograms("WITH_REGISTRATION")
+
+    if (loading) {
+        return (
+            <CenteredContent>
+                <CircularLoader />
+            </CenteredContent>
+        )
+    }
+
     return (
         <HashRouter>
             <div className={styles.container}>

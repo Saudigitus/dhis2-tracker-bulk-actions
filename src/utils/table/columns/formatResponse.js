@@ -25,7 +25,7 @@ function formatAttributes(data) {
             header: trackedEntityAttribute?.trackedEntityAttribute?.displayName,
             visible: trackedEntityAttribute?.displayInList,
             searchable: trackedEntityAttribute?.searchable,
-            valueType: trackedEntityAttribute?.trackedEntityAttribute?.optionSet ? "optionSet" : trackedEntityAttribute?.trackedEntityAttribute?.valueType,
+            valueType: trackedEntityAttribute?.trackedEntityAttribute?.optionSet ? "List" : trackedEntityAttribute?.trackedEntityAttribute?.valueType,
             optionSets: trackedEntityAttribute?.trackedEntityAttribute?.optionSet?.options,
             orgUnits: data?.organisationUnits?.map(x => x.id),
             trackedEntityType: data?.trackedEntityType,

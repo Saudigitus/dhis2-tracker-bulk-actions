@@ -1,8 +1,8 @@
 import { IconButton, TablePagination } from '@material-ui/core';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import React from 'react'
-import defaultClasses from './table.module.css';
 import Select from 'react-select';
+import defaultClasses from './table.module.css';
 
 
 // eslint-disable-next-line react/prop-types
@@ -41,14 +41,14 @@ const Pagination = ({ page, rowsPerPage, onPageChange, onRowsPerPageChange, tota
                     className={defaultClasses.textPagination}
                     value={rowsPerPage}
                     clearValueText={false}
-                    style={{ maxWidth: 50, marginTop: -10, height: 10, marginRight:10 }}
+                    style={{ maxWidth: 50, marginTop: -10, height: 10, marginRight: 10 }}
                     options={rowsPerPageNum}
                     clearable={false}
                     searchable={false}
                     onChange={onRowsPerPageChange}
-                    menuContainerStyle={{top: 'auto',	bottom: '100%'}}
+                    menuContainerStyle={{ top: 'auto', bottom: '100%' }}
                 />
-               
+
                 <span className={defaultClasses.textPagination}>
                     Page {page}
                 </span>
@@ -75,15 +75,5 @@ const Pagination = ({ page, rowsPerPage, onPageChange, onRowsPerPageChange, tota
         </div>
     )
 }
-
-// <TablePagination
-//     size="small"
-//     component="div"
-//     count={totalPages}
-//     page={page}
-//     onPageChange={onPageChange}
-//     rowsPerPage={rowsPerPage}
-//     onRowsPerPageChange={onRowsPerPageChange}
-// />
 
 export default Pagination

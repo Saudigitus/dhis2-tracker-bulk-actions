@@ -3,10 +3,10 @@ import Layout from '../components/layout/Layout.js'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { AppBarContext } from '../contexts';
 import "./App.css";
+import "react-select/dist/react-select.css";
 import { GeneratedVaribles } from '../contexts/GeneratedVaribles.js';
 import { useDataQuery } from '@dhis2/app-runtime';
 import { CenteredContent, CircularLoader } from '@dhis2/ui';
-import { format } from 'date-fns';
 
 const idb =
     window.indexedDB ||

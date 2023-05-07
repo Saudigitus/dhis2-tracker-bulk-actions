@@ -107,12 +107,16 @@ const TableComponent = (props) => {
             return false
         }
 
-        if (intersection.length > 0 || selectRows.length > intersection.length) {
+        console.log(intersection, columnData, selectRows);
+
+        if ((intersection.length > 0 && columnData.length != intersection.length) || selectRows.length > intersection.length) {
             return true
         }
 
         return false
     }
+
+    console.log(verifyIndeter());
 
     function verifyIsSelectedAll() {
         const intersection = columnData.filter(x => selectRows.includes(x.id));
@@ -133,6 +137,18 @@ const TableComponent = (props) => {
             setselectRows(copyRows)
         }
 
+    }
+
+    function getDisplayName(attribute, value, headers) {
+
+        for (let i = 0; i < headers.length; i++) {
+            if (attribute === headers[i].id && headers[i].valueType === "List") {
+                for (const op of headers[i].optionSets) {
+                    if (op.code === value) return op.displayName
+                }
+            }
+        }
+        return value
     }
 
     function renderHeaderRow(columns) {
@@ -226,7 +242,7 @@ const TableComponent = (props) => {
                                         className={classNames(classes.cell, classes.bodyCell)}
                                     >
                                         <div>
-                                            {row[column.id]}
+                                            {getDisplayName(column.id, row[column.id], headers)}
                                         </div>
                                     </Cell>
                                 ));
