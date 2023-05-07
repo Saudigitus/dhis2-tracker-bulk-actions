@@ -17,7 +17,7 @@ const ConfirmBulkAction = ({
     orgUnitSelected, label,
     initStatus, endStatus,
     teiEnrollment, localTeiEnrollment,
-    setlocalTeiEnrollment
+    setlocalTeiEnrollment, tEItransfered
 }) => {
     const [checked, setChecked] = useState(false);
     const [rejectedRows, setRejectedRows] = useState([]);
@@ -53,6 +53,7 @@ const ConfirmBulkAction = ({
             centered
         >
             <Modal.Body>
+
                 <h3 className='py-3 text-center'>Atention</h3>
                 <span className=''>
                     {modalType === "transfer" && <span> Are you sure you want to transfer <strong>{selectRows.length}</strong> {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected?.displayName || "Organisation Unit"}`}</strong>?</span>}
@@ -64,7 +65,7 @@ const ConfirmBulkAction = ({
                 <div style={{ maxHeight: 400, overflow: 'auto', overflowX: 'hidden' }}>
                     {approvedRows?.map((x, index) =>
                         <>
-                            <div style={{ display: "flex", alignItems: "center", marginBottom: 5, marginTop: 5, marginLeft: 20, width: '100%' }}>
+                            <div style={{ display: "flex", alignItems: "center",  marginBottom: 5, marginTop: 5, marginLeft: 20, width: '100%' }}>
                                 <>
                                     <Label className={rejectedRows.includes(x.id) && 'line-through'} color="muted" style={{ marginLeft: "5px" }}>
                                         {index + 1}. {x?.name?.split(";")[0].split(":")[0]}
@@ -103,6 +104,7 @@ const ConfirmBulkAction = ({
                 <span>
                     <Checkbox disabled={loading} className="checkbox-style" onChange={onChange} checked={checked} label="Agree" name="Ex" value={checked} />
                 </span>
+
             </Modal.Body>
             <Modal.Footer>
                 <Button disabled={loading} name="Basic button" onClick={handleClose} value="default">

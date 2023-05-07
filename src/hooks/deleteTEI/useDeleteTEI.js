@@ -23,7 +23,7 @@ const mutateDeleteTEI = {
     },
 }
 
-export function useDeleteTEI({handleCloseConfirmAction}) {
+export function useDeleteTEI() {
     const engine = useDataEngine()
     const { setTEItransfered, tEItransfered, allTeisFormated, programSelected, setselectRows } = useContext(GeneratedVaribles)
     const [loading, setloading] = useState(false)
@@ -35,7 +35,7 @@ export function useDeleteTEI({handleCloseConfirmAction}) {
         return (`${program.trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.displayName}: ${teiToMove?.[program.trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.id] || "---"};${program.trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.displayName}: ${teiToMove?.[program.trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.id] || "---"}`)
     }
 
-    const deleteTEI = async (program, teis) => {
+    const deleteTEI = async (program, teis, setShowSummaryModal) => {
         setloading(true)
         const copyTEITransfered = []
         const teisToDelete = []
@@ -59,7 +59,7 @@ export function useDeleteTEI({handleCloseConfirmAction}) {
             .catch((e) => {
                 console.log("response", e)
             })
-        handleCloseConfirmAction()
+            setShowSummaryModal(true)
         setloading(false)
         setloading(false)
         add('reload', true)

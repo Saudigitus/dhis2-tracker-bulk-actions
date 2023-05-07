@@ -18,10 +18,11 @@ import { useDeleteTEI } from '../../hooks/deleteTEI/useDeleteTEI.js'
 import TempTranferEvent from '../modal/TempTranferEvent.js'
 import ChangeStatusEnrollment from '../modal/ChangeStatusEnrollment.js'
 import EnrollDiffProgram from '../modal/EnrollDiffProgram.js'
+import BulkDeleteAction from '../modal/DeleteTeis.js'
 
 // eslint-disable-next-line react/prop-types
 function ListContent({ type, program }) {
-  const { order, orderBy, setreloadData, reloadData, setallTeisFormated, enrollmentDate, selectRows = [], setselectRows, programs = [], allTeisFormated } = useContext(GeneratedVaribles)
+  const { order, orderBy, setreloadData, reloadData, setallTeisFormated, enrollmentDate, selectRows = [], setselectRows, programs = [], allTeisFormated, tEItransfered=[], setTEItransfered } = useContext(GeneratedVaribles)
   const { filter } = useContext(AppBarContext);
 
   const [selectedFilter, setselectedFilter] = useState("")
@@ -30,7 +31,13 @@ function ListContent({ type, program }) {
 
   const [openModalBulk, setopenModalBulk] = useState(false)
   const [openModalConfirmBulk, setOpenModalConfirmBulk] = useState(false)
+  const [showSummaryModal, setShowSummaryModal]=useState(false)
   const handleCloseConfirmAction = () => setOpenModalConfirmBulk(false);
+  const handleCloseSummary=() => {
+        handleCloseConfirmAction()
+        setShowSummaryModal(false)
+        setTEItransfered([])
+    }
   const [searchParams] = useSearchParams();
   const programId = searchParams.get("programId")
   const ouName = searchParams.get("ouName")
@@ -42,7 +49,7 @@ function ListContent({ type, program }) {
   const [modalType, setmodalType] = useState("transfer")
   const { headers = [], loading, getData: getDataHeader } = useHeader({ type, program })
   const { totalPages, loading: loadingHeader, columnData, getData, teiEnrollment } = useData({ type, ou: selectedOu, program, programStatus: selectedFilter, page, pageSize })
-  const { loading: loadingDelete, deleteTEI } = useDeleteTEI({ handleCloseConfirmAction })
+  const { loading: loadingDelete, deleteTEI } = useDeleteTEI()
 
   const optionSets = headers.filter(x => x.optionSet)?.map(x => x.optionSet);
 
@@ -206,11 +213,10 @@ function ListContent({ type, program }) {
               />
               : null
       }
-
       {modalType === 'delete' && openModalConfirmBulk && (
-        <ConfirmBulkAction
+        <BulkDeleteAction
           modalType={modalType}
-          show={openModalConfirmBulk}
+          openModalConfirmBulk={openModalConfirmBulk}
           handleClose={handleCloseConfirmAction}
           //action={handleCloseConfirmAction}
           loading={loadingDelete}
@@ -220,7 +226,11 @@ function ListContent({ type, program }) {
           nameOfTEIType={nameOfTEIType}
           ouName={ouName}
           label={"Delete"}
-          action={() => deleteTEI(currentDetailsProgram(), selectRows)}
+          action={() => deleteTEI(currentDetailsProgram(), selectRows, setShowSummaryModal)}
+          tEItransfered={tEItransfered}
+          setTEItransfered={setTEItransfered}
+          showSummaryModal={showSummaryModal}
+          handleCloseSummary={handleCloseSummary}
         />
       )}
     </>
