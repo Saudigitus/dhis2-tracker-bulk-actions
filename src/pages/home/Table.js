@@ -41,9 +41,6 @@ function List() {
                 :
                 <InitialComponent />
             }
-            <div style={{ height: programId ? 0 : 400 }}>
-                <WithPadding />
-            </div>
         </>
     )
 }

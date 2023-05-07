@@ -1,25 +1,38 @@
-.containerInit{
+.containerInit {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: calc(100vh - 300px);
+    height: calc(100vh - 200px);
     width: 100%;
 }
 
-.paperInit{
+.paperInit {
     padding: 35px;
     width: 50%;
+    background-color: #E8EDF2;
 }
 
 .paperInit ul li {
-    padding: 10px;
+    padding: 6px;
 }
 
-.paperInit h2{
-    color: #2C6693;
+.paperInit h2 {
+    color: var(--colors-grey800);
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 22px;
+    margin-top: 0;
 }
 
-.paperInit span{
-    color: #E05050;
+.paperInit span {
+    color: var(--colors-grey800);
     margin-left: 10px;
+    font-size: 14px;
+}
+
+.paperOtherText {
+    font-size: 14px;
+    letter-spacing: .1px;
+    line-height: 18px;
+    margin-bottom: var(--spacers-dp12);
 }
