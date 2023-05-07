@@ -26,3 +26,11 @@
     margin-right: 5px;
     margin-bottom: 10px;
 }
+
+.errorMessage{
+    background-color: rgb(243, 245, 247);
+    padding: 10px;
+    font-family: monospace !important;
+    color: rgb(194, 26, 61);
+    width: 100% !important;
+}

@@ -71,7 +71,8 @@ export function useTransferTEI() {
             }).then(e => {
                 copyTEITransfered.push({ name: name, status: "Saved successfuly" })
             }).catch(e => {
-                copyTEITransfered.push({ name: name, status: "error" })
+                console.log('error', e)
+                copyTEITransfered.push({ name: name, status: "error", error: e })
             })
             console.log(name);
             setTEItransfered(copyTEITransfered)
@@ -111,11 +112,13 @@ export function useTransferTEI() {
                             }
                         ]
                     }
-                    await engine.mutate(EVENTMUTATE, { variables: { data: data } }).then(() => {
+                    await engine.mutate(EVENTMUTATE, { variables: { data: data } }).then((e) => {
                         copyTEITransfered.push({ name: name, status: "Saved successfuly" })
+                        console.log('params', e)
 
                     }).catch(e => {
                         copyTEITransfered.push({ name: name, status: "error", error: e })
+                        console.log('error', e)
 
                     })
                 }

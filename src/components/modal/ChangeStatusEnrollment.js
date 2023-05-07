@@ -8,7 +8,7 @@ import {
     Box,
     Label
 } from '@dhis2/ui'
-import { Divider, IconButton, LinearProgress } from '@material-ui/core'
+import { Collapse, Divider, IconButton, LinearProgress } from '@material-ui/core'
 import { Check, Close, InfoOutlined } from '@material-ui/icons';
 import React, { useState, useContext } from 'react'
 import { GeneratedVaribles } from '../../contexts/GeneratedVaribles'
@@ -36,7 +36,7 @@ function Testing({ name, Component }) {
     )
 }
 
-const ChangeStatusEnrollment = ({ open, setopen, modalType, initStatus, teiEnrollment }) => {
+const ChangeStatusEnrollment = ({ open, setopen, modalType, initStatus, teiEnrollment, selectedIndex, handleErrorClick }) => {
     const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows, allTeisFormated } = useContext(GeneratedVaribles)
     const { useQuery } = useParams()
     const programId = useQuery().get("programId")
@@ -84,7 +84,7 @@ const ChangeStatusEnrollment = ({ open, setopen, modalType, initStatus, teiEnrol
     }]
 
     return (
-        <Modal large open={open} position={'middle'} onClose={() => setopen(false)}>
+        <Modal large open={open} position={'middle'} onClose={() => {setopen(false); setTEItransfered([])}}>
             <ModalTitle>{('Change Status')}</ModalTitle>
             <p />
             <ModalContent>
@@ -134,7 +134,7 @@ const ChangeStatusEnrollment = ({ open, setopen, modalType, initStatus, teiEnrol
 
                         </div>
                         :
-                        tEItransfered.map(x =>
+                        tEItransfered.map((x, index) =>
                             <>
                                 <div style={{ display: "flex", marginBottom: 8, marginTop: 8, width: '100%' }}>
                                     <div>
@@ -154,14 +154,14 @@ const ChangeStatusEnrollment = ({ open, setopen, modalType, initStatus, teiEnrol
                                             :
                                             <div className='d-flex align-items-center'>
                                                 <span className={styles.errorStatus}>Error</span> 
-                                                <IconButton style={{color: "#C21A3D", marginBottom: 10}} size='small' title='More details'>
+                                                <IconButton onClick={() => handleErrorClick(index)} style={{color: "#C21A3D", marginBottom: 10}} size='small' title='More details'>
                                                     <InfoOutlined fontSize='small' />
                                                 </IconButton>
                                             </div>
                                         }
                                     </div>
-
                                 </div>
+                                <Collapse in={selectedIndex === index}> <div className={styles.errorMessage}>{x?.error?.message}</div> </Collapse>
                                 <Divider />
                             </>
                         )

@@ -8,7 +8,7 @@ import {
     Box,
     Label
 } from '@dhis2/ui'
-import { Divider, IconButton, LinearProgress } from '@material-ui/core'
+import { Collapse, Divider, IconButton, LinearProgress } from '@material-ui/core'
 import { Check, Close, InfoOutlined } from '@material-ui/icons';
 import { format } from 'date-fns';
 import React, { useState, useContext } from 'react'
@@ -39,7 +39,7 @@ function Wrapper({ name, Component }) {
 }
 
 // eslint-disable-next-line react/prop-types
-const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEIType, currentDetailsProgram }) => {
+const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEIType, currentDetailsProgram, selectedIndex, handleErrorClick }) => {
     const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows } = useContext(GeneratedVaribles)
     const { useQuery } = useParams()
     const ouName = useQuery().get("ouName")
@@ -51,17 +51,16 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
     const { verifyAcess } = useVerifyOuAcess()
     const [openModalConfirmBulk, setOpenModalConfirmBulk] = useState(false)
     const handleCloseConfirmAction = () => setOpenModalConfirmBulk(false);
-
     return (
         <Modal large open={open} position={'middle'} onClose={() => setopen(false)}>
-            <ModalTitle>{('Permanent transfer')}</ModalTitle>
+            <ModalTitle>{('Enroll in Different Program')}</ModalTitle>
             <ModalContent>
                 <div style={{ background: "rgb(243, 245, 247)", height: "20px", marginTop: 10 }}></div>
                 {loading && <LinearProgress />}
                 {
                     tEItransfered.length === 0 ?
                         <div style={{ marginTop: 18, marginLeft: 0, marginBottom: 0 }}>
-                            Enroll <strong>{selectRows.length}</strong>  {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected.displayName || "Organisation Unit"}`}</strong>
+                            Enroll <strong>{selectRows.length}</strong>  {nameOfTEIType()} from<strong >{` ${currentDetailsProgram()?.label} `}</strong> to<strong >{` ${programSelected?.label || "Program"}`}</strong>
                             <Box width="100%">
                                 {Wrapper({
                                     name: "Program",
@@ -169,7 +168,7 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
 
                         </div>
                         :
-                        tEItransfered.map(x =>
+                        tEItransfered.map((x, index) =>
                             <>
                                 <div style={{ display: "flex", marginBottom: 8, marginTop: 8, width: '100%' }}>
                                     <div>
@@ -189,14 +188,14 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
                                             :
                                             <div className='d-flex align-items-center'>
                                                 <span className={styles.errorStatus}>Error</span> 
-                                                <IconButton style={{color: "#C21A3D", marginBottom: 10}} size='small' title='More details'>
+                                                <IconButton onClick={() => handleErrorClick(index)}  style={{color: "#C21A3D", marginBottom: 10}} size='small' title='More details'>
                                                     <InfoOutlined fontSize='small' />
                                                 </IconButton>
                                             </div>
                                         }
                                     </div>
-
                                 </div>
+                                <Collapse in={selectedIndex === index}> <div className={styles.errorMessage}>{x?.error?.message}</div> </Collapse>
                                 <Divider />
                             </>
                         )
@@ -242,6 +241,8 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
                     nameOfTEIType={nameOfTEIType}
                     ouName={ouName} orgUnitSelected={orgUnitSelected}
                     label={"Enroll"}
+                    program={currentDetailsProgram}
+                    selectedProgram={programSelected?.label}
                 />
             }
 

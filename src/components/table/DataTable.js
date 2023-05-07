@@ -107,16 +107,12 @@ const TableComponent = (props) => {
             return false
         }
 
-        console.log(intersection, columnData, selectRows);
-
         if ((intersection.length > 0 && columnData.length != intersection.length) || selectRows.length > intersection.length) {
             return true
         }
 
         return false
     }
-
-    console.log(verifyIndeter());
 
     function verifyIsSelectedAll() {
         const intersection = columnData.filter(x => selectRows.includes(x.id));

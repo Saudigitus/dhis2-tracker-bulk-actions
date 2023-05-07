@@ -8,7 +8,7 @@ import {
     Box,
     Label
 } from '@dhis2/ui'
-import { Divider, IconButton, LinearProgress } from '@material-ui/core'
+import { Collapse, Divider, IconButton, LinearProgress } from '@material-ui/core'
 import { Check, Close, InfoOutlined } from '@material-ui/icons';
 import React, { useState, useContext } from 'react'
 import { GeneratedVaribles } from '../../contexts/GeneratedVaribles'
@@ -35,8 +35,8 @@ function Testing({ name, Component }) {
     )
 }
 
-const TranferEnrollment = ({ open, setopen, selectedTeis, modalType, nameOfTEIType, currentDetailsProgram }) => {
-    const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows, allTeisFormated } = useContext(GeneratedVaribles)
+const TranferEnrollment = ({ open, setopen, selectedTeis, modalType, nameOfTEIType, currentDetailsProgram, selectedIndex, handleErrorClick }) => {
+    const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows } = useContext(GeneratedVaribles)
     const { useQuery } = useParams()
     const programId = useQuery().get("programId")
     const ouName = useQuery().get("ouName")
@@ -47,7 +47,7 @@ const TranferEnrollment = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
     const handleCloseConfirmAction = () => setOpenModalConfirmBulk(false);
 
     return (
-        <Modal large open={open} position={'middle'} onClose={() => setopen(false)}>
+        <Modal large open={open} position={'middle'} onClose={() => {setopen(false); setTEItransfered([])}}>
             <ModalTitle>{('Permanent transfer')}</ModalTitle>
             <ModalContent>
             <div style={{ background: "rgb(243, 245, 247)", height: "20px", marginTop: 10 }}></div>
@@ -113,19 +113,19 @@ const TranferEnrollment = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
                                     </div>
                                     <div style={{ marginLeft: "auto", width: 100, height: "auto" }}>
                                         {x.status === "Saved successfuly" ?
-                                            <span className={styles.successStatus}>Success</span>
+                                            <span  className={styles.successStatus}>Success</span>
                                             :
                                             <div className='d-flex align-items-center'>
                                                 <span className={styles.errorStatus}>Error</span> 
-                                                <IconButton style={{color: "#C21A3D", marginBottom: 10}} size='small' title='More details'>
+                                                <IconButton onClick={() => handleErrorClick(index)} style={{color: "#C21A3D", marginBottom: 10}} size='small' title='More details'>
                                                     <InfoOutlined fontSize='small' />
                                                 </IconButton>
-                                            </div>
-                                            
+                                            </div> 
                                         }
                                     </div>
 
                                 </div>
+                                <Collapse in={selectedIndex === index}> <div className={styles.errorMessage}>{x?.error?.message} </div> </Collapse>
                                 <Divider />
                             </>
                         )

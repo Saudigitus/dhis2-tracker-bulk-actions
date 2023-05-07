@@ -17,7 +17,7 @@ const ConfirmBulkAction = ({
     orgUnitSelected, label,
     initStatus, endStatus,
     teiEnrollment, localTeiEnrollment,
-    setlocalTeiEnrollment, tEItransfered
+    setlocalTeiEnrollment, program, selectedProgram
 }) => {
     const [checked, setChecked] = useState(false);
     const [rejectedRows, setRejectedRows] = useState([]);
@@ -60,6 +60,7 @@ const ConfirmBulkAction = ({
                     {modalType === "TEMPtransfer" && <span> Are you sure you want to <strong className='text-danger'>transfer</strong> <strong>{selectRows.length}</strong> {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected?.displayName || "Organisation Unit"}`}</strong>?</span>}
                     {modalType === "delete" && <span> Are you sure you want to <strong className='text-danger'>delete</strong>  <strong>{selectRows.length}</strong> {nameOfTEIType()} from<strong >{` ${ouName} `}</strong>?</span>}
                     {modalType === "ChangeStatus" && <span> Are you sure you want to <strong className='text-danger'>change status </strong>from <strong >{` ${initStatus}`}</strong> to <strong >{`${endStatus}`}</strong>?</span>}
+                    {modalType === "diffProgram" && <span> Are you sure you want to <strong className='text-danger'>enroll</strong> <strong>{selectRows.length}</strong> {nameOfTEIType()} from<strong >{` ${program()?.label} `}</strong> to<strong >{` ${selectedProgram || "Program"}`}</strong>?</span>}
                 </span>
                 <div style={{ background: "rgb(243, 245, 247)", height: "20px", marginTop: 10 }}></div>
 

@@ -34,7 +34,7 @@ function Testing({ name, Component }) {
     )
 }
 
-const BulkDeleteAction = ({openModalConfirmBulk, handleClose, showSummaryModal, handleCloseSummary, loading, selectRows, setselectRows, selectedTeis, modalType, nameOfTEIType, ouName, action, tEItransfered }) => {
+const BulkDeleteAction = ({openModalConfirmBulk, handleClose, showSummaryModal, handleCloseSummary, loading, selectRows, setselectRows, selectedTeis, modalType, nameOfTEIType, ouName, action, tEItransfered, selectedIndex, handleErrorClick }) => {
 
     return (
         <div>
@@ -55,7 +55,7 @@ const BulkDeleteAction = ({openModalConfirmBulk, handleClose, showSummaryModal, 
                     tEItransfered={tEItransfered}
                 />
             :
-            <SummaryBulkAction show={showSummaryModal} handleClose={handleCloseSummary} tEItransfered={tEItransfered}/>
+            <SummaryBulkAction show={showSummaryModal} handleClose={handleCloseSummary} tEItransfered={tEItransfered} selectedIndex={selectedIndex} handleErrorClick={handleErrorClick}/>
             }
         </div>
     )

@@ -121,7 +121,15 @@ function ListContent({ type, program }) {
     return teisSelected
   }
   const selectedTeis = getTeiDetails(currentDetailsProgram())
-
+  
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const handleErrorClick = (index) => {
+    if (selectedIndex === index) {
+      setSelectedIndex(null);
+    } else {
+      setSelectedIndex(index);
+    }
+  }
   return (
     <>
       {type === "WITHOUT_REGISTRATION" &&
@@ -182,6 +190,8 @@ function ListContent({ type, program }) {
           selectedTeis={selectedTeis}
           nameOfTEIType={nameOfTEIType}
           currentDetailsProgram={currentDetailsProgram}
+          selectedIndex={selectedIndex}
+          handleErrorClick={handleErrorClick}
         />
         : modalType === "TEMPtransfer" ?
           openModalBulk &&
@@ -190,6 +200,8 @@ function ListContent({ type, program }) {
             setopen={setopenModalBulk}
             modalType={modalType}
             selectedTeis={selectedTeis}
+            selectedIndex={selectedIndex}
+            handleErrorClick={handleErrorClick}
           />
           : modalType === "ChangeStatus" ?
             openModalBulk &&
@@ -200,6 +212,8 @@ function ListContent({ type, program }) {
               initStatus={selectedFilter}
               teiEnrollment={teiEnrollment}
               selectedTeis={selectedTeis}
+              selectedIndex={selectedIndex}
+              handleErrorClick={handleErrorClick}
             />
             : modalType === "diffProgram" ?
               openModalBulk &&
@@ -210,6 +224,8 @@ function ListContent({ type, program }) {
                 nameOfTEIType={nameOfTEIType}
                 currentDetailsProgram={currentDetailsProgram}
                 selectedTeis={selectedTeis}
+                selectedIndex={selectedIndex}
+                handleErrorClick={handleErrorClick}
               />
               : null
       }
@@ -231,6 +247,8 @@ function ListContent({ type, program }) {
           setTEItransfered={setTEItransfered}
           showSummaryModal={showSummaryModal}
           handleCloseSummary={handleCloseSummary}
+          selectedIndex={selectedIndex}
+            handleErrorClick={handleErrorClick}
         />
       )}
     </>

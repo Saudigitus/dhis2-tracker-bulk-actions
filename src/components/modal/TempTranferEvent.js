@@ -8,7 +8,7 @@ import {
     Box,
     Label
 } from '@dhis2/ui'
-import { Divider, IconButton, LinearProgress } from '@material-ui/core'
+import { Collapse, Divider, IconButton, LinearProgress } from '@material-ui/core'
 import { Check, Close, InfoOutlined } from '@material-ui/icons';
 import React, { useState, useContext } from 'react'
 import { GeneratedVaribles } from '../../contexts/GeneratedVaribles'
@@ -38,7 +38,7 @@ function Wrapper({ name, Component }) {
 }
 
 // eslint-disable-next-line react/prop-types
-const TempTranferEvent = ({ open, setopen, modalType }) => {
+const TempTranferEvent = ({ open, setopen, modalType, selectedIndex, handleErrorClick }) => {
     const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows, allTeisFormated } = useContext(GeneratedVaribles)
     const { useQuery } = useParams()
     const programId = useQuery().get("programId")
@@ -74,7 +74,7 @@ const TempTranferEvent = ({ open, setopen, modalType }) => {
     const selectedTeis = getTeiDetails(currentDetailsProgram())
 
     return (
-        <Modal large open={open} position={'middle'} onClose={() => setopen(false)}>
+        <Modal large open={open} position={'middle'} onClose={() => {setopen(false); setTEItransfered([])}}>
             <ModalTitle>{('Temporary transfer')}</ModalTitle>
             <p />
             <ModalContent>
@@ -181,7 +181,7 @@ const TempTranferEvent = ({ open, setopen, modalType }) => {
 
                         </div>
                         :
-                        tEItransfered.map(x =>
+                        tEItransfered.map((x, index) =>
                             <>
                                 <div style={{ display: "flex", marginBottom: 8, marginTop: 8, width: '100%' }}>
                                     <div>
@@ -201,15 +201,14 @@ const TempTranferEvent = ({ open, setopen, modalType }) => {
                                             :
                                             <div className='d-flex align-items-center'>
                                                 <span className={styles.errorStatus}>Error</span> 
-                                                <IconButton style={{color: "#C21A3D", marginBottom: 10}} size='small' title='More details'>
+                                                <IconButton onClick={() => handleErrorClick(index)} style={{color: "#C21A3D", marginBottom: 10}} size='small' title='More details'>
                                                     <InfoOutlined fontSize='small' />
                                                 </IconButton>
                                             </div>
-                                            
                                         }
                                     </div>
-
                                 </div>
+                                <Collapse in={selectedIndex === index}> <div className={styles.errorMessage}>{x?.error?.message}</div> </Collapse>
                                 <Divider />
                             </>
                         )
