@@ -10,7 +10,7 @@ function FIlterComponent(props) {
 
 
     switch (type) {
-        case "optionSet":
+        case "List":
             return <SelectBoxes {...column}
                 onChange={onChange}
                 value={value}
@@ -41,7 +41,7 @@ function FIlterComponent(props) {
                 {...column}
             />
         default:
-            return <div>not mapped</div>
+            return <div>Not mapped</div>
     }
 }
 
