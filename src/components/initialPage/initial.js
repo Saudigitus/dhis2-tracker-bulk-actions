@@ -6,7 +6,7 @@ export default function InitialComponent() {
     return (
         <div className={styles.containerInit}>
             <Paper elevation={1} className={styles.paperInit}>
-                <h1>Tracker Bulk Actions</h1>
+                <h2>Tracker Bulk Actions</h2>
                 <span>Follow the instructions to proceed:</span>
                 <ul>
                     <li>Select the <strong> Organization unit</strong> you want to view data</li>
