@@ -12,8 +12,7 @@ const SummaryBulkAction = ({show, handleClose,  tEItransfered}) => {
         <Modal large open={show} position={'middle'} onClose={handleClose}>
         <ModalTitle>{('Bulk Delete Action')}</ModalTitle>
         <ModalContent>
-        <div style={{ background: "rgb(243, 245, 247)", height: "20px", marginTop: 10 }}></div>
-            
+            <div style={{ background: "rgb(243, 245, 247)", height: "20px", marginTop: 10 }}></div>
             {tEItransfered.map(x =>
                 <>
                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8, marginTop: 8, width: '100%' }}>
@@ -38,7 +37,6 @@ const SummaryBulkAction = ({show, handleClose,  tEItransfered}) => {
                                                     <InfoOutlined fontSize='small' />
                                                 </IconButton>
                                             </div>
-                                            
                                         }
                                 </div>
 

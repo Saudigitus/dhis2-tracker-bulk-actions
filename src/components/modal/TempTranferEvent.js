@@ -9,7 +9,7 @@ import {
     Label
 } from '@dhis2/ui'
 import { Divider, IconButton, LinearProgress } from '@material-ui/core'
-import { Check, Close } from '@material-ui/icons';
+import { Check, Close, InfoOutlined } from '@material-ui/icons';
 import React, { useState, useContext } from 'react'
 import { GeneratedVaribles } from '../../contexts/GeneratedVaribles'
 import { useParams } from '../../hooks/common/useQueryParams';
@@ -20,7 +20,8 @@ import SingleSelectField from '../SingleSelectComponent/SingleSelectField';
 import { ConfirmBulkAction } from './ConfirmBulkAction';
 import DatePicker from '../datepicker/DatePicker';
 import { format } from 'date-fns';
-// import { OptionFields } from '../genericFields/fields/SingleSelect'
+import styles from './summary.module.css';
+// import { OptionFields } from '../genericFields/fields/SingleSelect' 
 
 function Wrapper({ name, Component }) {
     return (
@@ -37,7 +38,7 @@ function Wrapper({ name, Component }) {
 }
 
 // eslint-disable-next-line react/prop-types
-const TempTranferEvent = ({ open, setopen }) => {
+const TempTranferEvent = ({ open, setopen, modalType }) => {
     const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows, allTeisFormated } = useContext(GeneratedVaribles)
     const { useQuery } = useParams()
     const programId = useQuery().get("programId")
@@ -77,6 +78,7 @@ const TempTranferEvent = ({ open, setopen }) => {
             <ModalTitle>{('Temporary transfer')}</ModalTitle>
             <p />
             <ModalContent>
+            <div style={{ background: "rgb(243, 245, 247)", height: "20px", marginTop: 10 }}></div>
                 {loading && <LinearProgress />}
                 {
                     tEItransfered.length === 0 ?
@@ -193,11 +195,17 @@ const TempTranferEvent = ({ open, setopen }) => {
                                         </Label >
 
                                     </div>
-                                    <div style={{ marginLeft: "auto", width: 250, height: "auto" }}>
+                                    <div style={{ marginLeft: "auto", width: 100, height: "auto" }}>
                                         {x.status === "Saved successfuly" ?
-                                            <Check color="primary" />
+                                            <span className={styles.successStatus}>Success</span>
                                             :
-                                            <Close color="error" />
+                                            <div className='d-flex align-items-center'>
+                                                <span className={styles.errorStatus}>Error</span> 
+                                                <IconButton style={{color: "#C21A3D", marginBottom: 10}} size='small' title='More details'>
+                                                    <InfoOutlined fontSize='small' />
+                                                </IconButton>
+                                            </div>
+                                            
                                         }
                                     </div>
 
@@ -248,7 +256,9 @@ const TempTranferEvent = ({ open, setopen }) => {
                     ouName={ouName}
                     orgUnitSelected={orgUnitSelected}
                     programStageSelected={programStageSelected}
-                />
+                    label={"Transfer"}
+                    modalType={modalType}
+          />
             }
 
         </Modal >

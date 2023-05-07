@@ -9,7 +9,7 @@ import {
     Label
 } from '@dhis2/ui'
 import { Divider, IconButton, LinearProgress } from '@material-ui/core'
-import { Check, Close } from '@material-ui/icons';
+import { Check, Close, InfoOutlined } from '@material-ui/icons';
 import { format } from 'date-fns';
 import React, { useState, useContext } from 'react'
 import { GeneratedVaribles } from '../../contexts/GeneratedVaribles'
@@ -20,6 +20,7 @@ import DatePicker from '../datepicker/DatePicker';
 import { OrgUnitCard } from '../OrgUnitTree';
 import SingleSelectField from '../SingleSelectComponent/SingleSelectField';
 import { ConfirmBulkAction } from './ConfirmBulkAction';
+import styles from './summary.module.css';
 // import { OptionFields } from '../genericFields/fields/SingleSelect'
 
 // eslint-disable-next-line react/prop-types
@@ -54,14 +55,13 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
     return (
         <Modal large open={open} position={'middle'} onClose={() => setopen(false)}>
             <ModalTitle>{('Permanent transfer')}</ModalTitle>
-            <p />
             <ModalContent>
+                <div style={{ background: "rgb(243, 245, 247)", height: "20px", marginTop: 10 }}></div>
                 {loading && <LinearProgress />}
                 {
                     tEItransfered.length === 0 ?
                         <div style={{ marginTop: 18, marginLeft: 0, marginBottom: 0 }}>
                             Enroll <strong>{selectRows.length}</strong>  {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected.displayName || "Organisation Unit"}`}</strong>
-                            <div style={{ background: "rgb(243, 245, 247)", height: "20px", marginTop: 10 }}></div>
                             <Box width="100%">
                                 {Wrapper({
                                     name: "Program",
@@ -183,11 +183,16 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
                                         </Label >
 
                                     </div>
-                                    <div style={{ marginLeft: "auto", width: 250, height: "auto" }}>
+                                    <div style={{ marginLeft: "auto", width: 100, height: "auto" }}>
                                         {x.status === "Saved successfuly" ?
-                                            <Check color="primary" />
+                                            <span className={styles.successStatus}>Success</span>
                                             :
-                                            <Close color="error" />
+                                            <div className='d-flex align-items-center'>
+                                                <span className={styles.errorStatus}>Error</span> 
+                                                <IconButton style={{color: "#C21A3D", marginBottom: 10}} size='small' title='More details'>
+                                                    <InfoOutlined fontSize='small' />
+                                                </IconButton>
+                                            </div>
                                         }
                                     </div>
 
