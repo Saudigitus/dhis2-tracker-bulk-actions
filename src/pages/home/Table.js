@@ -2,6 +2,7 @@ import Paper from '@material-ui/core/Paper';
 import React, { useContext } from 'react'
 import { useSearchParams } from 'react-router-dom';
 import { ListContent, WithPadding } from '../../components';
+import InitialComponent from '../../components/initialPage/initial';
 import { GeneratedVaribles } from '../../contexts/GeneratedVaribles';
 import { useVerifyOuAcess } from '../../hooks/programs/useVerifyOuAcess';
 import generalPagesStyles from "../Pages.module.css";
@@ -18,7 +19,7 @@ function List() {
 
     return (
         <>
-            {(programId && ouId) &&
+            {(programId && ouId) ?
                 <div className={generalPagesStyles.pageStyle}>
                     {verifyAcess(programId, ouId) ?
                         <Paper>
@@ -37,6 +38,8 @@ function List() {
 
                     }
                 </div>
+                :
+                <InitialComponent />
             }
             <div style={{ height: programId ? 0 : 400 }}>
                 <WithPadding />
