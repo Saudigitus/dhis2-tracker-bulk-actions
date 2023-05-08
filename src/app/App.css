@@ -301,3 +301,42 @@ body {
 .delete__relationships-aler{
     text-transform: uppercase;
 }
+
+.enroll__same-program{
+    display: flex;   
+    background-color: rgb(243, 245, 247);
+    padding: 10px;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.enroll__same-program span{
+    margin-left:10px;
+    font-family: 'roboto';
+    color: rgb(32, 32, 32);
+    font-size: 1.1em;
+    font-weight: 700;
+}
+
+.enroll__same-program .MuiSvgIcon-root{
+    color: rgb(241, 92, 92);
+    font-size: 3rem;
+}
+
+div.jsx-3719215021{
+    padding-right: 10px !important;
+}
+
+div.jsx-3719215021::-webkit-scrollbar {
+    width: 4px;
+}
+
+div.jsx-3719215021::-webkit-scrollbar :is(:hover, :focus) {
+    width: 15px !important;
+}
+
+
+div.jsx-3719215021::-webkit-scrollbar-thumb {
+    background-color: rgb(133, 133, 133);
+    border-radius: 20px;
+}
