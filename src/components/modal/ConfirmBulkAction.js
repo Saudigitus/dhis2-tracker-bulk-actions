@@ -25,26 +25,29 @@ const ConfirmBulkAction = ({
     const onChange = (event) => {
         setChecked(event.checked)
     }
-
-    const rejectRows = (id) => {
-        const copySelectRows = [...selectRows]
-        const teiToRemove = copySelectRows.indexOf(id)
+console.log("rejectedRows: ", rejectedRows)
+console.log("approvedRows: ", approvedRows)
+console.log("selectRows: ", selectRows)
+    const rejectRows = (obj) => {
+const copySelectRows = [...selectRows]
+        const teiToRemove = copySelectRows.findIndex(x=>x.id===obj.id)
         if (teiToRemove !== -1) {
             copySelectRows.splice(teiToRemove, 1)[0];
-            rejectedRows.push(id)
+            rejectedRows.push(obj)
             setselectRows(copySelectRows)
         }
     }
 
-    const undoRejectRows = (id) => {
+    const undoRejectRows = (obj) => {
         const copySelectRows = [...selectRows]
-        const teiToRemove = rejectedRows.indexOf(id)
+        const teiToRemove = rejectedRows.findIndex(x=>x.id===obj.id)
         if (teiToRemove !== -1) {
             rejectedRows.splice(teiToRemove, 1)[0];
-            copySelectRows.push(id)
+            copySelectRows.push(obj)
             setselectRows(copySelectRows)
         }
     }
+    
     return (
         <Modal
             show={show}
@@ -70,7 +73,7 @@ const ConfirmBulkAction = ({
                         <>
                             <div style={{ display: "flex", alignItems: "center",  marginBottom: 5, marginTop: 5, marginLeft: 20, width: '100%' }}>
                                 <>
-                                    <Label className={rejectedRows.includes(x.id) && 'line-through'} color="muted" style={{ marginLeft: "5px" }}>
+                                    <Label className={rejectedRows.some(e => e.id === x.id) && 'line-through'} color="muted" style={{ marginLeft: "5px" }}>
                                         {index + 1}. {x?.name?.split(";")[0].split(":")[0]}
                                         <strong>{x?.name?.split(";")[0].split(":")[1]}</strong>
                                         {", "}
@@ -78,7 +81,7 @@ const ConfirmBulkAction = ({
                                         <strong>{x?.name?.split(";")[1].split(":")[1]} </strong>
                                     </Label>
                                     {modalType === "ChangeStatus" && <div style={{ width: 250 }}>
-                                        <SingleSelectField disabled={rejectedRows.includes(x.id)} helperText={"EnrollmentDate"} value={localTeiEnrollment[x.id]} options={teiEnrollment[x.id]?.enrollments} loading={false}
+                                        <SingleSelectField disabled={rejectedRows.some(e => e.id === x.id)} helperText={"EnrollmentDate"} value={localTeiEnrollment[x.id]} options={teiEnrollment[x.id]?.enrollments} loading={false}
                                             onChange={
                                                 (v, e) => {
                                                     setlocalTeiEnrollment({ ...localTeiEnrollment, [x.id]: e.value })
@@ -88,12 +91,12 @@ const ConfirmBulkAction = ({
                                     </div>}
                                 </>
                                 <div style={{ marginLeft: "auto", width: 90, height: "auto" }}>
-                                    {rejectedRows.includes(x.id) ?
-                                        <IconButton size='small' title='Refazer' color='primary' onClick={() => undoRejectRows(x.id)}>
+                                    {rejectedRows.some(e => e.id === x.id) ?
+                                        <IconButton size='small' title='Refazer' color='primary' onClick={() => undoRejectRows(x)}>
                                             <Refresh color="inherit" fontSize='small' />
                                         </IconButton>
                                         :
-                                        <IconButton size='small' title='Cancelar' onClick={() => rejectRows(x.id)}>
+                                        <IconButton size='small' title='Cancelar' onClick={() => rejectRows(x)}>
                                             <Close color="inherit" fontSize='small' />
                                         </IconButton>
                                     }

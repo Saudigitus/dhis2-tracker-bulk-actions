@@ -52,7 +52,7 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
     const [openModalConfirmBulk, setOpenModalConfirmBulk] = useState(false)
     const handleCloseConfirmAction = () => setOpenModalConfirmBulk(false);
     return (
-        <Modal large open={open} position={'middle'} onClose={() => setopen(false)}>
+        <Modal large open={open} position={'middle'} onClose={() => {setopen(false); setTEItransfered([])}}>
             <ModalTitle>{('Enroll in Different Program')}</ModalTitle>
             <ModalContent>
                 <div style={{ background: "rgb(243, 245, 247)", height: "20px", marginTop: 10 }}></div>
@@ -66,7 +66,7 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
                                     name: "Program",
                                     Component: () => (
                                         Object.keys(programSelected).length == 0 ?
-                                            <SingleSelectField helperText={"Select Status"} value={programSelected} options={programs.filter(x => x.trackedEntityType.id === currentDetailsProgram()?.trackedEntityType.id)} onChange={
+                                            <SingleSelectField helperText={"Select the program"} value={programSelected} options={programs.filter(x => x.trackedEntityType.id === currentDetailsProgram()?.trackedEntityType.id)} onChange={
                                                 (v, e) => {
                                                     setprogramSelected(e)
                                                 }

@@ -31,8 +31,7 @@ export function useDeleteTEI() {
     const [mutate, { data, error }] = useDataMutation(mutateDeleteTEI)
 
     function getTeiDetails(tei, program) {
-        const teiToMove = allTeisFormated.find(x => x.id === tei)
-        return (`${program.trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.displayName}: ${teiToMove?.[program.trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.id] || "---"};${program.trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.displayName}: ${teiToMove?.[program.trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.id] || "---"}`)
+        return (`${program.trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.displayName}: ${tei?.[program.trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.id] || "---"};${program.trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.displayName}: ${tei?.[program.trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.id] || "---"}`)
     }
 
     const deleteTEI = async (program, teis, setShowSummaryModal) => {
@@ -40,7 +39,7 @@ export function useDeleteTEI() {
         const copyTEITransfered = []
         const teisToDelete = []
         for (const tei of teis) {
-            teisToDelete.push({ trackedEntityInstance: tei })
+            teisToDelete.push({ trackedEntityInstance: tei.id })
         }
         await engine
             .mutate(mutateDeleteTEI, {
@@ -51,7 +50,7 @@ export function useDeleteTEI() {
                     const name = getTeiDetails(tei, program)
                     copyTEITransfered.push({
                         name: name,
-                        status: e.response.importSummaries.find(x => x.reference === tei).status,
+                        status: e.response.importSummaries.find(x => x.reference === tei.id).status,
                     })
                     setTEItransfered(copyTEITransfered)
                 }
@@ -75,7 +74,7 @@ export function useDeleteTEI() {
                 .mutate(TRANSFERQUERY, {
                     variables: {
                         program: programSelected.value.value,
-                        trackedEntityInstance: tei,
+                        trackedEntityInstance: tei.id,
                     },
                 })
                 .then((e) => {

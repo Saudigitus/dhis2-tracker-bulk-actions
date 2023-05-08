@@ -52,8 +52,7 @@ export function useTransferTEI() {
     const { add } = useParams()
 
     function getTeiDetails(tei, program) {
-        const teiToMove = allTeisFormated.find(x => x.id === tei)
-        return (`${program.trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.displayName}: ${teiToMove?.[program.trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.id]};${program.trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.displayName}: ${teiToMove?.[program.trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.id]}`)
+        return (`${program.trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.displayName}: ${tei?.[program.trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.id]};${program.trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.displayName}: ${tei?.[program.trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.id]}`)
     }
 
     const transferTEI = async (program, ou, teis) => {
@@ -66,7 +65,7 @@ export function useTransferTEI() {
                 variables: {
                     program: program.value,
                     ou: ou,
-                    trackedEntityInstance: tei
+                    trackedEntityInstance: tei.id
                 }
             }).then(e => {
                 copyTEITransfered.push({ name: name, status: "Saved successfuly" })
@@ -91,7 +90,7 @@ export function useTransferTEI() {
             const name = getTeiDetails(tei, program)
             console.log(name);
             if (!programStage?.repeatable) {
-                const getEvents = await engine.query(EVENTQUERY_NOT_REPEATABLE, { variables: { program: program?.value, programStage: programStage?.code, tei: tei } })
+                const getEvents = await engine.query(EVENTQUERY_NOT_REPEATABLE, { variables: { program: program?.value, programStage: programStage?.code, tei: tei.id } })
                 const events = getEvents?.results?.events
 
                 if (events?.length > 0) {
@@ -100,7 +99,7 @@ export function useTransferTEI() {
                     const data = {
                         "events": [
                             {
-                                "trackedEntityInstance": tei,
+                                "trackedEntityInstance": tei.id,
                                 "program": program?.value,
                                 "programStage": programStage?.code,
                                 "enrollment": "lKFU7teKuuk",
@@ -124,14 +123,14 @@ export function useTransferTEI() {
                 }
 
             } else {
-                const getScheduleEvents = await engine.query(EVENTQUERY, { variables: { program: program?.value, programStage: programStage?.code, tei: tei } })
+                const getScheduleEvents = await engine.query(EVENTQUERY, { variables: { program: program?.value, programStage: programStage?.code, tei: tei.id } })
                 const scheduleEvents = getScheduleEvents?.results?.events
 
                 if (scheduleEvents?.length === 0) {
                     const data = {
                         "events": [
                             {
-                                "trackedEntityInstance": tei,
+                                "trackedEntityInstance": tei.id,
                                 "program": program?.value,
                                 "programStage": programStage?.code,
                                 "enrollment": "lKFU7teKuuk",
@@ -174,7 +173,7 @@ export function useTransferTEI() {
             await engine.mutate(TRANSFERQUERY, {
                 variables: {
                     program: programSelected.value.value,
-                    trackedEntityInstance: tei
+                    trackedEntityInstance: tei.id
                 }
             }).then(e => {
                 copyTEITransfered.push({ name: name, status: "Saved successfuly" })

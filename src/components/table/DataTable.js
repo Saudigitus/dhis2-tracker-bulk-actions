@@ -88,11 +88,11 @@ const TableComponent = (props) => {
     const visibleColumns = headers?.filter(column => column?.visible) || []
 
     function selectAllRows() {
-        const intersection = columnData.filter(x => !selectRows.includes(x.id));
+        const intersection = columnData.filter(x => !selectRows.some(c => x.id === c.id));
         const copyRows = [...selectRows]
         if (intersection.length > 0) {
             for (const row of intersection) {
-                copyRows.push(row.id)
+                copyRows.push(row)
             }
             setselectRows(copyRows)
         } else {
@@ -101,7 +101,7 @@ const TableComponent = (props) => {
     }
 
     function verifyIndeter() {
-        const intersection = columnData.filter(x => selectRows.includes(x.id));
+        const intersection = columnData.filter(x => !selectRows.some(c => x.id === c.id));
 
         if (intersection.length == 10) {
             return false
@@ -115,21 +115,21 @@ const TableComponent = (props) => {
     }
 
     function verifyIsSelectedAll() {
-        const intersection = columnData.filter(x => selectRows.includes(x.id));
+        const intersection = columnData.filter(x => selectRows.includes(x));
         if (intersection.length == columnData.length) return true;
         return false
 
     }
 
-    function selectedSingleRow(id) {
+    function selectedSingleRow(obj) {
         const copyRows = [...selectRows]
-        const pos = copyRows.findIndex(x => x === id)
+        const pos = copyRows.findIndex(x => x.id === obj.id)
 
         if (pos > -1) {
             copyRows.splice(pos, 1)
             setselectRows(copyRows)
         } else {
-            copyRows.push(id)
+            copyRows.push(obj)
             setselectRows(copyRows)
         }
 
@@ -255,9 +255,9 @@ const TableComponent = (props) => {
                                         className={classNames(classes.cell, classes.bodyCell)}
                                     >
                                         <Checkbox
-                                            checked={selectRows.findIndex(rows => rows === row.id) > -1}
+                                            checked={selectRows.findIndex(rows => rows.id === row.id) > -1}
                                             tabIndex={-1}
-                                            onChange={() => selectedSingleRow(row.id)}
+                                            onChange={() => selectedSingleRow(row)}
                                             // label={props.text}
                                             className={props.classes.checkbox}
                                             dense />
