@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import { Button, ButtonStrip, Label, Modal, ModalActions, ModalContent, ModalTitle } from '@dhis2/ui'
 import { Collapse, Divider, IconButton } from '@material-ui/core';
+import { InfoOutlined } from '@material-ui/icons';
 import React from 'react'
 import styles from './summary.module.css';
-import { InfoOutlined } from '@material-ui/icons';
 
 // eslint-disable-next-line react/prop-types
 
@@ -42,7 +42,7 @@ const SummaryBulkAction = ({show, handleClose, tEItransfered, selectedIndex, han
                                 </div>
 
                             </div>
-                            <Collapse in={selectedIndex === index}> <div className={styles.errorMessage}>{x?.error?.message} </div> </Collapse>
+                            <Collapse in={selectedIndex === index}> <div className={styles.errorMessage}>{x?.error} </div> </Collapse>
                             <Divider />
                 </>
             )}
