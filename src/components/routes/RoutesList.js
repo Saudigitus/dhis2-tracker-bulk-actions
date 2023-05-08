@@ -1,7 +1,7 @@
 /* eslint-disable import/namespace */
 // eslint-disable-next-line import/extensions
 import { Navigate } from "react-router-dom";
-import {Details, List as Home} from "../../pages";
+import { List as Home} from "../../pages";
 import { GlobalLayout } from "../layout";
 // eslint-disable-next-line import/extensions
 
@@ -20,6 +20,7 @@ export const routesList = [
         path: "/",
         icon: "",
         layout: GlobalLayout,
+        // eslint-disable-next-line react/react-in-jsx-scope
         Component: ()=> <Navigate to="/home" replace={true}/>
     },
     {
@@ -28,12 +29,6 @@ export const routesList = [
         icon: "",
         layout: GlobalLayout,
         Component: Home
-    },
-    {
-        label: "Details",
-        path: "/details",
-        icon: "",
-        layout: GlobalLayout,
-        Component: Details
-    },
+    }
 ]
+//getTypesButtons
