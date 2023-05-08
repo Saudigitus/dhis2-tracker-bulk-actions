@@ -68,13 +68,17 @@ export function useTransferTEI() {
                     ou: ou,
                     trackedEntityInstance: tei
                 }
-            }).then(e => {
-                copyTEITransfered.push({ name: name, status: "Saved successfuly" })
-            }).catch(e => {
-                console.log('error', e)
-                copyTEITransfered.push({ name: name, status: "error", error: e })
             })
-            console.log(name);
+            .then(e => {
+                if (e.status === "ERROR") {
+                    copyTEITransfered.push({ name: name, status: "error", error: e?.response?.importSummaries?.[0]?.description || e?.message || e })
+                } else {
+                    copyTEITransfered.push({ name: name, status: "SUCCESS" })
+                }
+            }).catch(e => {
+                copyTEITransfered.push({ name: name, status: "error", error: e?.response?.importSummaries?.[0]?.description || e?.message || e })
+            })
+
             setTEItransfered(copyTEITransfered)
         }
         setloading(false)
@@ -112,15 +116,16 @@ export function useTransferTEI() {
                             }
                         ]
                     }
-                    await engine.mutate(EVENTMUTATE, { variables: { data: data } }).then((e) => {
-                        copyTEITransfered.push({ name: name, status: "Saved successfuly" })
-                        console.log('params', e)
-
-                    }).catch(e => {
-                        copyTEITransfered.push({ name: name, status: "error", error: e })
-                        console.log('error', e)
-
-                    })
+                    await engine.mutate(EVENTMUTATE, { variables: { data: data } })
+                        .then(e => {
+                            if (e.status === "ERROR") {
+                                copyTEITransfered.push({ name: name, status: "error", error: e?.response?.importSummaries?.[0]?.description || e?.message || e })
+                            } else {
+                                copyTEITransfered.push({ name: name, status: "SUCCESS" })
+                            }
+                        }).catch(e => {
+                            copyTEITransfered.push({ name: name, status: "error", error: e?.response?.importSummaries?.[0]?.description || e?.message || e })
+                        })
                 }
 
             } else {
@@ -143,13 +148,16 @@ export function useTransferTEI() {
                             }
                         ]
                     }
-                    await engine.query(EVENTMUTATE, { variables: { data: data } }).then(() => {
-                        copyTEITransfered.push({ name: name, status: "Saved successfuly" })
-
-                    }).catch(e => {
-                        copyTEITransfered.push({ name: name, status: "error", error: e })
-
-                    })
+                    await engine.mutate(EVENTMUTATE, { variables: { data: data } })
+                        .then(e => {
+                            if (e.status === "ERROR") {
+                                copyTEITransfered.push({ name: name, status: "error", error: e?.response?.importSummaries?.[0]?.description || e?.message || e })
+                            } else {
+                                copyTEITransfered.push({ name: name, status: "SUCCESS" })
+                            }
+                        }).catch(e => {
+                            copyTEITransfered.push({ name: name, status: "error", error: e?.response?.importSummaries?.[0]?.description || e?.message || e })
+                        })
 
                 } else {
                     copyTEITransfered.push({ name: name, status: "error", error: "All the expected events are already present, cannot create more events." })
@@ -158,39 +166,15 @@ export function useTransferTEI() {
             setTEItransfered(copyTEITransfered)
         }
 
-        console.log(copyTEITransfered);
-
         setloading(false)
         add("reload", true)
         setselectRows([])
     }
 
-    const complete = async (teis) => {
-        setloading(true)
-        const copyTEITransfered = []
-        for (const tei of teis) {
-
-            const name = getTeiDetails(tei, programSelected.value)
-            await engine.mutate(TRANSFERQUERY, {
-                variables: {
-                    program: programSelected.value.value,
-                    trackedEntityInstance: tei
-                }
-            }).then(e => {
-                copyTEITransfered.push({ name: name, status: "Saved successfuly" })
-            }).catch(e => {
-                copyTEITransfered.push({ name: name, status: "error" })
-            })
-            console.log(name);
-            setTEItransfered(copyTEITransfered)
-        }
-    }
-
     return {
         loading,
         transferTEI,
-        transferEvent,
-        complete
+        transferEvent
     }
 
 }

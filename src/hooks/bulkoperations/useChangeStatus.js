@@ -33,6 +33,7 @@ export function useChangeStatus() {
         setloading(true)
         const copyTEITransfered = []
         for (const tei of teis) {
+            const name = getTeiDetails(tei, program)
             const enrollmentValue = await engine.query(ENROLLMENTQUERY, {
                 variables: {
                     id: teiEnrollment[tei],
@@ -42,17 +43,22 @@ export function useChangeStatus() {
             const teiToUpdate = enrollmentValue?.results
             teiToUpdate.status = status
             delete enrollmentValue.events
-        
+
             await engine.mutate(ENROLLMENTS_UPDATE, {
                 variables: {
                     data: teiToUpdate,
                     id: teiEnrollment[tei]
                 }
-            }).then(e => {
-                copyTEITransfered.push({ name: getTeiDetails(tei, program), status: "Saved successfuly" })
-            }).catch(e => {
-                copyTEITransfered.push({ name: getTeiDetails(tei, program), status: "error", error: e?.message || e })
             })
+                .then(e => {
+                    if (e.status === "ERROR") {
+                        copyTEITransfered.push({ name: name, status: "error", error: e?.response?.importSummaries[0]?.description || e?.message || e })
+                    } else {
+                        copyTEITransfered.push({ name: name, status: "SUCCESS" })
+                    }
+                }).catch(e => {
+                    copyTEITransfered.push({ name: name, status: "error", error: e?.response?.importSummaries[0]?.description || e?.message || e })
+                })
 
             setTEItransfered(copyTEITransfered)
         }
