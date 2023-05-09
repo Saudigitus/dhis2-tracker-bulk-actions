@@ -33,6 +33,7 @@
     font-family: monospace !important;
     color: rgb(194, 26, 61);
     width: 100% !important;
+    font-size: 13px !important;
 }
 
 .lineThrough{

@@ -5,20 +5,14 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2022-10-03T06:31:53.238Z\n"
-"PO-Revision-Date: 2022-10-03T06:31:53.238Z\n"
+"POT-Creation-Date: 2023-05-09T08:17:57.819Z\n"
+"PO-Revision-Date: 2023-05-09T08:17:57.819Z\n"
 
 msgid "Clear"
 msgstr "Clear"
 
 msgid "Column"
 msgstr "Column"
-
-msgid "Delay"
-msgstr "Delay"
-
-msgid "Only run selected checks"
-msgstr "Only run selected checks"
 
 msgid "Columns to show in table"
 msgstr "Columns to show in table"
