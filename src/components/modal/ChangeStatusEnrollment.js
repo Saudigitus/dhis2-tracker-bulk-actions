@@ -146,7 +146,7 @@ const ChangeStatusEnrollment = ({ open, setopen, modalType, initStatus, teiEnrol
 
                                     </div>
                                     <div style={{ marginLeft: "auto", width: 150, height: "auto" }}>
-                                        {x.status === "Saved successfuly" ?
+                                        {x.status === "SUCCESS" ?
                                             <span className={styles.successStatus}>Success</span>
                                             :
                                             <div className='d-flex align-items-center'>
@@ -158,7 +158,7 @@ const ChangeStatusEnrollment = ({ open, setopen, modalType, initStatus, teiEnrol
                                         }
                                     </div>
                                 </div>
-                                <Collapse in={selectedIndex === index}> <div className={styles.errorMessage}>{x?.error?.message}</div> </Collapse>
+                                <Collapse in={selectedIndex === index}> <div className={styles.errorMessage}>{x?.error}</div> </Collapse>
                                 <Divider />
                             </>
                         )

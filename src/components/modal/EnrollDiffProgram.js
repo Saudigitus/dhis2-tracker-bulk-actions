@@ -17,6 +17,7 @@ import { useCreateEnrollment } from '../../hooks/bulkoperations/useCreateEnrollm
 import { useParams } from '../../hooks/common/useQueryParams';
 import { useVerifyOuAcess } from '../../hooks/programs/useVerifyOuAcess';
 import DatePicker from '../datepicker/DatePicker';
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { OrgUnitCard } from '../OrgUnitTree';
 import SingleSelectField from '../SingleSelectComponent/SingleSelectField';
 import { ConfirmBulkAction } from './ConfirmBulkAction';
@@ -51,6 +52,9 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
     const { verifyAcess } = useVerifyOuAcess()
     const [openModalConfirmBulk, setOpenModalConfirmBulk] = useState(false)
     const handleCloseConfirmAction = () => setOpenModalConfirmBulk(false);
+
+    console.log(currentDetailsProgram(), programSelected, "currentDetailsProgram");
+
     return (
         <Modal large open={open} position={'middle'} onClose={() => {setopen(false); setTEItransfered([])}}>
             <ModalTitle>{('Enroll in Different Program')}</ModalTitle>
@@ -84,6 +88,13 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
                                     )
                                 })}
                                 <p />
+                                {
+                                    currentDetailsProgram().value === programSelected.value &&
+                                    <div className='enroll__same-program'>
+                                        <ErrorOutlineIcon />
+                                        <span>You are about to enroll to the same program. The active enrollment will be completed and a new enrollment will be created.</span>
+                                    </div>
+                                }
                             </Box>
                             <Divider />
                             <Box width="100%">
@@ -183,19 +194,19 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
 
                                     </div>
                                     <div style={{ marginLeft: "auto", width: 100, height: "auto" }}>
-                                        {x.status === "Saved successfuly" ?
+                                        {x.status === "SUCCESS" ?
                                             <span className={styles.successStatus}>Success</span>
                                             :
                                             <div className='d-flex align-items-center'>
-                                                <span className={styles.errorStatus}>Error</span> 
-                                                <IconButton onClick={() => handleErrorClick(index)}  style={{color: "#C21A3D", marginBottom: 10}} size='small' title='More details'>
+                                                <span className={styles.errorStatus}>Error</span>
+                                                <IconButton onClick={() => handleErrorClick(index)} style={{ color: "#C21A3D", marginBottom: 10 }} size='small' title='More details'>
                                                     <InfoOutlined fontSize='small' />
                                                 </IconButton>
                                             </div>
                                         }
                                     </div>
                                 </div>
-                                <Collapse in={selectedIndex === index}> <div className={styles.errorMessage}>{x?.error?.message}</div> </Collapse>
+                                <Collapse in={selectedIndex === index}> <div className={styles.errorMessage}>{x?.error}</div> </Collapse>
                                 <Divider />
                             </>
                         )
@@ -219,9 +230,9 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
                         disabled={
                             !orgUnitSelected?.id ||
                             selectRows.length === 0 ||
-                            !verifyAcess(currentDetailsProgram()?.value, orgUnitSelected.id)||
+                            !verifyAcess(currentDetailsProgram()?.value, orgUnitSelected.id) ||
                             !enrollmentDate ||
-                            !incidentDate||
+                            !incidentDate ||
                             !programSelected?.value
                         }
                         onClick={() => setOpenModalConfirmBulk(true)}

@@ -22,7 +22,7 @@ import BulkDeleteAction from '../modal/DeleteTeis.js'
 
 // eslint-disable-next-line react/prop-types
 function ListContent({ type, program }) {
-  const { order, orderBy, setreloadData, reloadData, setallTeisFormated, enrollmentDate, selectRows = [], setselectRows, programs = [], allTeisFormated, tEItransfered=[], setTEItransfered } = useContext(GeneratedVaribles)
+  const { order, orderBy, setreloadData, reloadData, setallTeisFormated, enrollmentDate, selectRows = [], setselectRows, programs = [], allTeisFormated, tEItransfered = [], setTEItransfered } = useContext(GeneratedVaribles)
   const { filter } = useContext(AppBarContext);
 
   const [selectedFilter, setselectedFilter] = useState("")
@@ -31,13 +31,13 @@ function ListContent({ type, program }) {
 
   const [openModalBulk, setopenModalBulk] = useState(false)
   const [openModalConfirmBulk, setOpenModalConfirmBulk] = useState(false)
-  const [showSummaryModal, setShowSummaryModal]=useState(false)
+  const [showSummaryModal, setShowSummaryModal] = useState(false)
   const handleCloseConfirmAction = () => setOpenModalConfirmBulk(false);
-  const handleCloseSummary=() => {
-        handleCloseConfirmAction()
-        setShowSummaryModal(false)
-        setTEItransfered([])
-    }
+  const handleCloseSummary = () => {
+    handleCloseConfirmAction()
+    setShowSummaryModal(false)
+    setTEItransfered([])
+  }
   const [searchParams] = useSearchParams();
   const programId = searchParams.get("programId")
   const ouName = searchParams.get("ouName")
@@ -118,9 +118,10 @@ function ListContent({ type, program }) {
     }
     return teisSelected
   }
-  const selectedTeis = getTeiDetails(currentDetailsProgram())
   
+  const selectedTeis = getTeiDetails(currentDetailsProgram())
   const [selectedIndex, setSelectedIndex] = useState(null);
+
   const handleErrorClick = (index) => {
     if (selectedIndex === index) {
       setSelectedIndex(null);
@@ -128,7 +129,7 @@ function ListContent({ type, program }) {
       setSelectedIndex(index);
     }
   }
-
+  
   return (
     <>
       {type === "WITHOUT_REGISTRATION" &&
@@ -247,7 +248,7 @@ function ListContent({ type, program }) {
           showSummaryModal={showSummaryModal}
           handleCloseSummary={handleCloseSummary}
           selectedIndex={selectedIndex}
-            handleErrorClick={handleErrorClick}
+          handleErrorClick={handleErrorClick}
         />
       )}
     </>

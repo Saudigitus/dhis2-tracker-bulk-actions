@@ -24,7 +24,7 @@ export function useCreateEnrollment() {
         setloading(true)
         const copyTEITransfered = []
         for (const tei of teis) {
-
+            const name = getTeiDetails(tei, program)
             await engine.mutate(ENROLLMENTS_CREATE, {
                 variables: {
                     data: {
@@ -36,11 +36,16 @@ export function useCreateEnrollment() {
                         "incidentDate": incidentDate
                     }
                 }
-            }).then(e => {
-                copyTEITransfered.push({ name: getTeiDetails(tei, program), status: "Saved successfuly" })
-            }).catch(e => {
-                copyTEITransfered.push({ name: getTeiDetails(tei, program), status: "error", error: e})
             })
+                .then(e => {
+                    if (e.status === "ERROR") {
+                        copyTEITransfered.push({ name: name, status: "error", error: e?.response?.importSummaries[0]?.description || e?.message || e })
+                    } else {
+                        copyTEITransfered.push({ name: name, status: "SUCCESS" })
+                    }
+                }).catch(e => {
+                    copyTEITransfered.push({ name: name, status: "error", error: e?.response?.importSummaries[0]?.description || e?.message || e })
+                })
 
             setTEItransfered(copyTEITransfered)
         }

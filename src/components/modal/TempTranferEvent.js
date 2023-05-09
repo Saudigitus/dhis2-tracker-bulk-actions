@@ -194,7 +194,7 @@ const TempTranferEvent = ({ open, setopen, modalType, selectedIndex, handleError
 
                                     </div>
                                     <div style={{ marginLeft: "auto", width: 100, height: "auto" }}>
-                                        {x.status === "Saved successfuly" ?
+                                        {x.status === "SUCCESS" ?
                                             <span className={styles.successStatus}>Success</span>
                                             :
                                             <div className='d-flex align-items-center'>
@@ -206,7 +206,7 @@ const TempTranferEvent = ({ open, setopen, modalType, selectedIndex, handleError
                                         }
                                     </div>
                                 </div>
-                                <Collapse in={selectedIndex === index}> <div className={styles.errorMessage}>{x?.error?.message}</div> </Collapse>
+                                <Collapse in={selectedIndex === index}> <div className={styles.errorMessage}>{x?.error}</div> </Collapse>
                                 <Divider />
                             </>
                         )
