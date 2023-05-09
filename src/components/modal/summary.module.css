@@ -1,0 +1,40 @@
+.successStatus{
+    background-color: #13C774;
+    padding: 2px 5px;
+    display: inline-block;
+    width: 85px !important;
+    text-align: center;
+    color: #1f2d3d !important;
+    font-size: 0.8rem;
+    border-radius: 10px;
+    vertical-align: middle !important;
+    color: #fff !important;
+    margin-bottom: 10px;
+}
+
+.errorStatus{
+    background-color: #C21A3D;
+    padding: 2px 5px;
+    display: inline-block;
+    width: 85px !important;
+    text-align: center;
+    color: #1f2d3d !important;
+    font-size: 0.8rem;
+    border-radius: 10px;
+    vertical-align: middle !important;
+    color: #fff !important;
+    margin-right: 5px;
+    margin-bottom: 10px;
+}
+
+.errorMessage{
+    background-color: rgb(243, 245, 247);
+    padding: 10px;
+    font-family: monospace !important;
+    color: rgb(194, 26, 61);
+    width: 100% !important;
+}
+
+.lineThrough{
+    text-decoration: line-through !important;
+}

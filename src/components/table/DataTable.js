@@ -1,22 +1,17 @@
 /* eslint-disable react/prop-types */
 import i18n from '@dhis2/d2-i18n';
-import { CenteredContent, CircularLoader } from '@dhis2/ui';
+import { CenteredContent, Checkbox, CircularLoader } from '@dhis2/ui';
 import { IconButton, TableSortLabel } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { Check, MoreHoriz, Remove } from '@material-ui/icons';
 import classNames from 'classnames';
 import React, { useContext } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom';
 import { GeneratedVaribles } from '../../contexts/GeneratedVaribles.js';
-import { useParams } from '../../hooks/common/useQueryParams.js';
-import ActionsMenu from '../actions/menu.js';
 import Body from './components/Body.js'
 import Cell from './components/Cell.js'
 import Head from './components/Head.js'
 import HeaderCell from './components/HeaderCell.js'
 import Row from './components/Row.js'
 import Table from './components/Table.js'
-import SortLabelWrapper from './sort/SortLabelWrapper.js';
 
 const getStyles = (theme) => ({
     tableContainer: {
@@ -71,19 +66,9 @@ const getStyles = (theme) => ({
     }
 });
 
-function descendingComparator(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
-        return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-        return 1;
-    }
-    return 0;
-}
-
 
 const TableComponent = (props) => {
-    const { order, orderBy, setOrder, setOrderBy } = useContext(GeneratedVaribles)
+    const { order, orderBy, setOrder, setOrderBy, selectRows = [], setselectRows } = useContext(GeneratedVaribles)
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -102,6 +87,62 @@ const TableComponent = (props) => {
     const columnHeaderInstances = []
     const visibleColumns = headers?.filter(column => column?.visible) || []
 
+    function selectAllRows() {
+        const intersection = columnData.filter(x => !selectRows.some(c => x.id === c.id));
+        const copyRows = [...selectRows]
+        if (intersection.length > 0) {
+            for (const row of intersection) {
+                copyRows.push(row)
+            }
+            setselectRows(copyRows)
+        } else {
+            setselectRows(intersection)
+        }
+    }
+
+    function verifyIndeter() {
+        const intersection = columnData.filter(x => !selectRows.some(c => x.id === c.id));
+
+        if ((intersection.length > 0 && columnData.length != intersection.length) || (selectRows.length > intersection.length && intersection.length > 0)) {
+            return true
+        }
+
+        return false
+    }
+
+    function verifyIsSelectedAll() {
+        const intersection = columnData.filter(x => selectRows.some(c => x.id === c.id));
+        if (intersection.length == columnData.length) return true;
+        return false
+
+    }
+
+    function selectedSingleRow(obj) {
+        const copyRows = [...selectRows]
+        const pos = copyRows.findIndex(x => x.id === obj.id)
+
+        if (pos > -1) {
+            copyRows.splice(pos, 1)
+            setselectRows(copyRows)
+        } else {
+            copyRows.push(obj)
+            setselectRows(copyRows)
+        }
+
+    }
+
+    function getDisplayName(attribute, value, headers) {
+
+        for (let i = 0; i < headers.length; i++) {
+            if (attribute === headers[i].id && headers[i].valueType === "List") {
+                for (const op of headers[i].optionSets) {
+                    if (op.code === value) return op.displayName
+                }
+            }
+        }
+        return value
+    }
+
     function renderHeaderRow(columns) {
         // eslint-disable-next-line react/prop-types
         const headerCells = columns?.map((column, index) => (
@@ -111,6 +152,7 @@ const TableComponent = (props) => {
                 // eslint-disable-next-line react/prop-types
                 className={classNames(classes.cell, classes.headerCell)}
             >
+
                 <TableSortLabel
                     active={orderBy === column.id}
                     direction={orderBy === column.id ? order : 'asc'}
@@ -131,17 +173,22 @@ const TableComponent = (props) => {
                 // eslint-disable-next-line react/prop-types
                 className={classes.row}
             >
+                <HeaderCell
+                    // innerRef={(instance) => { setColumnWidth(instance, index); }}
+                    key={"check"}
+                    // eslint-disable-next-line react/prop-types
+                    className={classNames(classes.cell, classes.headerCell)}
+                >
+                    <Checkbox
+                        checked={verifyIsSelectedAll()}
+                        tabIndex={-1}
+                        onChange={() => selectAllRows()}
+                        // label={props.text}
+                        indeterminate={verifyIndeter()}
+                        className={props.classes.checkbox}
+                        dense />
+                </HeaderCell>
                 {headerCells}
-                <HeaderCell
-                    className={classNames(classes.cell, classes.headerCell)}
-                >
-                    Estado
-                </HeaderCell>
-                <HeaderCell
-                    className={classNames(classes.cell, classes.headerCell)}
-                >
-                    Acções
-                </HeaderCell>
             </Row>
         )
     }
@@ -187,7 +234,7 @@ const TableComponent = (props) => {
                                         className={classNames(classes.cell, classes.bodyCell)}
                                     >
                                         <div>
-                                            {row[column.id]}
+                                            {getDisplayName(column.id, row[column.id], headers)}
                                         </div>
                                     </Cell>
                                 ));
@@ -197,25 +244,21 @@ const TableComponent = (props) => {
                                     // style={{ backgroundColor: row.id === props?.rowData?.id ? 'rgba(160, 201, 255,0.5)' : "" }}
                                     id={index}
                                     className={classNames(classes.row, classes.dataRow)}
-                                    onClick={() => { console.log(row) }}
+                                // onClick={() => { console.log(row) }}
                                 >
+                                    <Cell
+                                        key={row?.tei}
+                                        className={classNames(classes.cell, classes.bodyCell)}
+                                    >
+                                        <Checkbox
+                                            checked={selectRows.findIndex(rows => rows.id === row.id) > -1}
+                                            tabIndex={-1}
+                                            onChange={() => selectedSingleRow(row)}
+                                            // label={props.text}
+                                            className={props.classes.checkbox}
+                                            dense />
+                                    </Cell>
                                     {cells}
-                                    <Cell
-                                        key={"settings"}
-                                        className={classNames(classes.cell, classes.bodyCell)}
-                                    >
-                                        {row["u7dfk89C9X7"] ?
-                                            <Check aria-label='Enviado para investigação' style={{ color: '#00EB62' }} />
-                                            :
-                                            <Remove style={{ color: "rgba(0, 0, 0, 0.54)" }} />
-                                        }
-                                    </Cell>
-                                    <Cell
-                                        key={"settings"}
-                                        className={classNames(classes.cell, classes.bodyCell)}
-                                    >
-                                        <ActionsMenu row={row} />
-                                    </Cell>
                                 </Row>
                             );
                         })

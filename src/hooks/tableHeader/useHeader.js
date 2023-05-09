@@ -3,7 +3,7 @@ import { formatResponse } from "../../utils/table/columns/formatResponse";
 import { useFetchData } from "../common/useFetchData.js";
 
 const fieldsType = {
-    WITH_REGISTRATION: "programTrackedEntityAttributes[displayInList,searchable,trackedEntityAttribute[id,displayName,valueType,optionSet[options[code,displayName]]]]",
+    WITH_REGISTRATION: "programTrackedEntityAttributes[displayInList,searchable,trackedEntityAttribute[id,displayName,valueType,optionSet[options[code,displayName]]]],organisationUnits,trackedEntityType[id,trackedEntityTypeAttributes[trackedEntityAttribute[displayName,id]]]",
     WITHOUT_REGISTRATION: "programStages[programStageDataElements[displayInReports,dataElement[id,displayName,valueType,optionSet[id]]]]"
 }
 
@@ -14,9 +14,9 @@ const resourceTypes = (fields, id) => ({
 })
 
 export const useHeader = ({ type, program }) => {
-    const { error, loading, objects, validationText } = useFetchData(
+    const { error, loading, objects, validationText, getData } = useFetchData(
         resourceTypes(fieldsType[type], program),
-        false
+        true
     )
 
     return {
@@ -24,6 +24,7 @@ export const useHeader = ({ type, program }) => {
         error,
         loading,
         data: objects,
-        validationText
+        validationText,
+        getData
     }
 }

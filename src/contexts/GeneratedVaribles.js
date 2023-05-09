@@ -12,6 +12,27 @@ export const GeneratedVaribles = createContext({
     orderBy: {},
     setOrderBy: {},
     reloadData: {},
-    setreloadData: {}
+    setreloadData: {},
+    setselectRows: {},
+    selectRows: {},
+    setprograms: {},
+    programs: {},
+    userOrgUnit: {},
+    tEItransfered: {},
+    setTEItransfered: {},
+    allTeisFormated: {},
+    setallTeisFormated: {},
+    enrollmentDate: {},
+    setEnrollmentDate: {},
+    attributeFilters: {},
+    setattributeFilters: {},
+    programAcess: {},
+    setprogramAcess: {},
+    orgUnitSelected: {},
+    setorgUnitSelected: {},
+    programSelected: {},
+    setprogramSelected: {},
+    teiEnrollment: {},
+    setteiEnrollment: {}
 })
 

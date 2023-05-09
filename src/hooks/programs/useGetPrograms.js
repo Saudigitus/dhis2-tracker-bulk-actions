@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
+import { GeneratedVaribles } from "../../contexts/GeneratedVaribles";
 import { useFetchData } from "../common/useFetchData"
 import useShowAlerts from "../common/useShowAlerts"
 
@@ -12,8 +13,9 @@ const resource = (type, fields) => ({
 })
 
 
-export const useGetPrograms = (type, fields = "id~rename(value),displayName~rename(label)") => {
+export const useGetPrograms = (type, fields = "id~rename(value),displayName~rename(label),organisationUnits,programStages[id~rename(code),repeatable,displayName~rename(label)],trackedEntityType[id,name,trackedEntityTypeAttributes[trackedEntityAttribute[displayName,id]]]") => {
     const { showPopUpNotification } = useShowAlerts()
+    const { setprograms } = useContext(GeneratedVaribles)
     const { objects, loading, error } = useFetchData(
         resource(type, fields),
         false
@@ -25,6 +27,11 @@ export const useGetPrograms = (type, fields = "id~rename(value),displayName~rena
         showPopUpNotification(error, "error")
         console.log(error);
     }
+
+    useEffect(() => {
+        setprograms(objects)
+    }, [objects])
+
 
     return {
         programs: objects,

@@ -7,25 +7,15 @@ import React, { useState, useEffect, useContext } from 'react'
 import { AppBarContext } from "../../contexts";
 import { useParams } from "../../hooks/common/useQueryParams";
 
-// const orgUnitQuery = {
-//     results: {
-//         resource: "organisationUnits",
-//         params: ({ query, id }) => ({
-//             fields: "id,displayName",
-//             withinUserHierarchy: true,
-//             filter: `id:in:${id}`,
-//             query: query
-//         })
-//     }
-// }
-
-
-const me = {
+const orgUnitQuery = {
     results: {
-        resource: "me",
-        params: {
-            fields: "organisationUnits[id,displayName]",
-        }
+        resource: "organisationUnits",
+        params: ({ query, id }) => ({
+            fields: "id,displayName",
+            withinUserHierarchy: true,
+            // filter: `id:in:${id}`,
+            query: query
+        })
     }
 }
 
@@ -35,66 +25,60 @@ function OrgUnitTree({ selected, onChange, singleSelection = true, initiallyExpa
     const [loader, setLoader] = useState(false);
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
-    const [notOuAlert, setNotOuAlert] = useState(false);
-    const { setSelectedOu, setInitOu, initOU } = useContext(AppBarContext)
+    const { setSelectedOu, setInitOu, initOU, myOU } = useContext(AppBarContext)
     const { add, useQuery } = useParams();
+
+    (query);
 
     const ou = useQuery().get("ou")
     const ouName = useQuery().get("ouName")
     const fetcher = async () => {
         setLoader(true)
-        await engine.query(me)
-            .then(response => {
-                if (response.results.organisationUnits.length == 0) {
-                    setNotOuAlert(true)
+        await engine.query(orgUnitQuery,
+            {
+                variables: {
+                    id: `[${myOU.results.organisationUnits[0].id}]`,
+                    query: query
                 }
-                setData(response)
-                setLoader(false)
-                // engine.query(orgUnitQuery,
-                //     {
-                //         variables: {
-                //             id: `[${response.results.organisationUnits[0].id}]`,
-                //             query: query
-                //         }
-                //     }
-                // ).then(result => {
-                //     setLoader(false)
-                // }).catch(err => {
-                //     setLoader(false)
-                //     setError(err)
-                // })
-            }).catch(error => {
-                setError(error)
-            })
+            }
+        ).then(result => {
+            setData(result)
+            setLoader(false)
+        }).catch(err => {
+            setLoader(false)
+            setError(err)
+        })
     }
 
     useEffect(() => {
-        fetcher()
+        if (query) {
+            const delayDebounceFn = setTimeout(() => {
+                fetcher()
+            }, 600)
+            return () => clearTimeout(delayDebounceFn)
+        } else {
+            setData(myOU)
+        }
     }, [query])
 
     useEffect(() => {
-        if (!error && !notOuAlert) {
-            if (data && ou) {
+        if (data && ou) {
+            setSelectedOu({
+                id: ou,
+                selected: ou,
+                displayName: ouName,
+            })
+        } else
+            if (data && !initOU) {
                 setSelectedOu({
-                    id: ou,
-                    selected: ou,
-                    displayName: ouName,
+                    id: data.results.organisationUnits[0].id,
+                    selected: data.results.organisationUnits[0].id,
+                    displayName: data.results.organisationUnits[0].displayName,
                 })
-            } else
-                if (data && !initOU) {
-                    setSelectedOu({
-                        id: data.results.organisationUnits[0].id,
-                        selected: data.results.organisationUnits[0].id,
-                        displayName: data.results.organisationUnits[0].displayName,
-                    })
-
-                    add("ou", data.results.organisationUnits[0].id)
-                    add("ouName", data.results.organisationUnits[0].displayName)
-                    add("program", "BDbg3oehQRj")
-                    setInitOu(true)
-                }
-        }
-
+                add("ou", data.results.organisationUnits[0].id)
+                add("ouName", data.results.organisationUnits[0].displayName)
+                setInitOu(true)
+            }
     }, [data]);
 
 
@@ -103,16 +87,6 @@ function OrgUnitTree({ selected, onChange, singleSelection = true, initiallyExpa
         return <Help error>
             Something went wrong when loading the organisation units!
         </Help>
-    }
-
-    if (notOuAlert) {
-        return (
-            <CenteredContent>
-                <Help error>
-                    Você não tem nenhuma unidade Organizacional associada a você
-                </Help>
-            </CenteredContent>
-        )
     }
 
     if (loader || data === null) {
@@ -126,11 +100,11 @@ function OrgUnitTree({ selected, onChange, singleSelection = true, initiallyExpa
     return (
         <div>
             {
-                data.results.organisationUnits.length > 0 ?
+                data?.results?.organisationUnits?.length > 0 ?
                     <OrganisationUnitTree
-                        // name={data?.results.organisationUnits[0].displayName}
-                        roots={data?.results.organisationUnits.map(ou => ou.id)}
-                        // {...initiallyExpanded && { initiallyExpanded: [data?.results.organisationUnits[0].id] }}
+                        name={data?.results.organisationUnits[0].displayName}
+                        roots={data?.results.organisationUnits[0].id}
+                        {...initiallyExpanded && { initiallyExpanded: [data?.results.organisationUnits[0].id] }}
                         singleSelection={singleSelection}
                         onChange={onChange}
                         selected={selected?.selected}
