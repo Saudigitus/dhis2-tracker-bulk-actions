@@ -5,6 +5,8 @@ import { Check, Close, Refresh } from '@material-ui/icons';
 import React, { useState } from 'react'
 import { Modal } from 'react-bootstrap'
 import SingleSelectField from '../SingleSelectComponent/SingleSelectField';
+import styles from './summary.module.css';
+
 
 // eslint-disable-next-line react/prop-types
 
@@ -25,9 +27,7 @@ const ConfirmBulkAction = ({
     const onChange = (event) => {
         setChecked(event.checked)
     }
-console.log("rejectedRows: ", rejectedRows)
-console.log("approvedRows: ", approvedRows)
-console.log("selectRows: ", selectRows)
+
     const rejectRows = (obj) => {
 const copySelectRows = [...selectRows]
         const teiToRemove = copySelectRows.findIndex(x=>x.id===obj.id)
@@ -73,7 +73,7 @@ const copySelectRows = [...selectRows]
                         <>
                             <div style={{ display: "flex", alignItems: "center",  marginBottom: 5, marginTop: 5, marginLeft: 20, width: '100%' }}>
                                 <>
-                                    <Label className={rejectedRows.some(e => e.id === x.id) && 'line-through'} color="muted" style={{ marginLeft: "5px" }}>
+                                    <Label className={rejectedRows.some(e => e.id === x.id) && styles.lineThrough} color="muted" style={{ marginLeft: "5px" }}>
                                         {index + 1}. {x?.name?.split(";")[0].split(":")[0]}
                                         <strong>{x?.name?.split(";")[0].split(":")[1]}</strong>
                                         {", "}
