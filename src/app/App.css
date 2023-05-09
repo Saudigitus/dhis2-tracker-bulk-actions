@@ -314,13 +314,12 @@ body {
     margin-left:10px;
     font-family: 'roboto';
     color: rgb(32, 32, 32);
-    font-size: 1.1em;
-    font-weight: 700;
+    font-size: 13px;
 }
 
 .enroll__same-program .MuiSvgIcon-root{
     color: rgb(241, 92, 92);
-    font-size: 3rem;
+    font-size: 2rem;
 }
 
 div.jsx-3719215021{
