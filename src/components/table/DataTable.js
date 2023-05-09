@@ -103,11 +103,7 @@ const TableComponent = (props) => {
     function verifyIndeter() {
         const intersection = columnData.filter(x => !selectRows.some(c => x.id === c.id));
 
-        if (intersection.length == 10) {
-            return false
-        }
-
-        if ((intersection.length > 0 && columnData.length != intersection.length) || selectRows.length > intersection.length) {
+        if ((intersection.length > 0 && columnData.length != intersection.length) || (selectRows.length > intersection.length && intersection.length > 0)) {
             return true
         }
 
@@ -115,7 +111,7 @@ const TableComponent = (props) => {
     }
 
     function verifyIsSelectedAll() {
-        const intersection = columnData.filter(x => selectRows.includes(x));
+        const intersection = columnData.filter(x => selectRows.some(c => x.id === c.id));
         if (intersection.length == columnData.length) return true;
         return false
 
