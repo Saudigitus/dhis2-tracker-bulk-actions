@@ -14,7 +14,7 @@ import Content from './Content.js'
 import OtherFilters from './filter/other/OtherFilters.js'
 import style from "./listcontent.module.css";
 import { ConfirmBulkAction } from '../modal/ConfirmBulkAction.js'
-import { useDeleteTEI } from '../../hooks/deleteTEI/useDeleteTEI.js'
+import { useDeleteTEI } from '../../hooks/bulkoperations/useDeleteTEI.js'
 import TempTranferEvent from '../modal/TempTranferEvent.js'
 import ChangeStatusEnrollment from '../modal/ChangeStatusEnrollment.js'
 import EnrollDiffProgram from '../modal/EnrollDiffProgram.js'
