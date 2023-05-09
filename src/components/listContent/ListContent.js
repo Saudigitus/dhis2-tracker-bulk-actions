@@ -2,10 +2,15 @@ import React, { useState, useEffect, useContext } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { AppBarContext } from '../../contexts/AppBarContext.js'
 import { GeneratedVaribles } from '../../contexts/GeneratedVaribles.js'
+import { useDeleteTEI } from '../../hooks/bulkoperations/useDeleteTEI.js'
 import { useParams } from '../../hooks/common/useQueryParams.js'
 import { useGetOptionSets } from '../../hooks/optionSets/useGetOptionSets.js'
 import { useData } from '../../hooks/tableData/useData.js'
 import { useHeader } from '../../hooks/tableHeader/useHeader.js'
+import ChangeStatusEnrollment from '../modal/ChangeStatusEnrollment.js'
+import BulkDeleteAction from '../modal/DeleteTeis.js'
+import EnrollDiffProgram from '../modal/EnrollDiffProgram.js'
+import TempTranferEvent from '../modal/TempTranferEvent.js'
 import TranferEnrollment from '../modal/TranferEnrollment.js'
 import Pagination from '../table/components/Pagination.js'
 import WithBorder from '../table/components/WithBorder.js'
@@ -14,7 +19,6 @@ import Content from './Content.js'
 import OtherFilters from './filter/other/OtherFilters.js'
 import style from "./listcontent.module.css";
 import { ConfirmBulkAction } from '../modal/ConfirmBulkAction.js'
-import { useDeleteTEI } from '../../hooks/bulkoperations/useDeleteTEI.js'
 import TempTranferEvent from '../modal/TempTranferEvent.js'
 import ChangeStatusEnrollment from '../modal/ChangeStatusEnrollment.js'
 import EnrollDiffProgram from '../modal/EnrollDiffProgram.js'
@@ -118,7 +122,7 @@ function ListContent({ type, program }) {
     }
     return teisSelected
   }
-  
+
   const selectedTeis = getTeiDetails(currentDetailsProgram())
   const [selectedIndex, setSelectedIndex] = useState(null);
 
@@ -129,7 +133,7 @@ function ListContent({ type, program }) {
       setSelectedIndex(index);
     }
   }
-  
+
   return (
     <>
       {type === "WITHOUT_REGISTRATION" &&
