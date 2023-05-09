@@ -18,11 +18,6 @@ import WithPadding from '../tamplate/WithPadding.js'
 import Content from './Content.js'
 import OtherFilters from './filter/other/OtherFilters.js'
 import style from "./listcontent.module.css";
-import { ConfirmBulkAction } from '../modal/ConfirmBulkAction.js'
-import TempTranferEvent from '../modal/TempTranferEvent.js'
-import ChangeStatusEnrollment from '../modal/ChangeStatusEnrollment.js'
-import EnrollDiffProgram from '../modal/EnrollDiffProgram.js'
-import BulkDeleteAction from '../modal/DeleteTeis.js'
 
 // eslint-disable-next-line react/prop-types
 function ListContent({ type, program }) {
