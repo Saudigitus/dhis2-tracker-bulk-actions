@@ -18,6 +18,11 @@ import WithPadding from '../tamplate/WithPadding.js'
 import Content from './Content.js'
 import OtherFilters from './filter/other/OtherFilters.js'
 import style from "./listcontent.module.css";
+import { ConfirmBulkAction } from '../modal/ConfirmBulkAction.js'
+import TempTranferEvent from '../modal/TempTranferEvent.js'
+import ChangeStatusEnrollment from '../modal/ChangeStatusEnrollment.js'
+import EnrollDiffProgram from '../modal/EnrollDiffProgram.js'
+import BulkDeleteAction from '../modal/DeleteTeis.js'
 
 // eslint-disable-next-line react/prop-types
 function ListContent({ type, program }) {
@@ -111,10 +116,8 @@ function ListContent({ type, program }) {
   function getTeiDetails() {
     const teisSelected = []
     for (const tei of selectRows) {
-      const selectedTei = allTeisFormated?.find(x => x.id === tei)
-
-      const teiData = `${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.displayName}: ${selectedTei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.id] || "---"};${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.displayName}: ${selectedTei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.id] || "---"}`
-      teisSelected.push({ id: tei, name: teiData, isSelected: true })
+      const teiData = `${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.displayName}: ${tei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.id] || "---"};${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.displayName}: ${tei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.id] || "---"}`
+      teisSelected.push({ id: tei.id, name: teiData, isSelected: true })
 
     }
     return teisSelected

@@ -34,3 +34,7 @@
     color: rgb(194, 26, 61);
     width: 100% !important;
 }
+
+.lineThrough{
+    text-decoration: line-through !important;
+}

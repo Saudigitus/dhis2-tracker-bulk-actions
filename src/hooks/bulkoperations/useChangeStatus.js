@@ -24,8 +24,7 @@ export function useChangeStatus() {
     const { add } = useParams()
 
     function getTeiDetails(tei, program) {
-        const teiToMove = allTeisFormated.find(x => x.id === tei)
-        return (`${program.trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.displayName}: ${teiToMove?.[program.trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.id]};${program.trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.displayName}: ${teiToMove?.[program.trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.id]}`)
+        return (`${program.trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.displayName}: ${tei?.[program.trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.id]};${program.trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.displayName}: ${tei?.[program.trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.id]}`)
     }
 
     // eslint-disable-next-line max-params
@@ -36,7 +35,7 @@ export function useChangeStatus() {
             const name = getTeiDetails(tei, program)
             const enrollmentValue = await engine.query(ENROLLMENTQUERY, {
                 variables: {
-                    id: teiEnrollment[tei],
+                    id: teiEnrollment[tei.id],
                 }
             })
 
@@ -47,7 +46,7 @@ export function useChangeStatus() {
             await engine.mutate(ENROLLMENTS_UPDATE, {
                 variables: {
                     data: teiToUpdate,
-                    id: teiEnrollment[tei]
+                    id: teiEnrollment[tei.id]
                 }
             })
                 .then(e => {
