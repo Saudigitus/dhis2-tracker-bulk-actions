@@ -33,7 +33,7 @@ export function useCreateEnrollment() {
                         "status": "ACTIVE",
                         "orgUnit": orgUnit,
                         "enrollmentDate": enrollmentDate,
-                        "incidentDate": incidentDate
+                        "incidentDate": incidentDate || undefined
                     }
                 }
             })

@@ -1,12 +1,11 @@
 /* eslint-disable react/prop-types */
 import { Button, Checkbox, CircularLoader, Divider, Label } from '@dhis2/ui'
 import { IconButton } from '@material-ui/core';
-import { Check, Close, Refresh, Replay, Undo, UndoOutlined, UndoRounded } from '@material-ui/icons';
+import { Close, Replay } from '@material-ui/icons';
 import React, { useState } from 'react'
 import { Modal } from 'react-bootstrap'
-import SingleSelectField from '../SingleSelectComponent/SingleSelectField';
+import Confirm from './ConfirmModal';
 import styles from './summary.module.css';
-import Confirm from './Confirm';
 
 
 // eslint-disable-next-line react/prop-types
@@ -57,7 +56,7 @@ const ConfirmBulkAction = ({
                 {modalType === "transfer" && <span> Are you sure you want to <strong className='text-danger'>permanently transfer </strong> <strong>{selectRows.length}</strong> {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected?.displayName || "Organisation Unit"}`}</strong>?</span>}
                 {modalType === "TEMPtransfer" && <span> Are you sure you want to <strong className='text-danger'>temporarily transfer</strong> <strong>{selectRows.length}</strong> {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected?.displayName || "Organisation Unit"}`}</strong>?</span>}
                 {modalType === "delete" && <span> Are you sure you want to <strong className='text-danger'>delete</strong>  <strong>{selectRows.length}</strong> {nameOfTEIType()} from<strong >{` ${ouName} `}</strong>?</span>}
-                {modalType === "changeStatus" && <span> Are you sure you want to <strong className='text-danger'>change status </strong>from <strong >{` ${initStatus}`}</strong> to <strong >{`${endStatus}`}</strong>?</span>}
+                {modalType === "changeStatus" && <span> Are you sure you want to <strong className='text-danger'>change status </strong> to <strong >{`${endStatus}`}</strong>?</span>}
                 {modalType === "diffProgram" && <span> Are you sure you want to <strong className='text-danger'>enroll</strong> <strong>{selectRows.length}</strong> {nameOfTEIType()} from<strong >{` ${program()?.label} `}</strong> to<strong >{` ${selectedProgram || "Program"}`}</strong>?</span>}
             </>
         )
@@ -134,6 +133,7 @@ const ConfirmBulkAction = ({
                         handleClose={handleCloseConfirm}
                         message={message()}
                         title={title()}
+                        loading={loading}
                     />
                 }
             </Modal.Body>
@@ -143,10 +143,9 @@ const ConfirmBulkAction = ({
                 </Button>
                 {action &&
                     <Button disabled={!checked || !selectRows?.length}
-                        // onClick={action}
                         onClick={() => setopenConfirmModal(true)}
                         name="Primary button" destructive value="default">
-                        {loading ? <CircularLoader small /> : label}
+                        {label}
                     </Button>
                 }
             </Modal.Footer>

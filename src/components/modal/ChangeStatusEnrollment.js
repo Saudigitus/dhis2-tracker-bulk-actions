@@ -23,6 +23,7 @@ import styles from './summary.module.css';
 import { GenericSummary } from './GenericSummary';
 // import { OptionFields } from '../genericFields/fields/SingleSelect'
 
+// eslint-disable-next-line react/prop-types
 function Testing({ name, Component }) {
     return (
         <div style={{ display: "flex", marginTop: 15, marginBottom: 0 }}>
@@ -37,6 +38,7 @@ function Testing({ name, Component }) {
     )
 }
 
+// eslint-disable-next-line react/prop-types
 const ChangeStatusEnrollment = ({ open, setopen, modalType, initStatus, teiEnrollment, selectedIndex, handleErrorClick, showSummaryModal, handleCloseSummary }) => {
     const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows, allTeisFormated } = useContext(GeneratedVaribles)
     const { useQuery } = useParams()
