@@ -50,7 +50,6 @@ const MyApp = () => {
     const [programAcess, setprogramAcess] = useState(true)
     const [programSelected, setprogramSelected] = useState({})
     const [orgUnitSelected, setorgUnitSelected] = useState({})
-    const [teiEnrollment, setteiEnrollment] = useState({})
 
     const { data, loading, error } = useDataQuery(me)
 
@@ -109,8 +108,6 @@ const MyApp = () => {
             setorgUnitSelected,
             programSelected,
             setprogramSelected,
-            teiEnrollment,
-            setteiEnrollment
         }}>
             <AppBarContext.Provider value={{
                 selectedOu: selectedOu,
