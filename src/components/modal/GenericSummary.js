@@ -27,7 +27,7 @@ const GenericSummary = ({show, handleClose, tEItransfered, selectedIndex, handle
             
             <div className='py-3'>
                 <h5 className='my-2'>Summary</h5>
-                <div className='d-flex'>
+                <div className='d-flex mt-3'>
                     <div className={styles.imported}>
                         <div>
                             <h5 className='text-center'>0</h5>
