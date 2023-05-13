@@ -30,7 +30,7 @@ function ListContent({ type, program }) {
 
   const [openModalBulk, setopenModalBulk] = useState(false)
   const [openModalConfirmBulk, setOpenModalConfirmBulk] = useState(false)
-  const [showSummaryModal, setShowSummaryModal] = useState(true)
+  const [showSummaryModal, setShowSummaryModal] = useState(false)
   const handleCloseConfirmAction = () => setOpenModalConfirmBulk(false);
   const handleCloseSummary = () => {
     handleCloseConfirmAction()
