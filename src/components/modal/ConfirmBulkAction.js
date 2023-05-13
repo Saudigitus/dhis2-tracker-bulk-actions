@@ -6,6 +6,7 @@ import React, { useState } from 'react'
 import { Modal } from 'react-bootstrap'
 import SingleSelectField from '../SingleSelectComponent/SingleSelectField';
 import styles from './summary.module.css';
+import Confirm from './Confirm';
 
 
 // eslint-disable-next-line react/prop-types
@@ -23,6 +24,9 @@ const ConfirmBulkAction = ({
     const [checked, setChecked] = useState(false);
     const [rejectedRows, setRejectedRows] = useState([]);
     const [approvedRows, setApprovedRows] = useState([...selectedTeis]);
+    const [openConfirmModal, setopenConfirmModal] = useState(false);
+    const handleCloseConfirm = () => setopenConfirmModal(false);
+
     const onChange = (event) => {
         setChecked(event.checked)
     }
@@ -47,6 +51,30 @@ const ConfirmBulkAction = ({
         }
     }
 
+    function message() {
+        return (
+            <>
+                {modalType === "transfer" && <span> Are you sure you want to <strong className='text-danger'>permanently transfer </strong> <strong>{selectRows.length}</strong> {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected?.displayName || "Organisation Unit"}`}</strong>?</span>}
+                {modalType === "TEMPtransfer" && <span> Are you sure you want to <strong className='text-danger'>temporarily transfer</strong> <strong>{selectRows.length}</strong> {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected?.displayName || "Organisation Unit"}`}</strong>?</span>}
+                {modalType === "delete" && <span> Are you sure you want to <strong className='text-danger'>delete</strong>  <strong>{selectRows.length}</strong> {nameOfTEIType()} from<strong >{` ${ouName} `}</strong>?</span>}
+                {modalType === "changeStatus" && <span> Are you sure you want to <strong className='text-danger'>change status </strong>from <strong >{` ${initStatus}`}</strong> to <strong >{`${endStatus}`}</strong>?</span>}
+                {modalType === "diffProgram" && <span> Are you sure you want to <strong className='text-danger'>enroll</strong> <strong>{selectRows.length}</strong> {nameOfTEIType()} from<strong >{` ${program()?.label} `}</strong> to<strong >{` ${selectedProgram || "Program"}`}</strong>?</span>}
+            </>
+        )
+    }
+
+    function title() {
+        return (
+            <>
+                {modalType === "transfer" && <span>Permanent Tranfer</span>}
+                {modalType === "TEMPtransfer" && <span>Temporary Transfer</span>}
+                {modalType === "delete" && <span>Delete Entity</span>}
+                {modalType === "changeStatus" && <span>Change Enrollment Status</span>}
+                {modalType === "diffProgram" && <span>Enroll in Different Program</span>}
+            </>
+        )
+    }
+
     return (
         <Modal
             show={show}
@@ -61,11 +89,7 @@ const ConfirmBulkAction = ({
                     <h3 className='py-3 text-center'>{selectRows.length} {nameOfTEIType()} selected</h3>
                 }
                 <span className=''>
-                    {modalType === "transfer" && <span> Are you sure you want to <strong className='text-danger'>permanently transfer </strong> <strong>{selectRows.length}</strong> {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected?.displayName || "Organisation Unit"}`}</strong>?</span>}
-                    {modalType === "TEMPtransfer" && <span> Are you sure you want to <strong className='text-danger'>temporarily transfer</strong> <strong>{selectRows.length}</strong> {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected?.displayName || "Organisation Unit"}`}</strong>?</span>}
-                    {modalType === "delete" && <span> Are you sure you want to <strong className='text-danger'>delete</strong>  <strong>{selectRows.length}</strong> {nameOfTEIType()} from<strong >{` ${ouName} `}</strong>?</span>}
-                    {modalType === "changeStatus" && <span> Are you sure you want to <strong className='text-danger'>change status </strong>from <strong >{` ${initStatus}`}</strong> to <strong >{`${endStatus}`}</strong>?</span>}
-                    {modalType === "diffProgram" && <span> Are you sure you want to <strong className='text-danger'>enroll</strong> <strong>{selectRows.length}</strong> {nameOfTEIType()} from<strong >{` ${program()?.label} `}</strong> to<strong >{` ${selectedProgram || "Program"}`}</strong>?</span>}
+                    {message()}
                 </span>
                 <div style={{ background: "rgb(243, 245, 247)", height: "20px", marginTop: 10 }}></div>
 
@@ -103,7 +127,15 @@ const ConfirmBulkAction = ({
                         <Checkbox disabled={loading} className="checkbox-style" onChange={onChange} checked={checked} label="Agree" name="Ex" value={checked} />
                     </span>
                 }
-
+                {openConfirmModal &&
+                    <Confirm
+                        open={openConfirmModal}
+                        action={action}
+                        handleClose={handleCloseConfirm}
+                        message={message()}
+                        title={title()}
+                    />
+                }
             </Modal.Body>
             <Modal.Footer>
                 <Button disabled={loading} name="Basic button" onClick={handleClose} value="default">
@@ -111,7 +143,9 @@ const ConfirmBulkAction = ({
                 </Button>
                 {action &&
                     <Button disabled={!checked || !selectRows?.length}
-                        onClick={action} name="Primary button" destructive value="default">
+                        // onClick={action}
+                        onClick={() => setopenConfirmModal(true)}
+                        name="Primary button" destructive value="default">
                         {loading ? <CircularLoader small /> : label}
                     </Button>
                 }
