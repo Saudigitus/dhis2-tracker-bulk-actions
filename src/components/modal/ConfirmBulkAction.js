@@ -55,8 +55,11 @@ const ConfirmBulkAction = ({
             centered
         >
             <Modal.Body>
-
-                <h3 className='py-3 text-center'>Atention</h3>
+                {action ?
+                    <h3 className='py-3 text-center'>Atention</h3>
+                    :
+                    <h3 className='py-3 text-center'>{selectRows.length} {nameOfTEIType()} selected</h3>
+                }
                 <span className=''>
                     {modalType === "transfer" && <span> Are you sure you want to <strong className='text-danger'>permanently transfer </strong> <strong>{selectRows.length}</strong> {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected?.displayName || "Organisation Unit"}`}</strong>?</span>}
                     {modalType === "TEMPtransfer" && <span> Are you sure you want to <strong className='text-danger'>temporarily transfer</strong> <strong>{selectRows.length}</strong> {nameOfTEIType()} from<strong >{` ${ouName} `}</strong> to<strong >{` ${orgUnitSelected?.displayName || "Organisation Unit"}`}</strong>?</span>}
@@ -95,19 +98,23 @@ const ConfirmBulkAction = ({
                     )}
                 </div>
 
-                <span>
-                    <Checkbox disabled={loading} className="checkbox-style" onChange={onChange} checked={checked} label="Agree" name="Ex" value={checked} />
-                </span>
+                {action &&
+                    <span>
+                        <Checkbox disabled={loading} className="checkbox-style" onChange={onChange} checked={checked} label="Agree" name="Ex" value={checked} />
+                    </span>
+                }
 
             </Modal.Body>
             <Modal.Footer>
                 <Button disabled={loading} name="Basic button" onClick={handleClose} value="default">
-                    Cancel
+                    {action ? 'Cancel' : 'Close'}
                 </Button>
-                <Button disabled={!checked || !selectRows?.length}
-                    onClick={action} name="Primary button" destructive value="default">
-                    {loading ? <CircularLoader small /> : label}
-                </Button>
+                {action &&
+                    <Button disabled={!checked || !selectRows?.length}
+                        onClick={action} name="Primary button" destructive value="default">
+                        {loading ? <CircularLoader small /> : label}
+                    </Button>
+                }
             </Modal.Footer>
         </Modal>
     )

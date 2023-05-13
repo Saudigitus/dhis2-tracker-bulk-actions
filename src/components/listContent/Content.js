@@ -4,7 +4,7 @@ import { DataTable } from '../table/DataTable.js'
 import EnrollmentFilter from './filter/enrollment/EnrollmentFilter.js'
 
 // eslint-disable-next-line react/prop-types
-function Content({ columnData, headers, loading, loadingHeader, type, loadingOptionSet }) {
+function Content({ columnData, headers, loading, loadingHeader, type, loadingOptionSet, selectedTeis }) {
     const [headerColumns, setheaderColumns] = useState([])
 
     function updateVariables(values) {
@@ -32,6 +32,7 @@ function Content({ columnData, headers, loading, loadingHeader, type, loadingOpt
                         updateVariables={updateVariables}
                         headers={headerColumns}
                         type={type}
+                        selectedTeis={selectedTeis}
                     />
             }
 
