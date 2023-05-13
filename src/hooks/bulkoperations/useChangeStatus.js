@@ -10,16 +10,9 @@ const ENROLLMENTS_UPDATE = {
     data: ({ data }) => data
 }
 
-const ENROLLMENTQUERY = {
-    results: {
-        resource: "enrollments",
-        id: ({ id }) => id,
-    }
-}
-
 export function useChangeStatus() {
     const engine = useDataEngine()
-    const { setTEItransfered, allTeisFormated, setselectRows } = useContext(GeneratedVaribles)
+    const { setTEItransfered, setselectRows } = useContext(GeneratedVaribles)
     const [loading, setloading] = useState(false)
     const { add } = useParams()
 
@@ -28,25 +21,20 @@ export function useChangeStatus() {
     }
 
     // eslint-disable-next-line max-params
-    const changeProgramStatus = async (program, status, teis, teiEnrollment) => {
+    const changeProgramStatus = async (program, status, teis) => {
         setloading(true)
         const copyTEITransfered = []
         for (const tei of teis) {
             const name = getTeiDetails(tei, program)
-            const enrollmentValue = await engine.query(ENROLLMENTQUERY, {
-                variables: {
-                    id: teiEnrollment[tei.id],
-                }
-            })
 
-            const teiToUpdate = enrollmentValue?.results
+            const teiToUpdate = tei.enrollment
             teiToUpdate.status = status
-            delete enrollmentValue.events
+            delete teiToUpdate.events
 
             await engine.mutate(ENROLLMENTS_UPDATE, {
                 variables: {
                     data: teiToUpdate,
-                    id: teiEnrollment[tei.id]
+                    id: teiToUpdate.enrollment,
                 }
             })
                 .then(e => {

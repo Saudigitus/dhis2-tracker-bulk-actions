@@ -14,36 +14,24 @@ function formatDataElementsEvents(data) {
     return column
 }
 
-function formatAttributesTracked(data, programStatus) {
+function formatAttributesTracked(data) {
+    console.log(data);
     const column = []
-    const teiEnrollment = {}
 
     for (const trackedEntityInstance of data || []) {
         const columnObj = {}
 
         columnObj["id"] = trackedEntityInstance.trackedEntityInstance
+        columnObj["enrollment"] = trackedEntityInstance.enrollments[0]
+
         for (const attribute of trackedEntityInstance?.attributes || []) {
             columnObj[attribute?.attribute] = attribute?.value
         }
 
         column.push(columnObj)
-        teiEnrollment[trackedEntityInstance.trackedEntityInstance] = { enrollments: formatEnrollments(trackedEntityInstance.enrollments, programStatus) }
     }
 
-    return {
-        column: column,
-        teiEnrollment: teiEnrollment
-    }
-}
-
-
-function formatEnrollments(enrollments, programStatus) {
-    const enrol = []
-    for (const enrollment of enrollments.filter(x => x.status === programStatus) || []) {
-        enrol.push({ value: enrollment.enrollment, label: enrollment.enrollmentDate })
-    }
-
-    return enrol
+    return column
 }
 
 export const formatResponseData = (type, data, programStatus) => {

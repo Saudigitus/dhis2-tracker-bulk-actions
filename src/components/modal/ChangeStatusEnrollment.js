@@ -36,17 +36,16 @@ function Testing({ name, Component }) {
     )
 }
 
-const ChangeStatusEnrollment = ({ open, setopen, modalType, initStatus, teiEnrollment, selectedIndex, handleErrorClick }) => {
-    const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows, allTeisFormated } = useContext(GeneratedVaribles)
+// eslint-disable-next-line react/prop-types
+const ChangeStatusEnrollment = ({ open, setopen, modalType, initStatus, selectedIndex, handleErrorClick }) => {
+    const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows } = useContext(GeneratedVaribles)
     const { useQuery } = useParams()
     const programId = useQuery().get("programId")
     const ouName = useQuery().get("ouName")
     const [statusSelected, setstatusSelected] = useState("")
     const { loading, changeProgramStatus } = useChangeStatus()
-    const { verifyAcess } = useVerifyOuAcess()
     const [openModalConfirmBulk, setOpenModalConfirmBulk] = useState(false)
     const handleCloseConfirmAction = () => setOpenModalConfirmBulk(false);
-    const [localTeiEnrollment, setlocalTeiEnrollment] = useState({})
 
     function nameOfTEIType() {
         return programs.find(x => x.value === programId)?.trackedEntityType?.name || ""
@@ -195,7 +194,7 @@ const ChangeStatusEnrollment = ({ open, setopen, modalType, initStatus, teiEnrol
                 <ConfirmBulkAction
                     show={openModalConfirmBulk}
                     handleClose={handleCloseConfirmAction}
-                    action={() => changeProgramStatus(currentDetailsProgram(), statusSelected, selectRows, localTeiEnrollment)}
+                    action={() => changeProgramStatus(currentDetailsProgram(), statusSelected, selectRows)}
                     loading={loading}
                     selectRows={selectRows}
                     setselectRows={setselectRows}
@@ -207,9 +206,6 @@ const ChangeStatusEnrollment = ({ open, setopen, modalType, initStatus, teiEnrol
                     modalType={modalType}
                     initStatus={initStatus}
                     endStatus={statusSelected}
-                    teiEnrollment={teiEnrollment}
-                    localTeiEnrollment={localTeiEnrollment}
-                    setlocalTeiEnrollment={setlocalTeiEnrollment}
                 />
             }
         </Modal >

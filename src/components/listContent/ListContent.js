@@ -47,7 +47,7 @@ function ListContent({ type, program }) {
   const [pageSize, setpageSize] = useState(10)
   const [modalType, setmodalType] = useState("transfer")
   const { headers = [], loading, getData: getDataHeader } = useHeader({ type, program })
-  const { totalPages, loading: loadingHeader, columnData, getData, teiEnrollment } = useData({ type, ou: selectedOu, program, programStatus: selectedFilter, page, pageSize })
+  const { totalPages, loading: loadingHeader, columnData, getData } = useData({ type, ou: selectedOu, program, programStatus: selectedFilter, page, pageSize })
   const { loading: loadingDelete, deleteTEI } = useDeleteTEI()
 
   const optionSets = headers.filter(x => x.optionSet)?.map(x => x.optionSet);
@@ -202,14 +202,13 @@ function ListContent({ type, program }) {
             selectedIndex={selectedIndex}
             handleErrorClick={handleErrorClick}
           />
-          : modalType === "ChangeStatus" ?
+          : modalType === "changeStatus" ?
             openModalBulk &&
             <ChangeStatusEnrollment
               open={openModalBulk}
               setopen={setopenModalBulk}
               modalType={modalType}
               initStatus={selectedFilter}
-              teiEnrollment={teiEnrollment}
               selectedTeis={selectedTeis}
               selectedIndex={selectedIndex}
               handleErrorClick={handleErrorClick}
