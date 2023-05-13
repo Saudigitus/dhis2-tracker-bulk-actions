@@ -22,6 +22,7 @@ import { OrgUnitCard } from '../OrgUnitTree';
 import SingleSelectField from '../SingleSelectComponent/SingleSelectField';
 import { ConfirmBulkAction } from './ConfirmBulkAction';
 import styles from './summary.module.css';
+import { GenericSummary } from './GenericSummary';
 // import { OptionFields } from '../genericFields/fields/SingleSelect'
 
 // eslint-disable-next-line react/prop-types
@@ -40,7 +41,7 @@ function Wrapper({ name, Component }) {
 }
 
 // eslint-disable-next-line react/prop-types
-const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEIType, currentDetailsProgram, selectedIndex, handleErrorClick }) => {
+const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEIType, currentDetailsProgram, selectedIndex, handleErrorClick, showSummaryModal, handleCloseSummary }) => {
     const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows } = useContext(GeneratedVaribles)
     const { useQuery } = useParams()
     const ouName = useQuery().get("ouName")
@@ -59,12 +60,12 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
         <Modal large open={open} position={'middle'} onClose={() => {setopen(false); setTEItransfered([])}}>
             <ModalTitle>{('Enroll in Different Program')}</ModalTitle>
             <ModalContent>
-                <div style={{ background: "rgb(243, 245, 247)", height: "20px", marginTop: 10 }}></div>
                 {loading && <LinearProgress />}
                 {
                     tEItransfered.length === 0 ?
                         <div style={{ marginTop: 18, marginLeft: 0, marginBottom: 0 }}>
                             Enroll <strong>{selectRows.length}</strong>  {nameOfTEIType()} from<strong >{` ${currentDetailsProgram()?.label} `}</strong> to<strong >{` ${programSelected?.label || "Program"}`}</strong>
+                <div style={{ background: "rgb(243, 245, 247)", height: "20px", marginTop: 10 }}></div>
                             <Box width="100%">
                                 {Wrapper({
                                     name: "Program",
@@ -179,37 +180,7 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
 
                         </div>
                         :
-                        tEItransfered.map((x, index) =>
-                            <>
-                                <div style={{ display: "flex", marginBottom: 8, marginTop: 8, width: '100%' }}>
-                                    <div>
-
-                                        <Label color="muted" style={{ marginLeft: "5px" }}>
-                                            <strong>{x.name.split(";")[0].split(":")[0]} </strong>
-                                            {x.name.split(";")[0].split(":")[1]}
-                                            {" "}
-                                            <strong>{x.name.split(";")[1].split(":")[0]} </strong>
-                                            {x.name.split(";")[1].split(":")[1]}
-                                        </Label >
-
-                                    </div>
-                                    <div style={{ marginLeft: "auto", width: 100, height: "auto" }}>
-                                        {x.status === "SUCCESS" ?
-                                            <span className={styles.successStatus}>Success</span>
-                                            :
-                                            <div className='d-flex align-items-center'>
-                                                <span className={styles.errorStatus}>Error</span>
-                                                <IconButton onClick={() => handleErrorClick(index)} style={{ color: "#C21A3D", marginBottom: 10 }} size='small' title='More details'>
-                                                    <InfoOutlined fontSize='small' />
-                                                </IconButton>
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
-                                <Collapse in={selectedIndex === index}> <div className={styles.errorMessage}>{x?.error}</div> </Collapse>
-                                <Divider />
-                            </>
-                        )
+                        <GenericSummary loading={loading} modalType={modalType} show={showSummaryModal} handleClose={()=>{handleCloseSummary(); handleCloseConfirmAction(); setopen(false)}} tEItransfered={tEItransfered} selectedIndex={selectedIndex} handleErrorClick={handleErrorClick}/>
                 }
             </ModalContent>
             <ModalActions>

@@ -18,6 +18,7 @@ import { useTransferTEI } from '../../hooks/bulkoperations/useTransfer';
 import { OrgUnitCard } from '../OrgUnitTree';
 import { ConfirmBulkAction } from './ConfirmBulkAction';
 import { SummaryBulkAction } from './SummaryBulkAction';
+import { GenericSummary } from './GenericSummary';
 // import { OptionFields } from '../genericFields/fields/SingleSelect'
 
 function Testing({ name, Component }) {
@@ -55,7 +56,7 @@ const BulkDeleteAction = ({openModalConfirmBulk, handleClose, showSummaryModal, 
                     tEItransfered={tEItransfered}
                 />
             :
-            <SummaryBulkAction show={showSummaryModal} handleClose={handleCloseSummary} tEItransfered={tEItransfered} selectedIndex={selectedIndex} handleErrorClick={handleErrorClick}/>
+            <GenericSummary loading={loading} modalType={modalType} show={showSummaryModal} handleClose={()=>{handleCloseSummary(); handleClose()}} tEItransfered={tEItransfered} selectedIndex={selectedIndex} handleErrorClick={handleErrorClick}/>
             }
         </div>
     )

@@ -20,6 +20,7 @@ import SingleSelectField from '../SingleSelectComponent/SingleSelectField';
 import { ConfirmBulkAction } from './ConfirmBulkAction';
 import { useChangeStatus } from '../../hooks/bulkoperations/useChangeStatus';
 import styles from './summary.module.css';
+import { GenericSummary } from './GenericSummary';
 // import { OptionFields } from '../genericFields/fields/SingleSelect'
 
 function Testing({ name, Component }) {
@@ -36,9 +37,8 @@ function Testing({ name, Component }) {
     )
 }
 
-// eslint-disable-next-line react/prop-types
-const ChangeStatusEnrollment = ({ open, setopen, modalType, initStatus, selectedIndex, handleErrorClick }) => {
-    const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows } = useContext(GeneratedVaribles)
+const ChangeStatusEnrollment = ({ open, setopen, modalType, initStatus, teiEnrollment, selectedIndex, handleErrorClick, showSummaryModal, handleCloseSummary }) => {
+    const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows, allTeisFormated } = useContext(GeneratedVaribles)
     const { useQuery } = useParams()
     const programId = useQuery().get("programId")
     const ouName = useQuery().get("ouName")
@@ -84,7 +84,6 @@ const ChangeStatusEnrollment = ({ open, setopen, modalType, initStatus, selected
             <ModalTitle>{('Change Status')}</ModalTitle>
             <p />
             <ModalContent>
-                <div style={{ background: "rgb(243, 245, 247)", height: "20px", marginTop: 10 }}></div>
                 {loading && <LinearProgress />}
                 {
                     tEItransfered.length === 0 ?
@@ -130,37 +129,7 @@ const ChangeStatusEnrollment = ({ open, setopen, modalType, initStatus, selected
 
                         </div>
                         :
-                        tEItransfered.map((x, index) =>
-                            <>
-                                <div style={{ display: "flex", marginBottom: 8, marginTop: 8, width: '100%' }}>
-                                    <div>
-
-                                        <Label color="muted" style={{ marginLeft: "5px" }}>
-                                            <strong>{x.name.split(";")[0].split(":")[0]} </strong>
-                                            {x.name.split(";")[0].split(":")[1]}
-                                            {" "}
-                                            <strong>{x.name.split(";")[1].split(":")[0]} </strong>
-                                            {x.name.split(";")[1].split(":")[1]}
-                                        </Label >
-
-                                    </div>
-                                    <div style={{ marginLeft: "auto", width: 150, height: "auto" }}>
-                                        {x.status === "SUCCESS" ?
-                                            <span className={styles.successStatus}>Success</span>
-                                            :
-                                            <div className='d-flex align-items-center'>
-                                                <span className={styles.errorStatus}>Error</span> 
-                                                <IconButton onClick={() => handleErrorClick(index)} style={{color: "#C21A3D", marginBottom: 10}} size='small' title='More details'>
-                                                    <InfoOutlined fontSize='small' />
-                                                </IconButton>
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
-                                <Collapse in={selectedIndex === index}> <div className={styles.errorMessage}>{x?.error}</div> </Collapse>
-                                <Divider />
-                            </>
-                        )
+                        <GenericSummary loading={loading} modalType={modalType} show={showSummaryModal} handleClose={()=>{handleCloseSummary(); handleCloseConfirmAction(); setopen(false)}} tEItransfered={tEItransfered} selectedIndex={selectedIndex} handleErrorClick={handleErrorClick}/>
                 }
             </ModalContent>
             <ModalActions>

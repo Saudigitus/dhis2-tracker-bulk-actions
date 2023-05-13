@@ -191,6 +191,8 @@ function ListContent({ type, program }) {
           currentDetailsProgram={currentDetailsProgram}
           selectedIndex={selectedIndex}
           handleErrorClick={handleErrorClick}
+          showSummaryModal={showSummaryModal}
+          handleCloseSummary={handleCloseSummary}
         />
         : modalType === "TEMPtransfer" ?
           openModalBulk &&
@@ -201,6 +203,8 @@ function ListContent({ type, program }) {
             selectedTeis={selectedTeis}
             selectedIndex={selectedIndex}
             handleErrorClick={handleErrorClick}
+            showSummaryModal={showSummaryModal}
+            handleCloseSummary={handleCloseSummary}
           />
           : modalType === "changeStatus" ?
             openModalBulk &&
@@ -212,6 +216,8 @@ function ListContent({ type, program }) {
               selectedTeis={selectedTeis}
               selectedIndex={selectedIndex}
               handleErrorClick={handleErrorClick}
+              showSummaryModal={showSummaryModal}
+              handleCloseSummary={handleCloseSummary}
             />
             : modalType === "diffProgram" ?
               openModalBulk &&
@@ -224,6 +230,8 @@ function ListContent({ type, program }) {
                 selectedTeis={selectedTeis}
                 selectedIndex={selectedIndex}
                 handleErrorClick={handleErrorClick}
+                showSummaryModal={showSummaryModal}
+                handleCloseSummary={handleCloseSummary}
               />
               : null
       }
