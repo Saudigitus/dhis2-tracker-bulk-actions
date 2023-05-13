@@ -153,7 +153,7 @@ function ListContent({ type, program }) {
                   setopenModalBulkTranfer={setopenModalBulk}
                   setopenModalBulkDelete={setOpenModalConfirmBulk}
                   modalType={setmodalType}
-                  disableDelete={!selectRows.length}
+                  disabled={!selectRows.length}
                 />
               </WithPadding>
             </WithBorder>
