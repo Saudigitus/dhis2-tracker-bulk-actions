@@ -30,7 +30,7 @@ function ListContent({ type, program }) {
 
   const [openModalBulk, setopenModalBulk] = useState(false)
   const [openModalConfirmBulk, setOpenModalConfirmBulk] = useState(false)
-  const [showSummaryModal, setShowSummaryModal] = useState(false)
+  const [showSummaryModal, setShowSummaryModal] = useState(true)
   const handleCloseConfirmAction = () => setOpenModalConfirmBulk(false);
   const handleCloseSummary = () => {
     handleCloseConfirmAction()
@@ -191,6 +191,8 @@ function ListContent({ type, program }) {
           currentDetailsProgram={currentDetailsProgram}
           selectedIndex={selectedIndex}
           handleErrorClick={handleErrorClick}
+          showSummaryModal={showSummaryModal}
+          handleCloseSummary={handleCloseSummary}
         />
         : modalType === "TEMPtransfer" ?
           openModalBulk &&
@@ -201,6 +203,8 @@ function ListContent({ type, program }) {
             selectedTeis={selectedTeis}
             selectedIndex={selectedIndex}
             handleErrorClick={handleErrorClick}
+            showSummaryModal={showSummaryModal}
+            handleCloseSummary={handleCloseSummary}
           />
           : modalType === "ChangeStatus" ?
             openModalBulk &&
@@ -213,6 +217,8 @@ function ListContent({ type, program }) {
               selectedTeis={selectedTeis}
               selectedIndex={selectedIndex}
               handleErrorClick={handleErrorClick}
+              showSummaryModal={showSummaryModal}
+              handleCloseSummary={handleCloseSummary}
             />
             : modalType === "diffProgram" ?
               openModalBulk &&
@@ -225,6 +231,8 @@ function ListContent({ type, program }) {
                 selectedTeis={selectedTeis}
                 selectedIndex={selectedIndex}
                 handleErrorClick={handleErrorClick}
+                showSummaryModal={showSummaryModal}
+                handleCloseSummary={handleCloseSummary}
               />
               : null
       }
