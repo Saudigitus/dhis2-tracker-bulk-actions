@@ -166,6 +166,7 @@ function ListContent({ type, program }) {
             loadingHeader={loadingHeader}
             loadingOptionSet={loadingOptionSet}
             type={type}
+            selectedTeis={selectedTeis}
           />
           <Pagination
             onPageChange={onPageChange}
