@@ -7,7 +7,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import React from 'react';
 
 // eslint-disable-next-line react/prop-types
-export default function ConfirmModal({ open, handleClose, action, message, title }) {
+export default function ConfirmModal({ open, handleClose, action, message, title, loading }) {
     return (
         <Dialog
             open={open}
@@ -23,8 +23,12 @@ export default function ConfirmModal({ open, handleClose, action, message, title
                 <Button onClick={handleClose}>
                     No
                 </Button>
-                <Button onClick={action}  primary>
-                    Yes
+                <Button loading={loading} onClick={action} primary>
+                    {loading ?
+                        "Loading..."
+                        :
+                        "Yes"
+                    }
                 </Button>
             </DialogActions>
         </Dialog>

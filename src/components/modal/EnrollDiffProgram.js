@@ -54,10 +54,8 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
     const [openModalConfirmBulk, setOpenModalConfirmBulk] = useState(false)
     const handleCloseConfirmAction = () => setOpenModalConfirmBulk(false);
 
-    console.log(currentDetailsProgram(), programSelected, "currentDetailsProgram");
-
     return (
-        <Modal large open={open} position={'middle'} onClose={() => {setopen(false); setTEItransfered([])}}>
+        <Modal large open={open} position={'middle'} onClose={() => { setopen(false); setTEItransfered([]) }}>
             <ModalTitle>{('Enroll in Different Program')}</ModalTitle>
             <ModalContent>
                 {loading && <LinearProgress />}
@@ -65,7 +63,7 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
                     tEItransfered.length === 0 ?
                         <div style={{ marginTop: 18, marginLeft: 0, marginBottom: 0 }}>
                             Enroll <strong>{selectRows.length}</strong>  {nameOfTEIType()} from<strong >{` ${currentDetailsProgram()?.label} `}</strong> to<strong >{` ${programSelected?.label || "Program"}`}</strong>
-                <div style={{ background: "rgb(243, 245, 247)", height: "20px", marginTop: 10 }}></div>
+                            <div style={{ background: "rgb(243, 245, 247)", height: "20px", marginTop: 10 }}></div>
                             <Box width="100%">
                                 {Wrapper({
                                     name: "Program",
@@ -109,7 +107,7 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
                                             /> :
                                             <div style={{ display: "flex" }}>
                                                 <Label>
-                                                    {verifyAcess(currentDetailsProgram()?.value, orgUnitSelected.id) ?
+                                                    {verifyAcess(programSelected?.value, orgUnitSelected.id) ?
                                                         orgUnitSelected.displayName
                                                         :
                                                         "Selected program is invalid for selected registering unit"
@@ -129,7 +127,7 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
                             <Divider />
                             <Box width="100%">
                                 {Wrapper({
-                                    name: "Enrollment Date",
+                                    name: programSelected?.enrollmentDateLabel || "Enrollment Date",
                                     Component: () => (
                                         !enrollmentDate ?
                                             <DatePicker
@@ -154,9 +152,9 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
 
                             {/* Incident Date*/}
                             <Divider />
-                            <Box width="100%">
+                            {programSelected.displayIncidentDate && <Box width="100%">
                                 {Wrapper({
-                                    name: "Incident Date",
+                                    name: programSelected?.incidentDateLabel || "Incident Date",
                                     Component: () => (
                                         !incidentDate ?
                                             <DatePicker
@@ -176,11 +174,11 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
                                     )
                                 })}
                                 <p />
-                            </Box>
+                            </Box>}
 
                         </div>
                         :
-                        <GenericSummary loading={loading} modalType={modalType} show={showSummaryModal} handleClose={()=>{handleCloseSummary(); handleCloseConfirmAction(); setopen(false)}} tEItransfered={tEItransfered} selectedIndex={selectedIndex} handleErrorClick={handleErrorClick}/>
+                        <GenericSummary loading={loading} modalType={modalType} show={showSummaryModal} handleClose={() => { handleCloseSummary(); handleCloseConfirmAction(); setopen(false) }} tEItransfered={tEItransfered} selectedIndex={selectedIndex} handleErrorClick={handleErrorClick} />
                 }
             </ModalContent>
             <ModalActions>
@@ -200,10 +198,10 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
                         name="insert-preset"
                         disabled={
                             !orgUnitSelected?.id ||
-                            selectRows.length === 0 ||
-                            !verifyAcess(currentDetailsProgram()?.value, orgUnitSelected.id) ||
-                            !enrollmentDate ||
-                            !incidentDate ||
+                                selectRows.length === 0 ||
+                                !verifyAcess(programSelected?.value, orgUnitSelected.id) ||
+                                !enrollmentDate ||
+                                programSelected.displayIncidentDate ? !incidentDate : false ||
                             !programSelected?.value
                         }
                         onClick={() => setOpenModalConfirmBulk(true)}
