@@ -20,7 +20,7 @@ const ConfirmBulkAction = ({
     initStatus, endStatus,
     program, selectedProgram
 }) => {
-    const [checked, setChecked] = useState(false);
+    const [checked, setChecked] = useState(true);
     const [rejectedRows, setRejectedRows] = useState([]);
     const [approvedRows, setApprovedRows] = useState([...selectedTeis]);
     const [openConfirmModal, setopenConfirmModal] = useState(false);
@@ -48,6 +48,18 @@ const ConfirmBulkAction = ({
             copySelectRows.push(obj)
             setselectRows(copySelectRows)
         }
+    }
+
+    function agreementMessage() {
+        return (
+            <div className='mt-4'>
+                {modalType === "transfer" && <span><span style={{color:"red"}}>Attention:</span> This action will transfer permanently this Tracked entity instance into another organisation unit that have access to the selected program.</span>}
+                {modalType === "TEMPtransfer" && <span>Temporary Transfer</span>}
+                {modalType === "delete" && <span><span style={{color:"red"}}>Attention:</span> All selected Tracked entity instances will be deleted and can no longer be accessed.</span>}
+                {modalType === "changeStatus" && <span><span style={{color:"red"}}>Attention:</span> This action will change the enrollment status to all selected Tracked entity instances.</span>}
+                {modalType === "diffProgram" && <span><span style={{color:"red"}}>Attention:</span> This action will enroll this Tracked entity instance in a diferent program <strong></strong>with same trancked entity type.</span>}
+            </div>
+        )
     }
 
     function message() {
@@ -123,7 +135,7 @@ const ConfirmBulkAction = ({
 
                 {action &&
                     <span>
-                        <Checkbox disabled={loading} className="checkbox-style" onChange={onChange} checked={checked} label="Agree" name="Ex" value={checked} />
+                        {agreementMessage()}
                     </span>
                 }
                 {openConfirmModal &&
