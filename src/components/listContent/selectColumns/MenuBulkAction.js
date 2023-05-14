@@ -20,11 +20,11 @@ export default function MenuBulkAction({ anchorEl, setAnchorEl, setopenModalBulk
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                 transformOrigin={{ vertical: 'top', horizontal: 'center' }}
             >
-                <MenuItem disabled={disabled} onClick={() => { setopenModalBulkDelete(true); setAnchorEl(null); modalType("delete") }}>Delete TEI</MenuItem>
-                <MenuItem disabled={disabled} onClick={() => { setopenModalBulkTranfer(true); setAnchorEl(null); modalType("changeStatus") }}>Change Status</MenuItem>
-                <MenuItem disabled={disabled} onClick={() => { setopenModalBulkTranfer(true); setAnchorEl(null); modalType("TEMPtransfer") }}>Temporary Transfer</MenuItem>
                 <MenuItem disabled={disabled} onClick={() => { setopenModalBulkTranfer(true); setAnchorEl(null); modalType("transfer") }}>Permanent Transfer</MenuItem>
+                <MenuItem disabled={disabled} onClick={() => { setopenModalBulkTranfer(true); setAnchorEl(null); modalType("TEMPtransfer") }}>Temporary Transfer</MenuItem>
                 <MenuItem disabled={disabled} onClick={() => { setopenModalBulkTranfer(true); setAnchorEl(null); modalType("diffProgram") }}>Enroll in different program</MenuItem>
+                <MenuItem disabled={disabled} onClick={() => { setopenModalBulkTranfer(true); setAnchorEl(null); modalType("changeStatus") }}>Change Status</MenuItem>
+                <MenuItem disabled={disabled} onClick={() => { setopenModalBulkDelete(true); setAnchorEl(null); modalType("delete") }}>Delete TEI</MenuItem>
             </Menu>
         </>
     )
