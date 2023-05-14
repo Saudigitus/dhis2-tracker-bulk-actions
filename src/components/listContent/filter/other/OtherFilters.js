@@ -35,7 +35,7 @@ function OtherFilters({ onFilterByEnrollment, selectedFilter, setopenModalBulkTr
             <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div>
                     {filters.map(x =>
-                        <FilterChips small selected={selectedFilter === x.filter} key={x.children} {...x} onClick={() => onFilterByEnrollment(x.filter)} />
+                        <FilterChips small selected={selectedFilter === x.filter} key={x.children} {...x} onClick={() => onFilterByEnrollment(selectedFilter === x.filter ? null : x.filter)} />
                     )}
 
                 </div>
