@@ -21,7 +21,8 @@ function formatAttributesTracked(data) {
         const columnObj = {}
 
         columnObj["id"] = trackedEntityInstance.trackedEntityInstance
-        columnObj["enrollment"] = trackedEntityInstance.enrollments[0]
+        columnObj["enrollments"] = trackedEntityInstance.enrollments
+        columnObj["activeEnrollment"] = trackedEntityInstance.enrollments.filter(e => e.status === "ACTIVE")?.[0] || []
 
         for (const attribute of trackedEntityInstance?.attributes || []) {
             columnObj[attribute?.attribute] = attribute?.value

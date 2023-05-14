@@ -10,6 +10,7 @@ import {
 } from '@dhis2/ui'
 import { Collapse, Divider, IconButton, LinearProgress } from '@material-ui/core'
 import { Check, Close, InfoOutlined } from '@material-ui/icons';
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { format } from 'date-fns';
 import React, { useState, useContext } from 'react'
 import { GeneratedVaribles } from '../../contexts/GeneratedVaribles'
@@ -17,12 +18,11 @@ import { useCreateEnrollment } from '../../hooks/bulkoperations/useCreateEnrollm
 import { useParams } from '../../hooks/common/useQueryParams';
 import { useVerifyOuAcess } from '../../hooks/programs/useVerifyOuAcess';
 import DatePicker from '../datepicker/DatePicker';
-import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { OrgUnitCard } from '../OrgUnitTree';
 import SingleSelectField from '../SingleSelectComponent/SingleSelectField';
 import { ConfirmBulkAction } from './ConfirmBulkAction';
-import styles from './summary.module.css';
 import { GenericSummary } from './GenericSummary';
+import styles from './summary.module.css';
 // import { OptionFields } from '../genericFields/fields/SingleSelect'
 
 // eslint-disable-next-line react/prop-types
@@ -41,7 +41,7 @@ function Wrapper({ name, Component }) {
 }
 
 // eslint-disable-next-line react/prop-types
-const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEIType, currentDetailsProgram, selectedIndex, handleErrorClick, showSummaryModal, handleCloseSummary }) => {
+const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEIType, currentDetailsProgram, selectedIndex, handleErrorClick, showSummaryModal, handleCloseSummary, setShowSummaryModal }) => {
     const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows } = useContext(GeneratedVaribles)
     const { useQuery } = useParams()
     const ouName = useQuery().get("ouName")
@@ -133,6 +133,7 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
                                             <DatePicker
                                                 onChange={(e) => setenrollmentDate(e)}
                                                 value={enrollmentDate}
+                                                maxDate={programSelected.selectEnrollmentDatesInFuture ? undefined : new Date()}
                                             />
                                             :
                                             <div style={{ display: "flex" }}>
@@ -160,6 +161,7 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
                                             <DatePicker
                                                 onChange={(e) => setincidentDate(e)}
                                                 value={incidentDate}
+                                                maxDate={programSelected.selectEnrollmentDatesInFuture ? undefined : new Date()}
                                             />
                                             :
                                             <div style={{ display: "flex" }}>
@@ -214,7 +216,7 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
                 <ConfirmBulkAction modalType={modalType}
                     show={openModalConfirmBulk}
                     handleClose={handleCloseConfirmAction}
-                    action={() => createEnrollment(programSelected, orgUnitSelected.id, selectRows, enrollmentDate, incidentDate)}
+                    action={() => createEnrollment(programSelected, orgUnitSelected.id, selectRows, enrollmentDate, incidentDate, setShowSummaryModal)}
                     loading={loading} selectRows={selectRows}
                     setselectRows={setselectRows}
                     selectedTeis={selectedTeis}

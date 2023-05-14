@@ -194,6 +194,7 @@ function ListContent({ type, program }) {
           handleErrorClick={handleErrorClick}
           showSummaryModal={showSummaryModal}
           handleCloseSummary={handleCloseSummary}
+          setShowSummaryModal={setShowSummaryModal}
         />
         : modalType === "TEMPtransfer" ?
           openModalBulk &&
@@ -206,6 +207,7 @@ function ListContent({ type, program }) {
             handleErrorClick={handleErrorClick}
             showSummaryModal={showSummaryModal}
             handleCloseSummary={handleCloseSummary}
+            setShowSummaryModal={setShowSummaryModal}
           />
           : modalType === "changeStatus" ?
             openModalBulk &&
@@ -219,6 +221,7 @@ function ListContent({ type, program }) {
               handleErrorClick={handleErrorClick}
               showSummaryModal={showSummaryModal}
               handleCloseSummary={handleCloseSummary}
+              setShowSummaryModal={setShowSummaryModal}
             />
             : modalType === "diffProgram" ?
               openModalBulk &&
@@ -233,6 +236,7 @@ function ListContent({ type, program }) {
                 handleErrorClick={handleErrorClick}
                 showSummaryModal={showSummaryModal}
                 handleCloseSummary={handleCloseSummary}
+                setShowSummaryModal={setShowSummaryModal}
               />
               : null
       }

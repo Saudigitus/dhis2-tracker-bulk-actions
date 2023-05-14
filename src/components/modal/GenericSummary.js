@@ -30,19 +30,19 @@ const GenericSummary = ({ show, handleClose, tEItransfered, selectedIndex, handl
                             <div className='d-flex mt-3'>
                                 <div className={styles.imported}>
                                     <div>
-                                        <h5 className='text-center'>0</h5>
+                                        <h5 className='text-center'>{tEItransfered.filter(x => x.status === "SUCCESS").length}</h5>
                                         <span>Imported</span>
                                     </div>
                                 </div>
-                                <div className={styles.updated}>
+                                {/*<div className={styles.updated}>
                                     <div>
                                         <h5 className='text-center'>0</h5>
                                         <span>Updated</span>
                                     </div>
-                                </div>
+    </div>*/}
                                 <div className={styles.ignored}>
                                     <div>
-                                        <h5 className='text-center'>0</h5>
+                                        <h5 className='text-center'>{tEItransfered.filter(x => x.status === "ERROR").length}</h5>
                                         <span>Ignored</span>
                                     </div>
                                 </div>
