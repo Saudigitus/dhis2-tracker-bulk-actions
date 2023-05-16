@@ -12,7 +12,7 @@ const orgUnitQuery = {
         params: ({ query, id }) => ({
             fields: "id,displayName",
             withinUserHierarchy: true,
-            // filter: `id:in:${id}`,
+            filter: `id:in:${id}`,
             query: query
         })
     }
@@ -24,7 +24,7 @@ function OrgUnitTreeModal({ selected, onChange, singleSelection = true, initiall
     const [loader, setLoader] = useState(false);
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
-    const {  myOU } = useContext(AppBarContext)
+    const { myOU } = useContext(AppBarContext)
 
     const fetcher = async () => {
         setLoader(true)
@@ -45,7 +45,7 @@ function OrgUnitTreeModal({ selected, onChange, singleSelection = true, initiall
     }
 
     useEffect(() => {
-        if (query) {
+        if (query.length > 0) {
             const delayDebounceFn = setTimeout(() => {
                 fetcher()
             }, 1000)
@@ -75,7 +75,7 @@ function OrgUnitTreeModal({ selected, onChange, singleSelection = true, initiall
                 data?.results?.organisationUnits?.length > 0 ?
                     <OrganisationUnitTree
                         name={data?.results.organisationUnits[0].displayName}
-                        roots={data?.results.organisationUnits[0].id}
+                        roots={data?.results.organisationUnits?.map(x => x.id) || myOU.results.organisationUnits}
                         {...initiallyExpanded && { initiallyExpanded: [data?.results.organisationUnits[0].id] }}
                         singleSelection={singleSelection}
                         onChange={onChange}
