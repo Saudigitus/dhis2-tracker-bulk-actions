@@ -130,7 +130,15 @@ export function useCreateEnrollment() {
                     }
                 })
                 .catch(e => {
-                    console.log("response", e);
+                    for (const tei of teis) {
+                        const name = getTeiDetails(tei, program)
+
+                        copyTEITransfered.push({
+                            name: name,
+                            status: "ERROR",
+                            error: e?.error || e?.message
+                        })
+                    }
                 })
         }
 
