@@ -68,7 +68,7 @@ export function useTransferTEI() {
                         copyTEITransfered.push({ name: name, status: "SUCCESS" })
                     }
                 }).catch(e => {
-                    copyTEITransfered.push({ name: name, status: "ERROR", error: e.response.importSummaries?.[0]?.description || e?.message || e })
+                    copyTEITransfered.push({ name: name, status: "ERROR", error: e.response.importSummaries?.[0]?.description ||e.response.importSummaries[0]?.conflicts?.map(x => x.value).join(", ") || e?.message || e })
                 })
 
             setTEItransfered(copyTEITransfered)

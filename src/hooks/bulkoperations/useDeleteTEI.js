@@ -40,7 +40,7 @@ export function useDeleteTEI() {
                     copyTEITransfered.push({
                         name: name,
                         status: e.response.importSummaries.find(x => x.reference === tei.id).status,
-                        error: e.response.importSummaries.find(x => x.reference === tei.id).description
+                        error: e.response.importSummaries.find(x => x.reference === tei.id).description  || e.response.importSummaries.find(x => x.reference === tei.id)?.conflicts?.map(x => x.value).join(", ")
                     })
                     setTEItransfered(copyTEITransfered)
                 }
