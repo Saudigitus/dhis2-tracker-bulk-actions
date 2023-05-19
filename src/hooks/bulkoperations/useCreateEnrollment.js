@@ -93,30 +93,58 @@ export function useCreateEnrollment() {
 
         }
 
-        await mutate({ data: { enrollments: [...data, ...teiToUpdate] } })
-            .then((e) => {
-                for (const tei of teis) {
-                    const name = getTeiDetails(tei, program)
-                    const currentValue = e.response.importSummaries.filter(x => x?.description?.includes(tei.id) || x.reference === tei.activeEnrollment.enrollment)
+        if (teiToUpdate.length > 0) {
+            await mutate({ data: { enrollments: teiToUpdate } })
+                .then((e) => {
+                    for (const tei of teis) {
+                        const name = getTeiDetails(tei, program)
+                        const currentValue = e.response.importSummaries.filter(x => x?.description?.includes(tei.id) || x.reference === tei.activeEnrollment.enrollment)
 
-                    if (currentValue.length > 0) {
-                        copyTEITransfered.push({
-                            name: name,
-                            status: currentValue[0].status,
-                            error: currentValue[0]?.description || currentValue[0]?.conflicts?.map(x => x.value).join(", ")
-                        })
+                        if (currentValue.length > 0) {
+                            copyTEITransfered.push({
+                                name: name,
+                                status: currentValue[0].status,
+                                error: currentValue[0]?.description || currentValue[0]?.conflicts?.map(x => x.value).join(", ")
+                            })
+                        }
                     }
-                }
-            })
+                    // setTEItransfered(copyTEITransfered)
+                    // setloading(false)
+                    // add("reload", true)
+                    // setselectRows([])
+                })
+        }
+
+        if (data.length > 0) {
+            await mutateSecond({ data: { enrollments: data } })
+                .then((e) => {
+                    for (const tei of teis) {
+                        const name = getTeiDetails(tei, program)
+                        const currentValue = e.response.importSummaries.filter(x => x?.description?.includes(tei.id) || x.reference === tei.activeEnrollment.enrollment)
+
+                        if (currentValue.length > 0) {
+                            copyTEITransfered.push({
+                                name: name,
+                                status: currentValue[0].status,
+                                error: currentValue[0]?.description || currentValue[0]?.conflicts?.map(x => x.value).join(", ")
+                            })
+                        }
+                    }
+                    setTEItransfered(copyTEITransfered)
+                    setloading(false)
+                    add("reload", true)
+                    setselectRows([])
+                })
+        }
     }
 
 
-    if (response.error && controlError ) {
+    if ((response.error || responseSecond.error) && controlError) {
         setcontrolError(false)
 
         for (const tei of curTEIs) {
             const name = getTeiDetails(tei, prg)
-            const currentValue = response?.error?.details?.response?.importSummaries.filter(x => x.reference === tei.enrollments[0].enrollment || x?.description?.includes(tei.id)) 
+            const currentValue = (response|| responseSecond)?.error?.details?.response?.importSummaries.filter(x => x.reference === tei.enrollments[0].enrollment || x?.description?.includes(tei.id))
 
             if (currentValue?.length > 0) {
                 copyTEITransfered.push({
@@ -128,7 +156,7 @@ export function useCreateEnrollment() {
                 copyTEITransfered.push({
                     name: name,
                     status: "ERROR",
-                    error: response?.error?.details?.message
+                    error: (response|| responseSecond)?.error?.details?.message
                 })
             }
 

@@ -109,7 +109,7 @@ const ChangeStatusEnrollment = ({ open, setopen, modalType, initStatus, teiEnrol
                                     name: "Program Status",
                                     Component: () => (
                                         !statusSelected ?
-                                            <SingleSelectField helperText={"Select Status"} value={statusSelected} options={status.filter(x => x.value != initStatus)} loading={loading} onChange={
+                                            <SingleSelectField helperText={"Select Status"} value={statusSelected} options={status} loading={loading} onChange={
                                                 (v, e) => {
                                                     setstatusSelected(e.value)
                                                 }

@@ -1,7 +1,7 @@
 {
   "name": "dhis2-web-skeleton-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "The Tracker Bulk Actions App allows you the DHIS2 user a possibility to perform various operations with the tracked entities that are usually carried out on the TEI dashboard",
   "license": "BSD-3-Clause",
   "private": true,
   "author": {

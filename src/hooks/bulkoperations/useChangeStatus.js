@@ -80,6 +80,10 @@ export function useChangeStatus() {
                         }
 
                     }
+                    setTEItransfered(copyTEITransfered)
+                    setloading(false)
+                    add("reload", true)
+                    setselectRows([])
                 })
         }
     }

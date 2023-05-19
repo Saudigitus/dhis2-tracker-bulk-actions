@@ -14,11 +14,11 @@ export default function InitialComponent() {
                 </ul>
                 <span>How to perform operations:</span>
                 <ul>
-                    <li className={styles.paperOtherText}><strong>Delete TEI:</strong> select the entities in the table then select the action at the end confirm.</li>
-                    <li className={styles.paperOtherText}><strong>Change Status:</strong> select the initial status of the entities in the table then select the entities and the action at the end confirm the enrollment date for each instances.</li>
-                    <li className={styles.paperOtherText}><strong>Temporary Transfer:</strong> select the entities in the table then select the action at the end confirm.</li>
                     <li className={styles.paperOtherText}><strong>Permanent Transfer:</strong> select the entities in the table then select the action at the end confirm.</li>
+                    <li className={styles.paperOtherText}><strong>Temporary Transfer:</strong> select the entities in the table then select the action at the end confirm.</li>
                     <li className={styles.paperOtherText}><strong>Enroll in different Program:</strong> select the entities in the table then select the action at the end confirm.</li>
+                    <li className={styles.paperOtherText}><strong>Change Status:</strong> select the entities and the action at the end confirm.</li>
+                    <li className={styles.paperOtherText}><strong>Delete TEI:</strong> select the entities in the table then select the action at the end confirm.</li>
                 </ul>
             </Paper>
         </div>
