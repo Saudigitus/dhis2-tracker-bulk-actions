@@ -13,17 +13,17 @@ const OrgUnitCard = ({ expanded, selected, onChange, modal = false }) => {
 
   return (
     <div className={style.orgUnitCard}>
-      <Input onChange={(event) => setQuery(event.value)} label="An input" name="input" placeholder="Pesquisar..." />
+      {/*<Input onChange={(event) => setQuery(event.value)} label="An input" name="input" placeholder="Pesquisar..." />
       <Divider />
+    */}
       <div className={style.cardTree}>
-      
-      {modal?
-        <OrgUnitTreeModal query={query} initiallyExpanded={expanded} selected={selected} onChange={onChange} />
-        :
-        <OrgUnitTreeComponent query={query} initiallyExpanded={expanded} selected={selected} onChange={onChange} />
-      }
+        {modal ?
+          <OrgUnitTreeModal query={query} initiallyExpanded={expanded} selected={selected} onChange={onChange} />
+          :
+          <OrgUnitTreeComponent query={query} initiallyExpanded={expanded} selected={selected} onChange={onChange} />
+        }
       </div>
-    </div>
+    </div >
   )
 }
 

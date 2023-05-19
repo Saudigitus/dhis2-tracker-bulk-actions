@@ -10,6 +10,7 @@ import {
 } from '@dhis2/ui'
 import { Collapse, Divider, IconButton, LinearProgress } from '@material-ui/core'
 import { Check, Close, InfoOutlined } from '@material-ui/icons';
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { format } from 'date-fns';
 import React, { useState, useContext } from 'react'
 import { GeneratedVaribles } from '../../contexts/GeneratedVaribles'
@@ -17,10 +18,10 @@ import { useCreateEnrollment } from '../../hooks/bulkoperations/useCreateEnrollm
 import { useParams } from '../../hooks/common/useQueryParams';
 import { useVerifyOuAcess } from '../../hooks/programs/useVerifyOuAcess';
 import DatePicker from '../datepicker/DatePicker';
-import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { OrgUnitCard } from '../OrgUnitTree';
 import SingleSelectField from '../SingleSelectComponent/SingleSelectField';
 import { ConfirmBulkAction } from './ConfirmBulkAction';
+import { GenericSummary } from './GenericSummary';
 import styles from './summary.module.css';
 // import { OptionFields } from '../genericFields/fields/SingleSelect'
 
@@ -40,7 +41,7 @@ function Wrapper({ name, Component }) {
 }
 
 // eslint-disable-next-line react/prop-types
-const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEIType, currentDetailsProgram, selectedIndex, handleErrorClick }) => {
+const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEIType, currentDetailsProgram, selectedIndex, handleErrorClick, showSummaryModal, handleCloseSummary, setShowSummaryModal }) => {
     const { programs = [], selectRows = [], tEItransfered = [], setTEItransfered, setselectRows } = useContext(GeneratedVaribles)
     const { useQuery } = useParams()
     const ouName = useQuery().get("ouName")
@@ -53,18 +54,16 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
     const [openModalConfirmBulk, setOpenModalConfirmBulk] = useState(false)
     const handleCloseConfirmAction = () => setOpenModalConfirmBulk(false);
 
-    console.log(currentDetailsProgram(), programSelected, "currentDetailsProgram");
-
     return (
-        <Modal large open={open} position={'middle'} onClose={() => {setopen(false); setTEItransfered([])}}>
+        <Modal large open={open} position={'middle'} onClose={() => { setopen(false); setTEItransfered([]) }}>
             <ModalTitle>{('Enroll in Different Program')}</ModalTitle>
             <ModalContent>
-                <div style={{ background: "rgb(243, 245, 247)", height: "20px", marginTop: 10 }}></div>
                 {loading && <LinearProgress />}
                 {
                     tEItransfered.length === 0 ?
                         <div style={{ marginTop: 18, marginLeft: 0, marginBottom: 0 }}>
                             Enroll <strong>{selectRows.length}</strong>  {nameOfTEIType()} from<strong >{` ${currentDetailsProgram()?.label} `}</strong> to<strong >{` ${programSelected?.label || "Program"}`}</strong>
+                            <div style={{ background: "rgb(243, 245, 247)", height: "20px", marginTop: 10 }}></div>
                             <Box width="100%">
                                 {Wrapper({
                                     name: "Program",
@@ -108,7 +107,7 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
                                             /> :
                                             <div style={{ display: "flex" }}>
                                                 <Label>
-                                                    {verifyAcess(currentDetailsProgram()?.value, orgUnitSelected.id) ?
+                                                    {verifyAcess(programSelected?.value, orgUnitSelected.id) ?
                                                         orgUnitSelected.displayName
                                                         :
                                                         "Selected program is invalid for selected registering unit"
@@ -128,12 +127,13 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
                             <Divider />
                             <Box width="100%">
                                 {Wrapper({
-                                    name: "Enrollment Date",
+                                    name: programSelected?.enrollmentDateLabel || "Enrollment Date",
                                     Component: () => (
                                         !enrollmentDate ?
                                             <DatePicker
                                                 onChange={(e) => setenrollmentDate(e)}
                                                 value={enrollmentDate}
+                                                maxDate={programSelected.selectEnrollmentDatesInFuture ? undefined : new Date()}
                                             />
                                             :
                                             <div style={{ display: "flex" }}>
@@ -153,14 +153,15 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
 
                             {/* Incident Date*/}
                             <Divider />
-                            <Box width="100%">
+                            {programSelected.displayIncidentDate && <Box width="100%">
                                 {Wrapper({
-                                    name: "Incident Date",
+                                    name: programSelected?.incidentDateLabel || "Incident Date",
                                     Component: () => (
                                         !incidentDate ?
                                             <DatePicker
                                                 onChange={(e) => setincidentDate(e)}
                                                 value={incidentDate}
+                                                maxDate={programSelected.selectEnrollmentDatesInFuture ? undefined : new Date()}
                                             />
                                             :
                                             <div style={{ display: "flex" }}>
@@ -175,41 +176,11 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
                                     )
                                 })}
                                 <p />
-                            </Box>
+                            </Box>}
 
                         </div>
                         :
-                        tEItransfered.map((x, index) =>
-                            <>
-                                <div style={{ display: "flex", marginBottom: 8, marginTop: 8, width: '100%' }}>
-                                    <div>
-
-                                        <Label color="muted" style={{ marginLeft: "5px" }}>
-                                            <strong>{x.name.split(";")[0].split(":")[0]} </strong>
-                                            {x.name.split(";")[0].split(":")[1]}
-                                            {" "}
-                                            <strong>{x.name.split(";")[1].split(":")[0]} </strong>
-                                            {x.name.split(";")[1].split(":")[1]}
-                                        </Label >
-
-                                    </div>
-                                    <div style={{ marginLeft: "auto", width: 100, height: "auto" }}>
-                                        {x.status === "SUCCESS" ?
-                                            <span className={styles.successStatus}>Success</span>
-                                            :
-                                            <div className='d-flex align-items-center'>
-                                                <span className={styles.errorStatus}>Error</span>
-                                                <IconButton onClick={() => handleErrorClick(index)} style={{ color: "#C21A3D", marginBottom: 10 }} size='small' title='More details'>
-                                                    <InfoOutlined fontSize='small' />
-                                                </IconButton>
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
-                                <Collapse in={selectedIndex === index}> <div className={styles.errorMessage}>{x?.error}</div> </Collapse>
-                                <Divider />
-                            </>
-                        )
+                        <GenericSummary loading={loading} modalType={modalType} show={showSummaryModal} handleClose={() => { handleCloseSummary(); handleCloseConfirmAction(); setopen(false) }} tEItransfered={tEItransfered} selectedIndex={selectedIndex} handleErrorClick={handleErrorClick} />
                 }
             </ModalContent>
             <ModalActions>
@@ -229,10 +200,10 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
                         name="insert-preset"
                         disabled={
                             !orgUnitSelected?.id ||
-                            selectRows.length === 0 ||
-                            !verifyAcess(currentDetailsProgram()?.value, orgUnitSelected.id) ||
-                            !enrollmentDate ||
-                            !incidentDate ||
+                                selectRows.length === 0 ||
+                                !verifyAcess(programSelected?.value, orgUnitSelected.id) ||
+                                !enrollmentDate ||
+                                programSelected.displayIncidentDate ? !incidentDate : false ||
                             !programSelected?.value
                         }
                         onClick={() => setOpenModalConfirmBulk(true)}
@@ -245,7 +216,7 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
                 <ConfirmBulkAction modalType={modalType}
                     show={openModalConfirmBulk}
                     handleClose={handleCloseConfirmAction}
-                    action={() => createEnrollment(programSelected, orgUnitSelected.id, selectRows, enrollmentDate, incidentDate)}
+                    action={() => createEnrollment(programSelected, orgUnitSelected.id, selectRows, enrollmentDate, incidentDate, setShowSummaryModal)}
                     loading={loading} selectRows={selectRows}
                     setselectRows={setselectRows}
                     selectedTeis={selectedTeis}

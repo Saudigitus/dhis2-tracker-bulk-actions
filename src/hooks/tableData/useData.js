@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { AppBarContext } from "../../contexts";
 import { GeneratedVaribles } from "../../contexts/GeneratedVaribles";
 // eslint-disable-next-line import/extensions
@@ -6,7 +6,7 @@ import { formatResponseData } from "../../utils/table/rows/formatResponseData";
 import { useFetchData } from "../common/useFetchData.js";
 
 const fieldsType = {
-    WITH_REGISTRATION: "attributes[attribute,value],trackedEntityInstance,createdAt,enrollments[enrollmentDate,enrollment,status]",
+    WITH_REGISTRATION: "attributes[attribute,value],trackedEntityInstance,createdAt,enrollments[*]",
     WITHOUT_REGISTRATION: "event,dataValues[value,dataElement],trackedEntityInstance",
     QUERIES: "*"
 }
@@ -65,7 +65,7 @@ const resourceTypes = (props) => ({
 })
 
 
-export const useData = ({ type, ou, program, programStatus = undefined, page, pageSize, todayData, filters }) => {
+export const useData = ({ type, ou, program, page, pageSize, todayData, filters, programStatus }) => {
 
     const { filter } = useContext(AppBarContext);
     const { order, orderBy, enrollmentDate } = useContext(GeneratedVaribles);
@@ -87,11 +87,8 @@ export const useData = ({ type, ou, program, programStatus = undefined, page, pa
         enrollmentEnrolledAfter: enrollmentDate?.startDate
     }),)
 
-    const formated = formatResponseData(type, objects, programStatus)
-
     return {
-        columnData: formated?.column,
-        teiEnrollment: formated?.teiEnrollment,
+        columnData: formatResponseData(type, objects),
         error,
         loading,
         data: objects,

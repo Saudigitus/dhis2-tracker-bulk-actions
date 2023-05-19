@@ -8,7 +8,7 @@ import FilterChips from './FilterChips.js'
 
 
 // eslint-disable-next-line react/prop-types
-function OtherFilters({ onFilterByEnrollment, selectedFilter, setopenModalBulkTranfer, modalType, setopenModalBulkDelete, disableDelete }) {
+function OtherFilters({ onFilterByEnrollment, selectedFilter, setopenModalBulkTranfer, modalType, setopenModalBulkDelete, disabled }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClick = (event) => {
@@ -35,7 +35,7 @@ function OtherFilters({ onFilterByEnrollment, selectedFilter, setopenModalBulkTr
             <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div>
                     {filters.map(x =>
-                        <FilterChips small selected={selectedFilter === x.filter} key={x.children} {...x} onClick={() => onFilterByEnrollment(x.filter)} />
+                        <FilterChips small selected={selectedFilter === x.filter} key={x.children} {...x} onClick={() => onFilterByEnrollment(selectedFilter === x.filter ? null : x.filter)} />
                     )}
 
                 </div>
@@ -59,7 +59,7 @@ function OtherFilters({ onFilterByEnrollment, selectedFilter, setopenModalBulkTr
                         setopenModalBulkDelete={setopenModalBulkDelete}
                         modalType={modalType}
                         programStatus={selectedFilter}
-                        disableDelete={disableDelete}
+                        disabled={disabled}
                     />
                 </div>
 

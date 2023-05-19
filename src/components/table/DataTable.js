@@ -103,7 +103,7 @@ const TableComponent = (props) => {
     function verifyIndeter() {
         const intersection = columnData.filter(x => !selectRows.some(c => x.id === c.id));
 
-        if ((intersection.length > 0 && columnData.length != intersection.length) || (selectRows.length > intersection.length && intersection.length > 0)) {
+        if ((intersection.length > 0 && columnData.length != intersection.length) || (selectRows.length > intersection.length && intersection.length > 0) || (selectRows.length > 0 && intersection.length > 0)) {
             return true
         }
 

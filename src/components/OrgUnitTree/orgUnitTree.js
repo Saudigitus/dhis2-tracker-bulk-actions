@@ -28,10 +28,9 @@ function OrgUnitTree({ selected, onChange, singleSelection = true, initiallyExpa
     const { setSelectedOu, setInitOu, initOU, myOU } = useContext(AppBarContext)
     const { add, useQuery } = useParams();
 
-    (query);
-
     const ou = useQuery().get("ou")
     const ouName = useQuery().get("ouName")
+
     const fetcher = async () => {
         setLoader(true)
         await engine.query(orgUnitQuery,
@@ -42,6 +41,7 @@ function OrgUnitTree({ selected, onChange, singleSelection = true, initiallyExpa
                 }
             }
         ).then(result => {
+            console.log(result);
             setData(result)
             setLoader(false)
         }).catch(err => {
@@ -51,10 +51,10 @@ function OrgUnitTree({ selected, onChange, singleSelection = true, initiallyExpa
     }
 
     useEffect(() => {
-        if (query) {
+        if (query.length > 0) {
             const delayDebounceFn = setTimeout(() => {
                 fetcher()
-            }, 600)
+            }, 1000)
             return () => clearTimeout(delayDebounceFn)
         } else {
             setData(myOU)
@@ -81,8 +81,6 @@ function OrgUnitTree({ selected, onChange, singleSelection = true, initiallyExpa
             }
     }, [data]);
 
-
-
     if (error) {
         return <Help error>
             Something went wrong when loading the organisation units!
@@ -100,11 +98,11 @@ function OrgUnitTree({ selected, onChange, singleSelection = true, initiallyExpa
     return (
         <div>
             {
-                data?.results?.organisationUnits?.length > 0 ?
+                data.results.organisationUnits.length > 0 ?
                     <OrganisationUnitTree
-                        name={data?.results.organisationUnits[0].displayName}
-                        roots={data?.results.organisationUnits[0].id}
-                        {...initiallyExpanded && { initiallyExpanded: [data?.results.organisationUnits[0].id] }}
+                        // name={data?.results.organisationUnits[0].displayName || myOU.results.organisationUnits[0].displayName}
+                        roots={data?.results.organisationUnits?.map(x => x.id) || myOU.results.organisationUnits}
+                        {...initiallyExpanded && { initiallyExpanded: [data?.results.organisationUnits[0].id || myOU.results.organisationUnits[0].id] }}
                         singleSelection={singleSelection}
                         onChange={onChange}
                         selected={selected?.selected}

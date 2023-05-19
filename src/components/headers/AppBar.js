@@ -1,18 +1,15 @@
 /* eslint-disable import/extensions */
 import { IconButton } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import React, { useContext, useEffect } from 'react';
 import { AppBarContext } from '../../contexts';
 import { useParams } from '../../hooks/common/useQueryParams';
 import style from './appbar.module.css'
 import { itens } from './data';
-import { useConfig } from '@dhis2/app-runtime';
 import { useGetPrograms } from '../../hooks/programs/useGetPrograms';
 import { GeneratedVaribles } from '../../contexts/GeneratedVaribles';
 
 function AppBar() {
-    const { baseUrl } = useConfig();
     const { selectedOu, setSelectedOu } = useContext(AppBarContext)
     const { remove, add, useQuery } = useParams()
     const { loading, programs } = useGetPrograms("WITH_REGISTRATION")
