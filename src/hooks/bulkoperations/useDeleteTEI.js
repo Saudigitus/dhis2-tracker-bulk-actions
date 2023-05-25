@@ -2,6 +2,7 @@ import { useDataEngine } from '@dhis2/app-runtime'
 import { useContext, useState } from 'react'
 import { GeneratedVaribles } from '../../contexts/GeneratedVaribles'
 import { useParams } from '../common/useQueryParams'
+import { get2AttributeTei } from '../../utils/commons/get2AttributeTei'
 
 const mutateDeleteTEI = {
     resource: 'trackedEntityInstances',
@@ -19,10 +20,6 @@ export function useDeleteTEI() {
     const [loading, setloading] = useState(false)
     const { add } = useParams()
 
-    function getTeiDetails(tei, program) {
-        return (`${program.trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.displayName}: ${tei?.[program.trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.id] || "---"};${program.trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.displayName}: ${tei?.[program.trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.id] || "---"}`)
-    }
-
     const deleteTEI = async (program, teis, setShowSummaryModal) => {
         setloading(true)
         const copyTEITransfered = []
@@ -36,7 +33,7 @@ export function useDeleteTEI() {
             })
             .then((e) => {
                 for (const tei of teis) {
-                    const name = getTeiDetails(tei, program)
+                    const name = get2AttributeTei(tei, program)
                     copyTEITransfered.push({
                         name: name,
                         status: e.response.importSummaries.find(x => x.reference === tei.id).status,
