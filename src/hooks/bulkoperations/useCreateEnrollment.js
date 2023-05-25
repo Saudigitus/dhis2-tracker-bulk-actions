@@ -72,9 +72,8 @@ export function useCreateEnrollment() {
                 "incidentDate": incidentDate || undefined
             })
 
-
             // eslint-disable-next-line no-prototype-builtins
-            if (currentEnrollment.hasOwnProperty("enrollment")) {
+            if (currentEnrollment.hasOwnProperty("enrollment") && currentEnrollment.program === program.value) {
                 currentEnrollment.status = "COMPLETED"
                 delete currentEnrollment.events
                 delete currentEnrollment.attributes
@@ -92,6 +91,7 @@ export function useCreateEnrollment() {
             }
 
         }
+        console.log(teiToUpdate, data);
 
         if (teiToUpdate.length > 0) {
             await mutate({ data: { enrollments: teiToUpdate } })
@@ -128,8 +128,17 @@ export function useCreateEnrollment() {
                                 status: currentValue[0].status,
                                 error: currentValue[0]?.description || currentValue[0]?.conflicts?.map(x => x.value).join(", ")
                             })
+                        } else {
+                            const existValue = data.filter(x => x.trackedEntityInstance === tei.id)
+                            if (existValue.length > 0) {
+                                copyTEITransfered.push({
+                                    name: name,
+                                    status: "SUCCESS"
+                                })
+                            }
                         }
                     }
+
                     setTEItransfered(copyTEITransfered)
                     setloading(false)
                     add("reload", true)
@@ -144,7 +153,7 @@ export function useCreateEnrollment() {
 
         for (const tei of curTEIs) {
             const name = getTeiDetails(tei, prg)
-            const currentValue = (response|| responseSecond)?.error?.details?.response?.importSummaries.filter(x => x.reference === tei.enrollments[0].enrollment || x?.description?.includes(tei.id))
+            const currentValue = (response || responseSecond)?.error?.details?.response?.importSummaries.filter(x => x.reference === tei.enrollments[0].enrollment || x?.description?.includes(tei.id))
 
             if (currentValue?.length > 0) {
                 copyTEITransfered.push({
@@ -156,7 +165,7 @@ export function useCreateEnrollment() {
                 copyTEITransfered.push({
                     name: name,
                     status: "ERROR",
-                    error: (response|| responseSecond)?.error?.details?.message
+                    error: (response || responseSecond)?.error?.details?.message
                 })
             }
 
