@@ -21,6 +21,7 @@ import { ConfirmBulkAction } from './ConfirmBulkAction';
 import { useChangeStatus } from '../../hooks/bulkoperations/useChangeStatus';
 import styles from './summary.module.css';
 import { GenericSummary } from './GenericSummary';
+import { get2AttributeTei } from '../../utils/commons/get2AttributeTei';
 // import { OptionFields } from '../genericFields/fields/SingleSelect'
 
 // eslint-disable-next-line react/prop-types
@@ -60,7 +61,7 @@ const ChangeStatusEnrollment = ({ open, setopen, modalType, initStatus, teiEnrol
     function getTeiDetails() {
         const teisSelected = []
         for (const tei of selectRows) {
-            const teiData = `${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.displayName}: ${tei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.id] || "---"};${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.displayName}: ${tei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.id] || "---"}`
+            const teiData = get2AttributeTei(tei, currentDetailsProgram())
             teisSelected.push({ id: tei.id, name: teiData, isSelected: true })
         }
         return teisSelected

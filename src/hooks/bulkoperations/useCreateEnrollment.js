@@ -2,6 +2,7 @@ import { useDataEngine, useDataMutation } from '@dhis2/app-runtime'
 import { useContext, useState } from 'react'
 import { GeneratedVaribles } from '../../contexts/GeneratedVaribles'
 import { useParams } from '../common/useQueryParams'
+import { get2AttributeTei } from '../../utils/commons/get2AttributeTei'
 
 const ENROLLMENTS_CREATE = {
     resource: "enrollments",
@@ -35,10 +36,6 @@ export function useCreateEnrollment() {
     const [mutateSecond, responseSecond] = useDataMutation(ENROLLMENTS_UPDATE)
     const [controlError, setcontrolError] = useState(true)
 
-    function getTeiDetails(tei, program) {
-        return (`${program.trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.displayName}: ${tei?.[program.trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.id] || "---"};${program.trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.displayName}: ${tei?.[program.trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.id] || "---"}`)
-    }
-
     function getMessage(program, currentEnrollment) {
         if (!program.selectEnrollmentDatesInFuture && new Date(currentEnrollment.enrollmentDate) > new Date() && !program.selectIncidentDatesInFuture && new Date(currentEnrollment.incidentDate) > new Date()) {
             return `The current enrollment can't be completed because enrollment Date can't be future date: ${currentEnrollment.enrollmentDate} and incident Date can't be future date: ${currentEnrollment.incidentDate}`
@@ -60,7 +57,7 @@ export function useCreateEnrollment() {
 
         for (const tei of teis) {
             const currentEnrollment = tei.activeEnrollment || {}
-            const name = getTeiDetails(tei, program)
+            const name = get2AttributeTei(tei, program)
 
             data.push({
                 "trackedEntityInstance": tei.id,
@@ -91,13 +88,12 @@ export function useCreateEnrollment() {
             }
 
         }
-        console.log(teiToUpdate, data);
 
         if (teiToUpdate.length > 0) {
             await mutate({ data: { enrollments: teiToUpdate } })
                 .then((e) => {
                     for (const tei of teis) {
-                        const name = getTeiDetails(tei, program)
+                        const name = get2AttributeTei(tei, program)
                         const currentValue = e.response.importSummaries.filter(x => x?.description?.includes(tei.id) || x.reference === tei.activeEnrollment.enrollment)
 
                         if (currentValue.length > 0) {
@@ -119,7 +115,7 @@ export function useCreateEnrollment() {
             await mutateSecond({ data: { enrollments: data } })
                 .then((e) => {
                     for (const tei of teis) {
-                        const name = getTeiDetails(tei, program)
+                        const name = get2AttributeTei(tei, program)
                         const currentValue = e.response.importSummaries.filter(x => x?.description?.includes(tei.id) || x.reference === tei.activeEnrollment.enrollment)
 
                         if (currentValue.length > 0) {
@@ -152,7 +148,7 @@ export function useCreateEnrollment() {
         setcontrolError(false)
 
         for (const tei of curTEIs) {
-            const name = getTeiDetails(tei, prg)
+            const name = get2AttributeTei(tei, prg)
             const currentValue = (response || responseSecond)?.error?.details?.response?.importSummaries.filter(x => x.reference === tei.enrollments[0].enrollment || x?.description?.includes(tei.id))
 
             if (currentValue?.length > 0) {

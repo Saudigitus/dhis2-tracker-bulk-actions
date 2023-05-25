@@ -18,6 +18,7 @@ import WithPadding from '../tamplate/WithPadding.js'
 import Content from './Content.js'
 import OtherFilters from './filter/other/OtherFilters.js'
 import style from "./listcontent.module.css";
+import { get2AttributeTei } from '../../utils/commons/get2AttributeTei.js'
 
 // eslint-disable-next-line react/prop-types
 function ListContent({ type, program }) {
@@ -111,7 +112,7 @@ function ListContent({ type, program }) {
   function getTeiDetails() {
     const teisSelected = []
     for (const tei of selectRows) {
-      const teiData = `${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.displayName}: ${tei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.id] || "---"};${currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.displayName}: ${tei?.[currentDetailsProgram().trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.id] || "---"}`
+      const teiData = get2AttributeTei(tei, currentDetailsProgram())
       teisSelected.push({ id: tei.id, name: teiData, isSelected: true })
 
     }
