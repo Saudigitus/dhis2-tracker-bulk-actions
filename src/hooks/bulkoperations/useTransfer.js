@@ -1,6 +1,7 @@
 import { useDataEngine, useDataMutation } from '@dhis2/app-runtime'
 import { useContext, useState } from 'react'
 import { GeneratedVaribles } from '../../contexts/GeneratedVaribles'
+import { get2AttributeTei } from '../../utils/commons/get2AttributeTei'
 import { useParams } from '../common/useQueryParams'
 
 const TRANSFERQUERY = {
@@ -44,16 +45,12 @@ export function useTransferTEI() {
 
     const [mutate, response] = useDataMutation(EVENTS)
 
-    function getTeiDetails(tei, program) {
-        return (`${program.trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.displayName}: ${tei?.[program.trackedEntityType?.trackedEntityTypeAttributes?.[0]?.trackedEntityAttribute?.id] || "---"};${program.trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.displayName}: ${tei?.[program.trackedEntityType?.trackedEntityTypeAttributes?.[1]?.trackedEntityAttribute?.id] || "---"}`)
-    }
-
     const transferTEI = async (program, ou, teis) => {
         setloading(true)
         const copyTEITransfered = []
         for (const tei of teis) {
 
-            const name = getTeiDetails(tei, program)
+            const name = get2AttributeTei(tei, program)
             await engine.mutate(TRANSFERQUERY, {
                 variables: {
                     program: program.value,
@@ -105,7 +102,7 @@ export function useTransferTEI() {
         }
         await mutate({ data: { events: data } }).then((e) => {
             for (const event of systemIds) {
-                const name = getTeiDetails(teis[systemIds.indexOf(event)], program)
+                const name = get2AttributeTei(teis[systemIds.indexOf(event)], program)
                 const currentValue = e?.response?.importSummaries?.filter(x => x?.description?.includes(teis[systemIds.indexOf(event)]) || x.reference === event)
 
                 if (currentValue.length > 0) {
@@ -128,7 +125,7 @@ export function useTransferTEI() {
         setcontrolError(false)
 
         for (const event of sysIds) {
-            const name = getTeiDetails(curTEIs[sysIds.indexOf(event)], prg)
+            const name = get2AttributeTei(curTEIs[sysIds.indexOf(event)], prg)
             const currentValue = response?.error?.details?.response?.importSummaries?.filter(x => x?.description?.includes(curTEIs[sysIds.indexOf(event)]) || x.reference === event)
 
             if (currentValue?.length > 0) {
@@ -142,7 +139,7 @@ export function useTransferTEI() {
 
         if (copyTEITransfered.length === 0) {
             for (const tei of curTEIs) {
-                const name = getTeiDetails(tei, prg)
+                const name = get2AttributeTei(tei, prg)
 
                 copyTEITransfered.push({
                     name: name,
