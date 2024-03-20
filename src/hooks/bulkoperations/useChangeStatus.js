@@ -35,7 +35,7 @@ export function useChangeStatus() {
     }
 
     // eslint-disable-next-line max-params
-    const changeProgramStatus = async (program, status, teis) => {
+    const changeProgramStatus = async (program, status, teis, initStatus) => {
         setloading(true)
         setcontrolError(true)
         const teiToUpdate = []
@@ -45,7 +45,7 @@ export function useChangeStatus() {
         for (const tei of teis) {
             const name = get2AttributeTei(tei, program)
 
-            const currentEnrollment = tei.enrollments[0]
+            const currentEnrollment = tei.enrollments.filter(x => x.status === initStatus)[0]
             currentEnrollment.status = status
             delete currentEnrollment.events
             if (!program.selectEnrollmentDatesInFuture && new Date(currentEnrollment.enrollmentDate) > new Date() || !program.selectIncidentDatesInFuture && new Date(currentEnrollment.incidentDate) > new Date()) {
