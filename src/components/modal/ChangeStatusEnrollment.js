@@ -83,7 +83,7 @@ const ChangeStatusEnrollment = ({ open, setopen, modalType, initStatus, teiEnrol
     }]
 
     return (
-        <Modal large open={open} position={'middle'} onClose={() => {setopen(false); setTEItransfered([])}}>
+        <Modal large open={open} position={'middle'} onClose={() => { setopen(false); setTEItransfered([]) }}>
             <ModalTitle>{('Change Status')}</ModalTitle>
             <p />
             <ModalContent>
@@ -132,7 +132,7 @@ const ChangeStatusEnrollment = ({ open, setopen, modalType, initStatus, teiEnrol
 
                         </div>
                         :
-                        <GenericSummary loading={loading} modalType={modalType} show={showSummaryModal} handleClose={()=>{handleCloseSummary(); handleCloseConfirmAction(); setopen(false)}} tEItransfered={tEItransfered} selectedIndex={selectedIndex} handleErrorClick={handleErrorClick}/>
+                        <GenericSummary loading={loading} modalType={modalType} show={showSummaryModal} handleClose={() => { handleCloseSummary(); handleCloseConfirmAction(); setopen(false) }} tEItransfered={tEItransfered} selectedIndex={selectedIndex} handleErrorClick={handleErrorClick} />
                 }
             </ModalContent>
             <ModalActions>
@@ -162,11 +162,13 @@ const ChangeStatusEnrollment = ({ open, setopen, modalType, initStatus, teiEnrol
                 </ButtonStrip>
             </ModalActions>
 
+            console.log(tEItransfered);
+
             {(openModalConfirmBulk && tEItransfered.length === 0) &&
                 <ConfirmBulkAction
                     show={openModalConfirmBulk}
                     handleClose={handleCloseConfirmAction}
-                    action={() => changeProgramStatus(currentDetailsProgram(), statusSelected, selectRows)}
+                    action={() => changeProgramStatus(currentDetailsProgram(), statusSelected, selectRows, initStatus)}
                     loading={loading}
                     selectRows={selectRows}
                     setselectRows={setselectRows}
