@@ -81,7 +81,7 @@ const ConfirmBulkAction = ({
                 {modalType === "TEMPtransfer" && <span>Temporary Transfer</span>}
                 {modalType === "delete" && <span>Delete Entity</span>}
                 {modalType === "changeStatus" && <span>Change Enrollment Status</span>}
-                {modalType === "diffProgram" && <span>Enroll in Different Program</span>}
+                {modalType === "diffProgram" && <span>New enrollment</span>}
             </>
         )
     }

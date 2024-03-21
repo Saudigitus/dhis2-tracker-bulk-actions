@@ -16,7 +16,7 @@ export default function InitialComponent() {
                 <ul>
                     <li className={styles.paperOtherText}><strong>Permanent Transfer:</strong> select the entities in the table then select the action at the end confirm.</li>
                     <li className={styles.paperOtherText}><strong>Temporary Transfer:</strong> select the entities in the table then select the action at the end confirm.</li>
-                    <li className={styles.paperOtherText}><strong>Enroll in different Program:</strong> select the entities in the table then select the action at the end confirm.</li>
+                    <li className={styles.paperOtherText}><strong>New enrollment:</strong> select the entities in the table then select the action at the end confirm.</li>
                     <li className={styles.paperOtherText}><strong>Change Status:</strong> select the entities and the action at the end confirm.</li>
                     <li className={styles.paperOtherText}><strong>Delete TEI:</strong> select the entities in the table then select the action at the end confirm.</li>
                 </ul>

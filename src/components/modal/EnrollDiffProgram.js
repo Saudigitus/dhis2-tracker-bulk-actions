@@ -56,7 +56,7 @@ const EnrollDiffProgram = ({ open, setopen, selectedTeis, modalType, nameOfTEITy
 
     return (
         <Modal large open={open} position={'middle'} onClose={() => { setopen(false); setTEItransfered([]) }}>
-            <ModalTitle>{('Enroll in Different Program')}</ModalTitle>
+            <ModalTitle>{('New enrollment')}</ModalTitle>
             <ModalContent>
                 {loading && <LinearProgress />}
                 {
