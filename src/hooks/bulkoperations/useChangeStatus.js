@@ -45,7 +45,7 @@ export function useChangeStatus() {
         for (const tei of teis) {
             const name = get2AttributeTei(tei, program)
 
-            const currentEnrollment = tei.enrollments.filter(x => x.status === initStatus)[0]
+            const currentEnrollment = tei.enrollments.filter(x => x.status === initStatus)[0] || tei.enrollments[0]
             currentEnrollment.status = status
             delete currentEnrollment.events
             if (!program.selectEnrollmentDatesInFuture && new Date(currentEnrollment.enrollmentDate) > new Date() || !program.selectIncidentDatesInFuture && new Date(currentEnrollment.incidentDate) > new Date()) {
